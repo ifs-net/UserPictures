@@ -28,7 +28,9 @@
 <!--[foreach item=picture from=$picturesselected]-->
 <td align='center' width='100' onmouseover="this.style.backgroundColor='#cfcfcf';" onmouseout="this.style.backgroundColor='';">
 <center>
-&nbsp;<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$counter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
+
+<!--[ math equation="( s + x - 1)" s=$startnumthumb x=$counter assign="piccounter"]-->
+&nbsp;<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$piccounter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
 <small><!--[$picture.comment|truncate:30]--></small><br />
 </center>
 </td>
