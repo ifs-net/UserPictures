@@ -16,3 +16,4 @@ function UserPictures_accountapi_getall($args)
     // Return the items
     return $items;
 }
+?>
