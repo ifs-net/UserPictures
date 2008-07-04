@@ -81,7 +81,7 @@ define('_USERPICTURESLATESTIMAGESGALLERY',	'Latest pictures');
 define('_USERPICTURESLATESTIMAGESGALLERYTEXT',	'You can see the latest pictures from the galleries. Click the picture to get into the gallery of the user.');
 define('_USERPICTURESMORELATESTIMAGES',	'Show all new uploaded pictures');
 define('_USERPICTURESPICTURECOUNTER',	'There are');
-define('_USERPICTURESPICTURES',	'pictures uploaded at all in all galleries');
+define('_USERPICTURESPICTURES',	'pictures available');
 define('_USERPICTURESPICTURECOUNTERFORTHISUSER',	'Number of pictures of this member');
 define('_USERPICTURESFILTERCAT',	'filter');
 
