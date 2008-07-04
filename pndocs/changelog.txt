@@ -1,0 +1,134 @@
+Changelog for the userpictures module
+
+UPGRADE INFORMATION:
+====================
+- IMPORTANT NOTICE IF YOU WANT TO UPGRADE FROM LOWER VERSIONS.
+  Since the 0.52 release you do not need to update really old 
+  versions step by step. Just download the newest release 
+  (>= 0.52) and upgrade it in the modules module module list.
+  If you want to upgrade from 0.11 to 0.52 for examnple, all 
+  necessary steps are done. You do not need to download every 
+  release between the actual and your version to get the newest
+  release onto your system.
+
+0.93:
+=====
+- fixed bug "function_thumbs" when original file is missing 
+
+0.92:
+=====
+- fixed bug #5829: "error dropping table when deactivating module"
+
+0.91:
+=====
+- fixed bug #5820: "upper / lowecase problem in template"
+- fixed bug #5819: "error creating tables"
+
+0.90:
+=====
+- added "pic_id" as url parameter for the later use of comment
+  modules. These modules will need one number for a picture.
+- added "comment option" for users - if pnComments is installed
+  every user can choose if he wants his pictures to be commentable
+
+0.80:
+=====
+- added "pager support for thumbnail galleries"
+- added "delete thumbnail": If you want to recreate the thumbnails
+  you can now easily delete all thumbnails
+- added "hint in pictures": If you want to have a hin in your
+  thumbnails this is now possible if you have chosen to use the
+  gdlib as thumbnail creation method
+- added "sharpened thumbnail" for gdlib thumbnail creation
+  thanx to http://www.cerdmann.com/thumb/ for the code
+- Bug #5390: added "choose thumbnail creation method"
+  Some systems seem to have problems with the creation of the
+  thumbnails. Now you can choose wether you want to create the
+  thumbnails with "ImageMagick" or "gdlib".
+- Feature Request #5333: Users can now choose if they want to
+  give other community members the possibility to link the
+  own account name with their pictures
+- Feature Request #4888: Users can now categorize their pictures
+  as public and so their galleries can also be viewed by guests
+- Feature Request #5206: The "find orphans pictures"-function
+  was improved. Now files that might be still in the system after
+  a user's account was suspended can be found and deleted easily.
+
+
+0.70:
+=====
+- The english language pack is now included in the regular release
+  of pnUserPictures.
+- pnUserPictures can now be used as avatar management module.
+  If you upgrade to 0.70 this function will be disabled by default.
+  Just go into the main adminstration panel of pnUserPictures to
+  activate it. A new link will appear below each picture in the
+  picture management page.  The standard path (images/avatar) for
+  postnuke avatars will be used
+- The latest pictures block is cached for 180 seconds now - the
+  postnuke cache settings will be ignored
+- Bug #4974: Guests could upload pictures fixed now.
+- Bug #4885: Wrong permission scheme for category management.
+
+
+0.60:
+=====
+- Feature Request #4750: Data directory can now be customized in
+  the administration backend of pnUserPictures
+- Feature Request #4826: Data directory can be specified by the 
+  administrator. Please mention that you have to enter the relative
+  path not the absolute path of the directory in the filesystem.
+- Bug #4845, #4857: Upload problem for regular templates when own 
+  uploads are disabled.
+- Bug #4866: Filenames have not been changed while rotating and 
+  moving the pictures. To avoid caching problems (same filename
+  but different content) this is fixed now.
+
+0.51:
+=====
+- Feature Request #4623: category management for photo gallery
+- fixed some bugs
+
+0.40:
+=====
+- Associated Persons: Your users can now associate other users
+  with their fotos. So you can include info like "this user is
+  linked in X pictures" in the profile page of a user.
+- block: there is a new block now that makes it possible to 
+  display the latest pictures of your community. You are 
+  able to customize the numbers of rows and columns for the 
+  pictures
+- Thumbnail gallery for latest pictures / all pictures sorted 
+  by upload date
+- Some bugs fixed
+
+0.30:
+=====
+- Thumbnail gallery is now available and the new intro page of a user's
+  gallery.
+- fixed bug: Animated gif files do not longer cause problems when they
+  are uploaded.
+- Thumbnails are now created for every picture. Take care: if you change
+  the size of the thumbnails old thumbnails will not be renewed. In this
+  case you would have to delete all thumbnail files manually. It is no
+  problem to delete these files because if they are missing they are
+  generated automatically
+  After upgrading please go into the admin panel and check the value for
+  the size of the thumbnails!
+  The thumbnails will be created on demand!
+- Fixed bug: find orphans function did not work for the "own gallery"-template
+
+0.20:
+=====
+- Valid tempaltes are now integrated. Thank you "nicname" for your support ;-)
+  Users that use an old version and have a directory /users/case - please 
+  delete the directory "case"!
+
+0.11:
+=====
+- fixed: no more caching problems.
+- find orphan handling in admin interface
+
+0.10:
+=====
+- initial release
