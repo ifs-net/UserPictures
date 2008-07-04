@@ -5,8 +5,8 @@
 $modversion['name']           = 'UserPictures';
 // the version string must not exceed 10 characters!
 $modversion['version']        = '0.91';
-$modversion['description']    = 'Give your users the chance to create own galleries and enhance your profile pages etc. with user pictures using pnUserPictures';
-$modversion['displayname']    = 'pnUserPictures';
+$modversion['description']    = 'Give your users the chance to create own galleries and enhance your profile pages etc. with user pictures using UserPictures';
+$modversion['displayname']    = 'UserPictures';
 
 // The following in formation is used by the credits module
 // to display the correct credits
@@ -16,7 +16,7 @@ $modversion['help']           = 'pndocs/help.txt';
 $modversion['license']        = 'pndocs/license.txt';
 $modversion['official']       = 0;
 $modversion['author']         = 'Florian Schieﬂl';
-$modversion['contact']        = 'http://www.ifs-net.de/pnUserPictures/';
+$modversion['contact']        = 'http://www.ifs-net.de/';
 
 // The following information tells the PostNuke core that this
 // module has an admin option.
