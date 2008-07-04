@@ -352,69 +352,26 @@ function UserPictures_upgrade($oldversion)
     return true;
 }
 
-
 /**
  * delete the UserPictures module
- *
- * This function is only ever called once during the lifetime of a particular
- * module instance
- * This function MUST exist in the pninit file for a module
  *
  * @return       bool       true on success, false otherwise
  */
 function UserPictures_delete()
 {
-    $dbconn  =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    $UserPicturestable  = &$pntable['userpictures'];
-    $UserPictures_templatestable  = &$pntable['userpictures_templates'];
-    $UserPictures_personstable  = &$pntable['userpictures_persons'];
-    $UserPictures_settingstable  = &$pntable['userpictures_settings'];
-    $UserPictures_categoriestable  = &$pntable['userpictures_categories'];
-    $UserPictures_catassoctable  = &$pntable['userpictures_catassoc'];
-
-    // New Object DataDictionary
-    $dict = &NewDataDictionary($dbconn);
-
-    $sqlarray = $dict->DropTableSQL($UserPicturestable);
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESDROPTABLEFAILED);
-        return false;
-    }
-
-    $sqlarray = $dict->DropTableSQL($UserPictures_templatestable);
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESDROPTEMPLATESTABLEFAILED);
-        return false;
-    }
-
-    $sqlarray = $dict->DropTableSQL($UserPictures_personstable);
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESDROPPERSONSTABLEFAILED);
-        return false;
-    }
-
-    $sqlarray = $dict->DropTableSQL($UserPictures_settingstable);
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESDROPSETTINGSTABLEFAILED);
-        return false;
-    }
-
-    $sqlarray = $dict->DropTableSQL($UserPictures_catassoctable);
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESDROPPCATASSOCTABLEFAILED);
-        return false;
-    }
-
-    $sqlarray = $dict->DropTableSQL($UserPictures_categoriestable);
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESDROPCATEGORIESTABLEFAILED);
-        return false;
-    }
+  	if (!DBUtil::dropTable('userpictures')) return false;
+  	if (!DBUtil::dropTable('userpictures_templates')) return false;
+  	if (!DBUtil::dropTable('userpictures_persons')) return false;
+  	if (!DBUtil::dropTable('userpictures_settings')) return false;
+  	if (!DBUtil::dropTable('userpictures_categories')) return false;
+  	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
 
     // Delete any module variables
-    pnModDelVar('UserPictures');
+    pnModDelVar('MyProfile');
+    
+    // delete old config file if there is one
+    $configfile = 'modules/MyProfile/config/tabledef.inc';
+    if (file_exists($configfile)) unlink($configfile);
 
     // Deletion successful
     return true;
