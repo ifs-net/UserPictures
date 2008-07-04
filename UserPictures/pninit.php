@@ -2,20 +2,10 @@
 /**
  * initialise the UserPictures module
  *
- * This function is only ever called once during the lifetime of a particular
- * module instance.
- * This function MUST exist in the pninit file for a module
- *
- * @author       Jim McDonald
- * @return       bool       true on success, false otherwise
  */
 function UserPictures_init()
 {
-    // Get datbase setup - note that both pnDBGetConn() and pnDBGetTables()
-    // return arrays but we handle them differently.  For pnDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For pnDBGetTables() we want to keep the entire
-    // tables array together for easy reference later on
+    // Get datbase setup
     $dbconn  =& pnDBGetConn(true);
     $pntable =& pnDBGetTables();
 
@@ -374,11 +364,6 @@ function UserPictures_upgrade($oldversion)
  */
 function UserPictures_delete()
 {
-    // Get datbase setup - note that both pnDBGetConn() and pnDBGetTables()
-    // return arrays but we handle them differently.  For pnDBGetConn()
-    // we currently just want the first item, which is the official
-    // database handle.  For pnDBGetTables() we want to keep the entire
-    // tables array together for easy reference later on
     $dbconn  =& pnDBGetConn(true);
     $pntable =& pnDBGetTables();
 
@@ -434,6 +419,4 @@ function UserPictures_delete()
     // Deletion successful
     return true;
 }
-
-
 ?>
