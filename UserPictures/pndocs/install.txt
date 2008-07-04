@@ -1,0 +1,45 @@
+Installation of pnUserPictures
+==============================
+
+
+
+1. Requirements:
+
+    - The programm "convert" from ImageMagick has to be installed
+
+    - the gd library has to be installed and php has to compiled 
+    with this library
+
+    - The directory modules/UserPictures/data hast to be read- and
+      writeable by the webserver! (chmod 777 for example)
+      
+    - the shell_exec-command in php must have been enabled
+    
+    - Plese check your php memory limit if you decide to use the 
+    gdlib thumbnail creation. You might have to increase it
+      
+
+2. Installation:
+
+    - Activate the module in the postnuke module administration
+
+    
+3. Integration
+
+    You want to integrate pictures in a profile for example?
+    
+    <!--[pnmodapifunc modname="UserPictures" type="user" func="showPicture" uid=$uid template_id=1 assign=profilepic]-->
+    <!--[$profilepic.code]--><br />
+    <!--[$profilepic.comment]-->
+    
+    This above is an example for a profile picture. Customize 
+    this (template_id, variables) for your needs.
+    
+    The array that returns from the function call above has more
+    variables inside than code and comment but please don't use them!
+			     
+
+Have a lot of fun.
+
+Bug-Reports and Feature-Requests? Please write them into the trackers at
+http://noc.postnuke.com/projects/pnuserpictures/

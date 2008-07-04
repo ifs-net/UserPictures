@@ -1,0 +1,18 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+<h1><!--[pnml name="_USERPICTURESMANAGEYOURSETTINGS"]--></h1>
+<br /><!--[pnml name="_USERPICTURESMANAGEYOURSETTINGSTEXT"]-->
+<br /><br />
+<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="settings"]-->">
+<!--[pnsecgenauthkey assign="authid"]-->
+<input type="hidden" name="authid" value="<!--[$authid]-->" />
+<input type="hidden" name="action" value="update" />
+<input name="nolinking" type="checkbox" <!--[if $settings.nolinking eq 1]-->checked="checked" <!--[/if]--> value="1" /> <!--[pnml name="_USERPICTURESFORBIDOTHERSTOLINKME"]--> (<a href="<!--[pnmodurl modname="UserPictures" type="user" func="settings" action="deleteMyLinks" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETEMYLINKS"]--></a>)<br />
+<!--[if $comment]--><input name="nocomments" type="checkbox" <!--[if $settings.nocomments eq 1]-->checked="checked" <!--[/if]--> value="1" /> <!--[pnml name="_USERPICTURESPICTURESNOTCOMMENTABLE"]--> <br /><!--[/if]-->
+<input name="picspublic" type="checkbox" <!--[if $settings.picspublic eq 1]-->checked="checked" <!--[/if]--> value="1" /> <!--[pnml name="_USERPICTUREALLOWGUESTSTOSEEMYPICTURES"]--><br />
+<br />
+<input type="submit" value="<!--[pnml name="_USERPICTURESSUBMITSETTINGS"]-->" />
+</form>
+
+
+<!--[include file="userpictures_user_footer.htm"]-->
+

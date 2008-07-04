@@ -1,0 +1,29 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+<h1><!--[pnml name="_USERPICTURESLATESTIMAGESGALLERY"]--></h1>
+
+<p /><!--[pnml name="_USERPICTURESLATESTIMAGESGALLERYTEXT"]-->
+
+<!--[pnmodapifunc modname="UserPictures" type="user" func="getPictures" template_id="0" assign="pictures"]-->
+<!--[pnmodapifunc modname="UserPictures" type="user" func="getPictures" template_id="0" startnumthumb=$startnumthumb assign="thumbnails"]-->
+
+<br /><!--[pnml name="_USERPICTURESPICTURECOUNTER"]-->: <!--[$pictures|@count]--> <!--[pnml name="_USERPICTURESPICTURES"]-->
+
+<center>
+<br />
+<!--[* Display a pager to go to the pages   *]-->
+<!--[pager show="page" rowcount=$pictures limit=50 posvar=startnumthumb shift=1]-->
+
+<table cellpadding='5' cellspacing='5' border='0'>
+<!--[foreach from=$thumbnails item="picture"]-->
+    <td align='center' width='100' onmouseover="this.style.backgroundColor='#cfcfcf';" onmouseout="this.style.backgroundColor='';">
+    <br />
+    &nbsp;<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid]-->"><img border="0" src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment|pnvarprepfordisplay]-->" alt="<!--[$picture.comment|pnvarprepfordisplay]-->"></a>&nbsp;
+    <!--[pnusergetvar name="uname" uid=$picture.uid assign="uname"]-->
+    <br /><a href="user.php?op=userinfo&amp;uname=<!--[$uname]-->"><img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$uname|truncate:10|pnvarprepfordisplay]--></a><br />
+    <!--[cycle values=",,,,</tr><tr>"]-->
+    </td>
+<!--[/foreach]-->
+</td></tr></table>
+</center>
+<!--[include file="userpictures_user_footer.htm"]-->
+

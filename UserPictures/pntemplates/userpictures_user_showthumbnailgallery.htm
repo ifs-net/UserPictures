@@ -1,0 +1,50 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+<h1><!--[pnml name="_USERPICTURESSHOWGALLERY"]--> <!--[pnusergetvar name="uname" uid=$uid]--></h1>
+<img src="modules/UserPictures/pnimages/profile.gif" /> <a href="user.php?op=userinfo&amp;uname=<!--[pnusergetvar name="uname" uid=$uid]-->"><!--[pnml name="_USERPICTURESPROFILELINK"]--></a>
+
+<br /><a href="<!--[pnmodurl modname="UserPictures" type="user" func="assoc" uid=$uid"]-->"><img src="modules/UserPictures/pnimages/spider.gif" /> <!--[pnml name="_USERPICTURESASSOCPICS"]--></a>
+<!--[if $viewer_uid eq $uid]-->
+<br /><img src="modules/UserPictures/pnimages/manage.gif" /> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=0 uid=$uid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESMANAGEYOURGALLERY"]--></a><br />
+<!--[/if]-->
+
+
+<!--[if $picturecounter eq 0]-->
+    <br />
+    <strong><!--[pnml name="_USERPICTURESHASNOGALLERY"]--></strong>
+<!--[/if]-->
+
+
+<br /><!--[pnml name="_USERPICTURESPICTURECOUNTERFORTHISUSER"]-->: <!--[$pictures|@count]--> <!--[pnml name="_USERPICTURESPICTURES"]-->
+
+<!--[include file="userpictures_user_categories.htm"]-->
+
+<center>
+<!--[* Display a pager to go to the pages   *]-->
+<!--[pager show="page" rowcount=$pictures limit=25 posvar=startnumthumb shift=1]-->
+
+<table cellpadding='5' cellspacing='5' border='0'>
+<tr>
+<!--[counter start=1 assign=counter]-->
+<!--[foreach item=picture from=$picturesselected]-->
+<td align='center' width='100' onmouseover="this.style.backgroundColor='#cfcfcf';" onmouseout="this.style.backgroundColor='';">
+<center>
+&nbsp;<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$counter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
+<small><!--[$picture.comment|truncate:30]--></small><br />
+</center>
+</td>
+<!--[counter]-->
+<!--[if $pictures gt 20]-->
+    <!--[cycle values=",,,,</tr><tr>"]-->
+<!--[else]-->
+    <!--[cycle values=",,,</tr><tr>"]-->
+<!--[/if]-->
+<!--[/foreach]-->
+</tr>
+</table>
+<!--[* Display a pager to go to the pages   *]-->
+<!--[pager show="page" rowcount=$pictures limit=25 posvar=startnumthumb shift=1]-->
+</center>
+
+
+<!--[include file="userpictures_user_footer.htm"]-->
+
