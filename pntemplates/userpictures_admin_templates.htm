@@ -1,0 +1,61 @@
+<!--[include file="userpictures_admin_menu.htm"]-->
+<h1><!--[pnml name="_USERPICTURESTEMPLATESADMINPANEL"]--></h1>
+<!--[pnml name="_USERPICTURESWHATARETEMPLATES"]-->
+<h3><!--[pnml name="_USERPICTURESNEWTEMPLATE"]--></h3>
+<form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="templates"]-->">
+<input type="hidden" name="action" value="send" />
+<input type="hidden" name="id" value="<!--[$id]-->" />
+<br /><!--[pnml name="_USERPICTURESTITLE]-->:<br />
+<input type="text" name="title" value="<!--[$title]-->" />
+<br /><!--[pnml name="_USERPICTURESMAXWIDTH]-->:<br />
+<input type="text" name="max_width" value="<!--[$max_width]-->" size="5" /> <!--[pnml name="_USERPICTURESPIXELS"]-->
+<br /><!--[pnml name="_USERPICTURESMAXHEIGHT]-->:<br />
+<input type="text" name="max_height" value="<!--[$max_height]-->" size="5" /> <!--[pnml name="_USERPICTURESPIXELS"]-->
+<br /><!--[pnml name="_USERPICTURESDDEFAULTIMAGE]-->:<br />
+<input type="text" name="defaultimage" value="<!--[$defaultimage]-->" size="60" />
+<br /><!--[pnml name="_USERPICTURESTOVERIFY]-->:<br />
+<select name="to_verify">
+<option <!--[if $to_verify eq 0]-->selected="selected"<!--[/if]--> value="0"><!--[pnml name="_USERPICTURESNOTTOVERIFY"]--></option>
+<option <!--[if $to_verify eq 1]-->selected="selected"<!--[/if]-->value="1"><!--[pnml name="_USERPICTURESTOVERIFY"]--></option>
+</select>
+<br />
+<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
+</form>
+
+<h3><!--[pnml name="_USERINFOEXISTINGTEMPLATES"]--></h3>
+<!--[pnml name="_USERINFOWARNINGFOREDIT"]-->
+<!--[pnmodapifunc modname="UserPictures" type="admin" func="getTemplates" assign=templates]-->
+<table cellspacing=10>
+    <tr>
+	<th><!--[pnml name="_USERPICTURESID"]--></th>
+	<th><!--[pnml name="_USERPICTURESTITLE"]--></th>
+	<th><!--[pnml name="_USERPICTURESMAXRESOLUTION"]--></th>
+	<th><!--[pnml name="_USERPICTURESDEFAULTIMAGE"]--></th>
+	<th><!--[pnml name="_USERPICTURESTOVERIFYTABLE"]--></th>
+	<th><!--[pnml name="_USERPICTURESIMAGESAVAILABLE"]--></th>
+	<th><!--[pnml name="_USERPICTURESACTION"]--></th>
+    </tr>
+    <tr>
+        <td>0</td>
+        <td><!--[pnml name="_USERPICTURESOWNGALLERY"]--></td>
+        <td><!--[pnmodgetvar module="UserPictures" name="maxwidth"]--> x <!--[pnmodgetvar module="UserPictures" name="maxheight"]--></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td><!--[pnmodapifunc modname="UserPictures" type="user" func="getPictures" template_id=0 assign=pictures]--><!--[$pictures|@count]--></td>
+        <td>&nbsp;</td>
+    </tr>
+    <!--[foreach from=$templates item=template]-->
+    <tr>
+	<td><!--[$template.id]--></td>
+	<td><!--[$template.title]--></td>
+	<td><!--[$template.max_width]--> x <!--[$template.max_height]--></td>
+	<td><!--[$template.defaultimage]--></td>
+	<td><!--[if $template.to_verify eq 1]--><!--[pnml name="_USERPICTURESYES"]--><!--[else]--><!--[pnml name="_USERPICTURESNO"]--><!--[/if]--></td>
+	<td><!--[pnmodapifunc modname="UserPictures" type="user" func="getPictures" template_id=$template.id assign=pictures]--><!--[$pictures|@count]--></td>
+	<td>
+	    <a onclick="return confirm('<!--[pnml name="_USERPICTURESREALLYDELETE"]-->')" href="<!--[pnmodurl modname="UserPictures" type="admin" func="templates" action="delete" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>
+	    <a href="<!--[pnmodurl modname="UserPictures" type="admin" func="templates" action="edit" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESEDIT"]--></a>
+	</td>
+    </tr>
+    <!--[/foreach]-->
+</table>

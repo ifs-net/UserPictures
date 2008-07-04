@@ -1,0 +1,54 @@
+<!--[include file="userpictures_admin_menu.htm"]-->
+
+
+<h1><!--[pnml name="_USERPICTURESMAINADMINPANEL"]--></h1>
+<p />
+<form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="main"]-->">
+<!--[pnmodgetvar module="UserPictures" name="activated" assign=activated]-->
+<!--[pnmodgetvar module="UserPictures" name="avatarmanagement" assign=avatarmanagement]-->
+<!--[pnmodgetvar module="UserPictures" name="avatarsize" assign=avatarsize]-->
+<!--[pnmodgetvar module="UserPictures" name="ownuploads" assign=ownuploads]-->
+<!--[pnmodgetvar module="UserPictures" name="verifytext" assign=verifytext]-->
+<!--[pnmodgetvar module="UserPictures" name="convert" assign=convert]-->
+<!--[pnmodgetvar module="UserPictures" name="maxfilesize" assign=maxfilesize]-->
+<!--[pnmodgetvar module="UserPictures" name="disabledtext" assign=disabledtext]-->
+<!--[pnmodgetvar module="UserPictures" name="maxwidth" assign=maxwidth]-->
+<!--[pnmodgetvar module="UserPictures" name="maxheight" assign=maxheight]-->
+<!--[pnmodgetvar module="UserPictures" name="thumbnailsize" assign=thumbnailsize]-->
+<!--[pnmodgetvar module="UserPictures" name="thumbnailcreation" assign=thumbnailcreation]-->
+<!--[pnmodgetvar module="UserPictures" name="datadir" assign=datadir]-->
+<!--[pnmodgetvar module="UserPictures" name="hint" assign=hint]-->
+<!--[pnsecgenauthkey module="UserPictures" assign=authid]-->
+
+<input type="hidden" name="action" value="send" />
+<input type="hidden" name="authid" value="<!--[$authid]-->" />
+<input type="checkbox" name="activated" value="1" <!--[if $activated]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESALLOWUPLOADS"]-->
+<p /><!--[pnml name="_USERPICTURESDISABLEDTEXT"]-->:<br />
+<textarea name="disabledtext" rows=5 cols=50><!--[$disabledtext]--></textarea>
+<p /><!--[pnml name="_USERPICTURESVERIFYTEXT"]-->:<br />
+<textarea name="verifytext" rows=5 cols=50><!--[$verifytext]--></textarea>
+<p /><!--[pnml name="_USERPICTURESCONVERT"]-->:<br />
+<input name="convert" value="<!--[$convert]-->" />
+<p /><!--[pnml name="_USERPICTURESMAXFILESIZE"]-->:<br />
+<input name="maxfilesize" value="<!--[$maxfilesize]-->" size="6" /> KB
+<p /><!--[pnml name="_USERPICTURESDATADIR"]-->:<br />
+<input name="datadir" value="<!--[$datadir]-->" />
+<p /><!--[pnml name="_USERPICTURESOWNUPLOADS"]-->:<br />
+<input name="ownuploads" value="<!--[$ownuploads]-->" size="6" /> <!--[pnml name="_USERPICTURESPICTURES"]-->
+<p /><!--[pnml name="_USERPICTURESMAXWIDTHUSERGALLERY"]-->:<br />
+<input name="maxwidth" value="<!--[$maxwidth]-->" size="6" /> <!--[pnml name="_USERPICTURESPIXEL"]-->
+<p /><!--[pnml name="_USERPICTURESMAXHEIGHTUSERGALLERY"]-->:<br />
+<input name="maxheight" value="<!--[$maxheight]-->" size="6" /> <!--[pnml name="_USERPICTURESPIXEL"]-->
+<p /><!--[pnml name="_USERPICTURESTHUMBNAILCREATIONMETHOD"]-->:
+<select name="thumbnailcreation">
+<option value="convert" <!--[if $thumbnailcreation eq 'convert']-->selected="selected"<!--[/if]-->><!--[pnml name="_USERPICTURESTCCONVERT"]--></option>
+<option value="gdlib" <!--[if $thumbnailcreation eq 'gdlib']-->selected="selected"<!--[/if]-->><!--[pnml name="_USERPICTURESTCGDLIB"]--></option>
+</select>
+<p /><input type="checkbox" name="hint" value="1" <!--[if $hint]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESSHOWHINTONTHUMBNAILS"]--> <a href="<!--[pnmodurl modname="Userpictures" type="admin" func="main" action="deletethumbnails" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETETHUMBNAILSFORRECREATION"]--></a>.
+<p /><!--[pnml name="_USERPICTURESTHUMBNAILSIZE"]-->: <!--[pnml name="_USERPICTURESATTENTIONONCHANGE"]--><br />
+<input name="thumbnailsize" value="<!--[$thumbnailsize]-->" size="9" /> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
+<p /><input type="checkbox" name="avatarmanagement" value="1" <!--[if $avatarmanagement]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESALLOWAVATARMANAGEMENT"]-->
+<p /><!--[pnml name="_USERPICTURESAVATARSIZE"]-->:<br />
+<input name="avatarsize" value="<!--[$avatarsize]-->" size="9" /> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
+<p /><input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
+</form>

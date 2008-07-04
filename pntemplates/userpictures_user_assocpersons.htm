@@ -1,0 +1,29 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+
+<h1><!--[pnml name="_USERPICTURESASSOCPERSONS"]--></h1>
+
+<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$picture.template_id uid=$picture.uid]-->"><!--[pnml name="_USERPICTURESBACKTOMANAGE"]--></a>
+
+<!--[if $picture.uid gt 0]-->
+    <!--[pnsecgenauthkey module="UserPictures" assign="authid"]-->
+    <center>
+    <!--[$picture.code]-->
+    </center><br /><br />
+    <!--[pnml name="_USERPICTURESASSOCIATEPERSON"]-->:<br />
+    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id]-->">
+    <input type="hidden" name="authid" value="<!--[$authid]-->" />
+    <input type="hidden" name="action" value="add" />
+    <input type="text" name="uname" />
+    <input type="submit" value="<!--[pnml name="_USERPICTURESADD"]-->" />
+    </form>												      
+    
+    
+    <br /><br /><!--[pnml name="_USERPICTURESASSOCIATEDPERSONS"]-->:<br />
+    <ul>
+    <!--[foreach from=$assocPersons item="person"]-->
+	<li><a href="user.php?op=userinfo&amp;uname=<!--[$uname]-->"><!--[$person.uname]--></a> (<a href="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id uname=$person.uname authid=$authid action="delete"]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>)</li>
+    <!--[/foreach]-->
+    </ul>    
+<!--[else]-->
+    <!--[pnml name="_USERPICTURESPICTURENOTFOUND"]-->
+<!--[/if]-->
