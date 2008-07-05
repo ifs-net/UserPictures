@@ -368,6 +368,9 @@ function UserPictures_user_showThumbnailGallery()
 																				'startnumthumb'	=> $startnumthumb));
     $pnRender->assign('picturesselected',	$picturesselected);
     $pnRender->assign('pictures',			$pictures);
+    $diffPics = pnModAPIFunc('UserPictures','user','picturesDiff',array(	'allPics'	=> $pictures,
+																			'shownPics'	=> $picturesselected));
+	$pnRender->assign('diffpics',			$diffPics);
     $pnRender->assign('picturecounter',		count($pictures));
     $startnum = FormUtil::getPassedValue('startnum',1);
     if (!isset($startnum) or (!($startnum>=0))) $startnum=1;

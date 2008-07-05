@@ -16,6 +16,24 @@ function UserPictures_userapi_showPicture($args)
 }
 
 /**
+ * get not displayed pictures of a page for slideshow
+ *
+ * @param	$args['allPics']	array
+ * @param	$args['shownPics']	array
+ * @return	array
+ */
+function UserPictures_userapi_picturesDiff($args)
+{
+  	$a = $args['allPics'];
+  	$s = $args['shownPics'];
+  	// reorder allPics array with id as key value;
+  	foreach ($a as $x) $allPics[$x['id']] = $x;
+  	// delete key and value if double
+  	foreach ($s as $x) if ($allPics[$x['id']]['id'] > 0) unset($allPics[$x['id']]);
+  	return $allPics;
+}
+
+/**
  * get order array for noscript ajax fallback ordering the item list
  *
  * @param	$fields		array
@@ -139,9 +157,9 @@ function UserPictures_userapi_addPerson($args)
  */
 function UserPictures_userapi_addToCategory($args)
 {
-    $uid=(int)$args['uid'];
-    $picture_id=(int)$args['picture_id'];
-    $cat_id=(int)$args['cat_id'];
+    $uid = 			(int)$args['uid'];
+    $picture_id =	(int)$args['picture_id'];
+    $cat_id =		(int)$args['cat_id'];
     if (!isset($uid) || (!($uid>0))) return false;
     if (!isset($cat_id) || (!($cat_id>0))) return false;
     if (!isset($picture_id) || (!($picture_id>0))) return false;
@@ -166,7 +184,6 @@ function UserPictures_userapi_addToCategory($args)
     if ($dbconn->ErrorNo() != 0) return false;
     // set should be closed when it has been finished with
     $result->Close();
-
     return true;
 } 
 
@@ -207,7 +224,6 @@ function UserPictures_userapi_delFromCategory($args)
     if ($dbconn->ErrorNo() != 0) return false;
     // set should be closed when it has been finished with
     $result->Close();
-
     return true;
 } 
 
@@ -244,7 +260,6 @@ function UserPictures_userapi_addCategory($args)
     if ($dbconn->ErrorNo() != 0) return false;
     // set should be closed when it has been finished with
     $result->Close();
-
     return true;
 } 
 
@@ -277,7 +292,6 @@ function UserPictures_userapi_editCategory($args)
     $userpictures_categoriescolumn = &$pntable['userpictures_categories_column'];
 
     // SQL statement 
-    
     if (isset($delete) && ($delete == '1')) {
 	// we now have to delete all associations between pictures and this category
 	$catAssocs = UserPictures_userapi_getCategoryAssociations(array('cat_id'=>$id));
@@ -484,7 +498,6 @@ function UserPictures_userapi_getCategory($args)
     // Return the item array
     $result->Close();
     return $item;
-
 }
 
 
@@ -527,7 +540,6 @@ function UserPictures_userapi_getCategoryAssociations($args)
     // Return the item array
     $result->Close();
     return $items;
-
 }
 
 
@@ -569,7 +581,6 @@ function UserPictures_userapi_getCategoriesAssociation($args)
     // Return the item array
     $result->Close();
     return $items;
-
 }
 
 
@@ -604,7 +615,6 @@ function UserPictures_userapi_delPerson($args)
     if ($dbconn->ErrorNo() != 0) return false;
     // set should be closed when it has been finished with
     $result->Close();
-
     return true;
 } 
 
@@ -648,7 +658,6 @@ function UserPictures_userapi_getPersons($args)
     // Return the item array
     $result->Close();
     return $items;
-
 }
 
 /**
@@ -991,7 +1000,6 @@ function UserPictures_userapi_storePictureDB($args)
 
     // set should be closed when it has been finished with
     $result->Close();
-
     return true;
 }
 
