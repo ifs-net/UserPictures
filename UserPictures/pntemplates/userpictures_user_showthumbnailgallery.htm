@@ -1,4 +1,5 @@
 <!--[include file="userpictures_user_menu.htm"]-->
+
 <h1><!--[pnml name="_USERPICTURESSHOWGALLERY"]--> <!--[pnusergetvar name="uname" uid=$uid]--></h1>
 <img src="modules/UserPictures/pnimages/profile.gif" /> <a href="user.php?op=userinfo&amp;uname=<!--[pnusergetvar name="uname" uid=$uid]-->"><!--[pnml name="_USERPICTURESPROFILELINK"]--></a>
 
@@ -30,7 +31,7 @@
 <center>
 
 <!--[ math equation="( s + x - 1)" s=$startnumthumb x=$counter assign="piccounter"]-->
-&nbsp;<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$piccounter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
+&nbsp;<a rel="lightbox[set]" href="<!--[$picture.filename]-->" title="<!--[$picture.comment]--> " xhref="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$piccounter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
 <small><!--[$picture.comment|truncate:30]--></small><br />
 </center>
 </td>

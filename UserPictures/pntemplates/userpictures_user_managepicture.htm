@@ -109,7 +109,7 @@
 			<!--[/foreach]-->
 		    </select>
 		    <input type="submit" value="<!--[pnml name="_USERPICTURESADDTOCAT"]-->" />
-		    </form><br />
+		    </form>
 		    <!--[pnmodapifunc modname="UserPictures" type="user" func="getCategoriesAssociation" picture_id=$picture.id assign="assocs"]-->
 		    <!--[if $assocs|@count gt 0]-->
 			<!--[pnml name="_USERPICTURESASSOCIATEDWITH"]-->
@@ -121,11 +121,10 @@
 			</ul>
 		    <!--[/if]-->
 		<!--[else]-->
-	        <small>[<a href="<!--[pnmodurl modname="UserPictures" type="user" func="manageCategories"]-->"><!--[pnml name="_USERPICTURESCATEGORYMANAGEMENT"]--></a>]</small><br />
+	        <small>[<a href="<!--[pnmodurl modname="UserPictures" type="user" func="manageCategories"]-->"><!--[pnml name="_USERPICTURESCATEGORYMANAGEMENT"]--></a>]</small>
 		<!--[/if]-->
 	    <!--[/if]-->
 	</td></tr>
-	<tr><td><hr /></td><td><hr /></td><td><hr /></td></tr>
 	</table>
 	</li>
 	<!--[/foreach]-->
