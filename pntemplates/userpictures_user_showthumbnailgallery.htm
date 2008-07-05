@@ -31,7 +31,10 @@
 <center>
 
 <!--[ math equation="( s + x - 1)" s=$startnumthumb x=$counter assign="piccounter"]-->
-&nbsp;<a rel="lightbox[set]" href="<!--[$picture.filename]-->" title="<!--[$picture.comment]--> " xhref="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$piccounter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
+&nbsp;<a id=p<!--[$picture.id]--> rel="lightbox[set]" title="<!--[$picture.comment]--> " href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid startnum=$piccounter cat_id=$cat_id pic_id=$picture.id]-->"><img border=0 src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"></a>&nbsp;<br />
+<script type="text/javascript">
+	$('p<!--[$picture.id]-->').href="<!--[$picture.filename]-->";
+</script>
 <small><!--[$picture.comment|truncate:30]--></small><br />
 </center>
 </td>
