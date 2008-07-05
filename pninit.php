@@ -2,6 +2,7 @@
 /**
  * initialise the UserPictures module
  *
+ * @return       bool       true on success, false otherwise
  */
 function UserPictures_init()
 {
@@ -58,7 +59,11 @@ function UserPictures_init()
     return true;
 }
 
-
+/**
+ * upgrade the UserPictures module
+ *
+ * @return       bool       true on success, false otherwise
+ */
 function UserPictures_upgrade($oldversion)
 {
     switch($oldversion) {

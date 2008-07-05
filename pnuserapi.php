@@ -16,6 +16,26 @@ function UserPictures_userapi_showPicture($args)
 }
 
 /**
+ * store the new order of the fields
+ *
+ * @param	$args['list']	array
+ * @return 	boolan
+ */
+function UserPictures_userapi_ajaxSaveList($args) 
+{
+ 	$list = $args['list'];
+	if (!isset($list)) return false; 
+	foreach ($list as $key=>$value) {
+	  	// get item with id "value" and set the new position number "sort" (+1)
+	  	$field = DBUtil::selectObjectByID('userpictures',$value);
+	  	$field['position'] = $key;
+	  	DBUtil::updateObject($field,'userpictures');
+	}
+	return true;
+}
+
+
+/**
  * add an associaiton to a picture
  *
  * @param	$args['picture_id']	int
@@ -1058,7 +1078,7 @@ function UserPictures_userapi_getPictures($args)
     $startnum=$args[startnum];
     if (isset($startnum) && ($startnum >= 0)) $limit = "  LIMIT ".($startnum-1)." ,1 ";
     
-    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['filename']." DESC";
+    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['position']." $userpicturestable.".$userpicturescolumn['filename']." DESC";
 
     // do we need the data for the "latest pictures" thumbnail gallery?
     $startnumthumb=$args[startnumthumb];
@@ -1193,7 +1213,7 @@ function UserPictures_userapi_getPicture($args)
                    ".$userpicturescolumn['verified']."
             FROM $userpicturestable
 	    $where
-	    ORDER BY ".$userpicturescolumn['filename']." DESC
+	    ORDER BY ".$userpicturescolumn['position'].", ".$userpicturescolumn['filename']." DESC
 	    ";
     $result =& $dbconn->Execute($sql);
     // Check for an error with the database code, and if so set an appropriate
