@@ -34,7 +34,7 @@ function UserPictures_pntables()
     $pntable['userpictures_column_def'] = array(
     			'id'					=> "I	AUTOINCREMENT PRIMARY",
     			'uid'					=> "I	NOTNULL DEFAULT 0",
-    			'position'				=> "I	NOTNULL DEFAULT 99999",
+    			'position'				=> "I	NOTNULL DEFAULT 0",
     			'template_id'			=> "I	NOTNULL DEFAULT 0",
         		'comment'				=> "XL	NOTNULL DEFAULT ''",
         		'coords'				=> "XL	NOTNULL DEFAULT ''",

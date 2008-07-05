@@ -51,6 +51,11 @@
 <!--[pager show="page" rowcount=$pictures limit=25 posvar=startnumthumb shift=1]-->
 </center>
 
+<!--[if $diffpics|@count gt 0]-->
+	<!--[foreach from=$diffpics item=p]-->
+		<a rel="lightbox[set]" href="<!--[$p.filename]-->" title="<!--[$P.comment]--> "></a>
+	<!--[/foreach]-->
+<!--[/if]-->
 
 <!--[include file="userpictures_user_footer.htm"]-->
 
