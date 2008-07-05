@@ -11,6 +11,15 @@ UPGRADE INFORMATION:
   release between the actual and your version to get the newest
   release onto your system.
 
+1.0:
+====
+- added coords field to each picture to add some gps coordinates
+- added position field to each picture
+- fixed bug with paged thumbnail galleries and wrong links
+- added myprofile plugin
+- zikula compatible now - UserPictures does not run with PostNuke
+  any more!
+
 0.93:
 =====
 - fixed bug "function_thumbs" when original file is missing 
