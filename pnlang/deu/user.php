@@ -9,6 +9,8 @@ define('_USERPICTURESUPLOADPICTURES',		'Eigene Bildergalerie verwalten');
 define('_USERPICTURESMANAGECATEGORIES',		'Alben-/Kategorienverwaltung');
 
 // managepicture
+define('_USERPICTURESMOVEDOWN',				'runter');
+define('_USERPICTURESMOVEUP',				'hoch');
 define('_USERPICTURESUPLOADDELETESEXISTINGPICTURE',	'Wenn ein neues Bild hochgeladen wird, dann wird automatisch ein altes, sofern vorhanden, überschrieben');
 define('_USERPICTURESSEND',		'Abschicken');
 define('_USERPICTURESUPLOADED',		'Bild wurde hochgeladen');
