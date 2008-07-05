@@ -5,151 +5,14 @@
  */
 function UserPictures_init()
 {
-    // Get datbase setup
-    $dbconn  =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
+  	// Create Tables
+  	if (!DBUtil::createTable('userpictures')) return false;
+  	if (!DBUtil::createTable('userpictures_templates')) return false;
+  	if (!DBUtil::createTable('userpictures_persons')) return false;
+  	if (!DBUtil::createTable('userpictures_settings')) return false;
+  	if (!DBUtil::createTable('userpictures_categories')) return false;
+  	if (!DBUtil::createTable('userpictures_catrassoc')) return false;
 
-    // It's good practice to name the table and column definitions you
-    // are getting - $table and $column don't cut it in more complex
-    // modules
-    $UserPicturestable  = &$pntable['userpictures'];
-    $UserPicturescolumn = &$pntable['userpictures_column'];
-
-    $UserPictures_templatestable  = &$pntable['userpictures_templates'];
-    $UserPictures_templatescolumn = &$pntable['userpictures_templates_column'];
-
-    $UserPictures_personstable  = &$pntable['userpictures_persons'];
-    $UserPictures_personscolumn = &$pntable['userpictures_persons_column'];
-
-    $UserPictures_categoriestable  = &$pntable['userpictures_categories'];
-    $UserPictures_categoriescolumn = &$pntable['userpictures_categories_column'];
-
-    $UserPictures_catassoctable  = &$pntable['userpictures_catassoc'];
-    $UserPictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
-
-    $UserPictures_settingstable  = &$pntable['userpictures_settings'];
-    $UserPictures_settingscolumn = &$pntable['userpictures_settings_column'];
-
-    // Create the table - the formatting here is not mandatory, but it does
-    // make the SQL statement relatively easy to read.
-    // Create a new data dictionary object
-    $dict = &NewDataDictionary($dbconn);
-
-    // Define array containing specific table options
-	// This variable only need populating once as the same table options will
-	// apply for all tables to be created.
-    $taboptarray =& pnDBGetTableOptions();
-
-    // Define the fields in the form:
-    // $fieldname $type $colsize $otheroptions
-    $flds = "
-        $UserPicturescolumn[id]			I	AUTOINCREMENT PRIMARY,
-        $UserPicturescolumn[uid]		I	NOTNULL DEFAULT 0,
-        $UserPicturescolumn[template_id]	I	NOTNULL DEFAULT 0,
-        $UserPicturescolumn[comment]		XL	NOTNULL DEFAULT '',
-        $UserPicturescolumn[filename]		XL	NOTNULL DEFAULT '',
-        $UserPicturescolumn[verified]		C(1)	NOTNULL DEFAULT '0'
-    ";
-
-    $flds_templates = "
-        $UserPictures_templatescolumn[id]			I	AUTOINCREMENT PRIMARY,
-        $UserPictures_templatescolumn[title]		XL	NOTNULL DEFAULT '',
-        $UserPictures_templatescolumn[max_width]		I	NOTNULL DEFAULT 320,
-        $UserPictures_templatescolumn[max_height]		I	NOTNULL DEFAULT 200,
-        $UserPictures_templatescolumn[defaultimage]	XL	NOTNULL DEFAULT '',
-        $UserPictures_templatescolumn[to_verify]		C(1)	NOTNULL DEFAULT '0'
-	
-    ";
-
-    $flds_persons = "
-        $UserPictures_personscolumn[id]			I	AUTOINCREMENT PRIMARY,
-        $UserPictures_personscolumn[picture_id]		I	NOTNULL DEFAULT 0,
-        $UserPictures_personscolumn[uid]		I	NOTNULL DEFAULT 0
-    ";
-
-    $flds_catassoc = "
-        $UserPictures_catassoccolumn[id]			I	AUTOINCREMENT PRIMARY,
-        $UserPictures_catassoccolumn[picture_id]		I	NOTNULL DEFAULT 0,
-        $UserPictures_catassoccolumn[cat_id]			I	NOTNULL DEFAULT 0,
-        $UserPictures_catassoccolumn[uid]			I	NOTNULL DEFAULT 0
-    ";
-
-    $flds_categories = "
-        $UserPictures_categoriescolumn[id]			I	AUTOINCREMENT PRIMARY,
-        $UserPictures_categoriescolumn[uid]			I	NOTNULL DEFAULT 0,
-        $UserPictures_categoriescolumn[title]			XL	NOTNULL DEFAULT '',
-        $UserPictures_categoriescolumn[text]			XL	NOTNULL DEFAULT '',
-        $UserPictures_categoriescolumn[sortnr]			I	NOTNULL DEFAULT 0
-    ";
-
-    $flds_settings = "
-        $UserPictures_settingscolumn[uid]			I	AUTOINCREMENT PRIMARY,
-        $UserPictures_settingscolumn[nolinking]			I	NOTNULL DEFAULT 0,
-        $UserPictures_settingscolumn[nocomments]		I	NOTNULL DEFAULT 0,
-        $UserPictures_settingscolumn[picspublic]		I	NOTNULL DEFAULT 0
-    ";
-
-    // Creating the table for the templates
-    $sqlarray = $dict->CreateTableSQL($UserPictures_settingstable, $flds_settings, $taboptarray);
-
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESCREATESETTINGSTABLEFAILED."-".$sqlarray[0]);
-        return false;
-    }
-
-    // Creating the table for the pictures
-    $sqlarray = $dict->CreateTableSQL($UserPicturestable, $flds, $taboptarray);
-
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESCREATETABLEFAILED.'-'.$sqlarray[0]);
-        return false;
-    }
-
-    // Creating the table for the templates
-    $sqlarray = $dict->CreateTableSQL($UserPictures_templatestable, $flds_templates, $taboptarray);
-
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESCREATETABLEFAILED."-".$sqlarray[0]);
-        return false;
-    }
-
-    // Creating the table for the templates
-    $sqlarray = $dict->CreateTableSQL($UserPictures_personstable, $flds_persons, $taboptarray);
-
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESCREATEPERSONSTABLEFAILED."-".$sqlarray[0]);
-        return false;
-    }
-
-    $sqlarray = $dict->CreateTableSQL($UserPictures_catassoctable, $flds_catassoc, $taboptarray);
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESCREATECATASSOCTABLEFAILED."-".$sqlarray[0]);
-        return false;
-    }
-
-    $sqlarray = $dict->CreateTableSQL($UserPictures_categoriestable, $flds_categories, $taboptarray);
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dict->ExecuteSQLArray($sqlarray) != 2) {
-        pnSessionSetVar('errormsg', _USERPICTURESCREATECATEGORIESTABLEFAILED."-".$sqlarray[0]);
-        return false;
-    }
-
-    // Set up an initial value for a module variable.  Note that all module
-    // variables should be initialised with some value in this way rather
-    // than just left blank, this helps the user-side code and means that
-    // there doesn't need to be a check to see if the variable is set in
-    // the rest of the code as it always will be
 
     // If the interactive installation has run, we hve some values now in sessionvars
     // that we must use
@@ -346,10 +209,15 @@ function UserPictures_upgrade($oldversion)
 	        return false;
     	    }
 	case '0.90':
-	    // no content but we need this case!
-        default:
+	case '0.91':
+	case '0.92':
+	// all for 1.0 now!
+	case '0.93':
+		if (!DBUtil::changeTable('userpictures')) return false;
+	case '0.94':	
+	default:
+	    return true;
 	}
-    return true;
 }
 
 /**
@@ -367,11 +235,7 @@ function UserPictures_delete()
   	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
 
     // Delete any module variables
-    pnModDelVar('MyProfile');
-    
-    // delete old config file if there is one
-    $configfile = 'modules/MyProfile/config/tabledef.inc';
-    if (file_exists($configfile)) unlink($configfile);
+    pnModDelVar('UserPictures');
 
     // Deletion successful
     return true;
