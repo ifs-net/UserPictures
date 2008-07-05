@@ -390,7 +390,7 @@ function UserPictures_user_managePicture()
     $template_id 	= FormUtil::getPassedValue('template_id');
     $picture_id 	= FormUtil::getPassedValue('picture_id');
     $uid 			= pnUserGetVar('uid');
-    $id 			= pnUserGetVar('template_id');
+    $id 			= FormUtil::getPassedValue('template_id',0);
     
     if (isset($action) && ($action=='delete')) {
 	// is the auth-key correct?
@@ -419,16 +419,6 @@ function UserPictures_user_managePicture()
 	$comment = pnVarCleanFromInput('comment');
 	if (pnModAPIFunc('UserPictures','user','setComment',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment))) pnSessionSetVar('statusmsg',_USERPICTURECOMMENTCHANGED);
 	else pnSessionSetVar('errormsg',_USERPICTURESCOMMENTCHANGEERROR);
-    }    
-    if (isset($action) && ($action=='moveup')) {
-	// is the auth-key correct?
-        if (!pnSecConfirmAuthKey()) {
-            pnSessionSetVar('errormsg', _BADAUTHKEY);
-            return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-        }
-	$lastfilename=pnVarCleanFromInput('lastfilename');
-	if (pnModAPIFunc('UserPictures','user','moveUp',array('picture_id'=>$picture_id,'uid'=>$uid,'lastfilename'=>$lastfilename))) pnSessionSetVar('statusmsg',_USERPICTURESMOVEDUP);
-	else pnSessionSetVar('errormsg',_USERPICTURESMOVEUPEERROR);
     }    
     if (isset($action) && ($action=='rotate')) {
 	// is the auth-key correct?
@@ -475,7 +465,7 @@ function UserPictures_user_managePicture()
     }	
 
     // this is just to clean the browsers url input field and to 
-    // avoid errors because of navigating with the browser buttons
+    // avoid errors caused by navigating with the browser buttons
     if (isset($action)) return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id))."#$picture_id");
 
 
@@ -488,6 +478,12 @@ function UserPictures_user_managePicture()
 		return pnRedirect(pnModURL('UserPictures','user','main'));
     }
     // Assign some values to some variables
+	$pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array(
+					'pictures' => pnModAPIFunc('UserPictures','user','getPicture',array(
+													'uid' 			=> pnUserGetVar('uid'),
+													'template_id'	=> $id
+												))));
+    $render->assign('pictures',			$pictures);
     $render->assign('uid',				pnUserGetVar('uid'));
     $render->assign('activated',		pnModGetVar('UserPictures','activated'));
     $render->assign('disabledtext',		pnModGetVar('UserPictures','disabledtext'));
@@ -495,10 +491,6 @@ function UserPictures_user_managePicture()
     $render->assign('verifytext',		pnModGetVar('UserPictures','verifytext'));
     $render->assign('avatarmanagement',	pnModGetVar('UserPictures','avatarmanagement'));
     $render->assign('template',			$template);
-    $render->assign('pictures',			pnModAPIFunc('UserPictures','user','getPicture',array(
-												'uid' 			=> pnUserGetVar('uid'),
-												'template_id'	=> $template['id']
-												)));
     
     $categories = pnModAPIFunc('UserPictures','user','getCategories',array('uid'=>$uid));
     if (count($categories)>0) $render->assign('categories',$categories);
@@ -509,5 +501,18 @@ function UserPictures_user_managePicture()
     return $render->fetch('userpictures_user_managepicture.htm');
 }
 
-
+/**
+ * noscript tp ajax call to store the new field-list
+ *
+ * @return	output
+ */
+function UserPictures_user_saveList()
+{
+	$order = unserialize(FormUtil::getPassedValue('order'));
+    // Security check
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
+ 	// store the new order    
+	pnModAPIFunc('UserPictures','ajax','ajaxSaveList',array('list' => $order));
+    return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id' => FormUtil::getPassedValue('template_id'))));
+}
 ?>

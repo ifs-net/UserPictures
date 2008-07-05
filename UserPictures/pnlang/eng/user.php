@@ -9,6 +9,8 @@ define('_USERPICTURESUPLOADPICTURES',		'Manage my own gallery');
 define('_USERPICTURESMANAGECATEGORIES',		'Manage categories for the own gallery');
 
 // managepicture
+define('_USERPICTURESMOVEDOWN',				'down');
+define('_USERPICTURESMOVEUP',				'up');
 define('_USERPICTURESUPLOADDELETESEXISTINGPICTURE',	'Whenever you upload a new picture the old picture will be overwritten');
 define('_USERPICTURESSEND',		'Submit');
 define('_USERPICTURESUPLOADED',		'Upload successfull');

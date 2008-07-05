@@ -16,6 +16,55 @@ function UserPictures_userapi_showPicture($args)
 }
 
 /**
+ * get order array for noscript ajax fallback ordering the item list
+ *
+ * @param	$fields		array
+ * @return	array
+ */
+function UserPictures_userapi_addOrderLinkToPictures($args)
+{
+  	/**
+  	 * This function switches the value of two given positions
+  	 * in a given array
+  	 *
+  	 * @param 	$array	array
+  	 * @param	$pos1	int
+  	 * @param 	$pos2	int
+  	 * @return 	array
+  	 */
+  	function switchArrayElements($array,$pos1,$pos2) {
+	    $cache = $array[$pos1];
+	    $array[$pos1] = $array[$pos2];
+	    $array[$pos2] = $cache;
+	    return $array;
+	}
+	
+  	$fields = $args['pictures'];
+  	if (!isset($fields)) return false;
+  	
+	// we'll now create an array which contains the array for 
+	// moving an element up and down for every element of the list
+  	foreach ($fields as $field) $workArray[] = $field['id'];
+  	$i=0;
+  	foreach ($workArray as $w) {
+  	  	// we'll store the array with the id of the entry as key
+  	  	$copy = $workArray;
+  	  	if ($i!=0) $res[$workArray[$i]]['up'] = switchArrayElements($copy,($i-1),$i);
+  	  	if ($i!=count($fields)-1) $res[$workArray[$i]]['down'] = switchArrayElements($copy,$i,($i+1));
+	    $i++;
+	}
+	foreach ($fields as $field) {
+	  	$up = $res[$field['id']]['up'];
+		if (count($up)>0)$field['orderlink']['up'] = htmlentities(serialize($up));
+		$down = $res[$field['id']]['down'];
+		if (count($down)>0)$field['orderlink']['down'] = htmlentities(serialize($down));
+		$fieldRes[]=$field;
+	}
+	prayer($filedRes);
+	return $fieldRes;
+}
+
+/**
  * store the new order of the fields
  *
  * @param	$args['list']	array
@@ -652,89 +701,6 @@ function UserPictures_userapi_increaseFilename($args)
 }
 
 /**
- * move a picture one position up
- *
- * @param	$args['uid']		int
- * @param	$args['picture_id']	int
- * @param	$args['template_id']	int
- * @param	$args['lastfilename']	string
- * @return	bool
- */
-function UserPictures_userapi_moveup($args)
-{
-    $prefix = pnModGetVar('UserPictures','datadir');    
-    $uid=(int)$args['uid'];
-    $picture_id=(int)$args['picture_id'];
-    $template_id=(int)$args['template_id'];
-    $lastfilename=$args['lastfilename'];    
-
-    if (!file_exists($lastfilename)) return false;
-
-    // now we'll fetch the picture that should be moved up.
-    $pictures=UserPictures_userapi_getPicture(array('template_id'=>$template_id,'picture_id'=>$picture_id,'uid'=>$uid));    
-    $picture=$pictures[0];
-
-    // the filename is [template_id]-[unix-timestamp]_[uid].jpg
-    // we now need to increase the timestamp plus one to avoid
-    // caching problems for each picture.
-    //
-    // we need $lastfilename and $filename - each without prefix!
-	
-    // THE LAST FILE
-    // the end of the file:
-    
-    $filename = UserPictures_userapi_cleanFilename(array('template_id'=>$template_id,'uid'=>$uid,'filename'=>$picture['filename']));
-    $lastfilename = UserPictures_userapi_cleanFilename(array('template_id'=>$template_id,'uid'=>$uid,'filename'=>$lastfilename));
-    
-    // ok we now can unlink the thumbnails. Even if sth. will cause an error
-    // the thumbnails will be created on demand if they are needed again
-    unlink($prefix.$filename.'.thumb.jpg');
-    unlink($prefix.$lastfilename.'.thumb.jpg');
-
-    // now we will increase each timestamp plus one because so we will not
-    // have problems with any browser cache. New picture name => no problem ;-)    
-    
-    $lastfilename_new = UserPictures_userapi_increaseFilename(array('value'=>1,'filename'=>$lastfilename));
-    $filename_new = UserPictures_userapi_increaseFilename(array('value'=>1,'filename'=>$filename));
-    
-    // rename the files    
-    if (!rename($prefix.$filename,$prefix.$lastfilename_new)) return false;
-    if (!rename($prefix.$lastfilename,$prefix.$filename_new)) return false;
-    
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpicturestable = $pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-
-    // SQL statement 
-    $sql = "UPDATE $userpicturestable 
-        SET ".$userpicturescolumn['filename']." = '".pnVarPrepForStore($lastfilename_new)."'
-        WHERE ".$userpicturescolumn['filename']." = '". pnVarPrepForStore($filename) ."'
-        LIMIT 1 ";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-
-    // SQL statement 
-    $sql = "UPDATE $userpicturestable 
-        SET ".$userpicturescolumn['filename']." = '".pnVarPrepForStore($filename_new)."'
-        WHERE ".$userpicturescolumn['filename']." = '". pnVarPrepForStore($lastfilename) ."'
-        LIMIT 1 ";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-
-    return true;
-}
-
-/**
  * rotate a picture
  *
  * @param	$args['uid']		int
@@ -1078,7 +1044,7 @@ function UserPictures_userapi_getPictures($args)
     $startnum=$args[startnum];
     if (isset($startnum) && ($startnum >= 0)) $limit = "  LIMIT ".($startnum-1)." ,1 ";
     
-    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['position']." $userpicturestable.".$userpicturescolumn['filename']." DESC";
+    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['position'].", $userpicturestable.".$userpicturescolumn['filename']." DESC";
 
     // do we need the data for the "latest pictures" thumbnail gallery?
     $startnumthumb=$args[startnumthumb];

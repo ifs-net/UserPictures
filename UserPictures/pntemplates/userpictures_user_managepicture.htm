@@ -33,7 +33,7 @@
 	<!--[if $template.id eq 0]--> / <!--[pnmodgetvar module="UserPictures" name="ownuploads"]--> <!--[/if]-->
 
 	<!--[foreach item=picture from=$pictures]-->
-   	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">dddd
+   	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">
 	<table>
 	<tr><td>
 	    <center>
@@ -51,12 +51,22 @@
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a>
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=90|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockwith.gif" title="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" alt="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" /></a>
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=270|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockagainst.gif" title="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" alt="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" /></a>
-	    <!--[if $template.id eq 0 and $pictures gt 1 and $picture.lastfilename ne ""]-->
-		<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="moveup" template_id=$template.id picture_id=$picture.id authid=$authid lastfilename=$picture.lastfilename|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/icon_up.gif" title="<!--[pnml name="_USERPICTURESONTOP"]-->" alt="<!--[pnml name="_USERPICTURESONTOP"]-->" /></a>
-	    <!--[/if]-->
-	    <!--[if $template.id eq 0 and $pictures gt 1 and $picture.next_id ne ""]-->
-		<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="moveup" template_id=$template.id picture_id=$picture.next_id authid=$authid lastfilename=$picture.filename|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/icon_down.gif" title="<!--[pnml name="_USERPICTURESONTOP"]-->" alt="<!--[pnml name="_USERPICTURESDOWN]-->" /></a>
-	    <!--[/if]-->
+		<noscript>
+			<!--[if $picture.orderlink.up ne ""]-->
+				<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="saveList"]-->" >
+				<input type="hidden" name="template_id" value="<!--[$template.id]-->">
+				<input type="hidden" name="order" value="<!--[$picture.orderlink.up]-->" />
+				<input type="submit" value="<!--[pnml name="_USERPICTURESMOVEUP"]-->" />
+				</form>
+			<!--[/if]-->
+			<!--[if $picture.orderlink.down ne ""]-->
+				<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="saveList"]-->" >
+				<input type="hidden" name="template_id" value="<!--[$template.id]-->">
+				<input type="hidden" name="order" value="<!--[$picture.orderlink.down]-->" />
+				<input type="submit" value="<!--[pnml name="_USERPICTURESMOVEDOWN"]-->" />
+				</form>
+			<!--[/if]-->
+		</noscript>
 	    </center>
 	    <!--[pnml name="_USERPICTURESMODIFYCOMMENT"]--><br />
 	    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id]-->" />
@@ -120,7 +130,9 @@
 	</li>
 	<!--[/foreach]-->
 </ul>
-
+</center>
+<!--[/if]-->
+<!--[/if]-->
 	<script type="text/javascript">
 	//<![CDATA[
 	Sortable.create("userpictures_list", {
@@ -135,10 +147,5 @@
 	})
 	//]]>
 	</script>
-
-</table>
-</center>
-<!--[/if]-->
-<!--[/if]-->
 
 <!--[include file="userpictures_user_footer.htm"]-->
