@@ -1,36 +1,37 @@
+<div style="overflow:scroll;height:90%">
 <!--[include file="userpictures_user_menu.htm"]-->
 <!--[pnajaxheader prototype="1" scriptacoulous="1"]-->
 
-<a name="top"></a>
 <h1><!--[pnml name="_USERPICTURESMANAGEYOURPICTURES"]-->: <!--[$template.title]--></h1>
 <!--[if $activated eq 0]-->
-    <br /><!--[pnml name="_USERPICTURESDISABLED"]-->
+    <!--[pnml name="_USERPICTURESDISABLED"]-->
     <br /><!--[$disabledtext]-->
 <!--[else]-->
-<br /><a href="<!--[pnmodurl modname="UserPictures" type="user" func="main"|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESBACKTOALLTEMPLATES"]--></a>
+<a href="<!--[pnmodurl modname="UserPictures" type="user" func="main"|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESBACKTOALLTEMPLATES"]--></a><br />
 <!--[if $template.id eq 0]-->
-<br /><a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$uid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESGALLERYVIEW"]--></a><br /> <br />
+<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$uid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESGALLERYVIEW"]--></a><br />
 <!--[/if]-->
 
 <!--[if $pictures eq 0 or $template.id eq 0]-->
 <!--[if $template.id gt -1]-->
-    <br /><form action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->" method="post" enctype="multipart/form-data" name="upload">
+	<div class="userpictures_uploadform">
+	<!--[if $pictures ne 0]-->
+	<!--[pnml name="_USERPICTURESAMOUNT"]-->: <!--[$pictures|@count]-->
+	<!--[if $template.id eq 0]--> / <!--[pnmodgetvar module="UserPictures" name="ownuploads"]--> <!--[/if]--><br />
+    <form action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->" method="post" enctype="multipart/form-data" name="upload">
+    <!--[if $verifytext ne '']--><!--[$verifytext|pnvarprepfordisplay|nl2br]--><br /><!--[/if]-->
     <input type="hidden" name="authid" value="<!--[pnsecgenauthkey module="UserPictures"]-->" />
     <input type="hidden" name="action" value="upload" />
     <input type="file" name="file" id="file" size="32" />
     <br /><!--[pnml name="_USERPICTURESCOMMENT"]-->:<br />
     <input name="comment" />
-    <br />
-    <!--[$verifytext|pnvarprepfordisplay|nl2br]-->
-    <br /><input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->">
+	<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->">
     </form>
+    </div>
 <!--[/if]-->
 <!--[/if]-->
 
 	<ul id="userpictures_list" class="userpictures_sortablelist">
-	<!--[if $pictures ne 0]-->
-	<!--[pnml name="_USERPICTURESAMOUNT"]-->: <!--[$pictures|@count]-->
-	<!--[if $template.id eq 0]--> / <!--[pnmodgetvar module="UserPictures" name="ownuploads"]--> <!--[/if]-->
 
 	<!--[foreach item=picture from=$pictures]-->
    	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">
@@ -42,7 +43,6 @@
 	    <!--[else]-->
 		<a href="<!--[$picture.filename]-->" target="_blanc"><!--[$picture.code_thumbnail]--></a><br />
 	    <!--[/if]-->
-	    <small><a href="#top"><!--[pnml name="_USERPICTURESGOONTOP"]--></a></small><br />
 	    </center>
 	</td><td>
 	    <br />
@@ -146,5 +146,5 @@
 	})
 	//]]>
 	</script>
-
 <!--[include file="userpictures_user_footer.htm"]-->
+</div>
