@@ -1,3 +1,3 @@
 <?php
-define('_USERPICTURESOWNPICTURES',	'My pictures');
+define('_USERPICTURESOWNPICTURES',		'My pictures');
 ?>
