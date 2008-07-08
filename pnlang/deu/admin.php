@@ -1,7 +1,7 @@
 <?php
 
 // main
-define('_USERPICTURESMAINADMINPANEL',	'Administrationspanel pnUserPictures');
+define('_USERPICTURESMAINADMINPANEL',	'Administrationspanel UserPictures');
 define('_USERPICTURESALLOWUPLOADS',	'Hochladen von Bildern erlauben');
 define('_USERPICTURESVERIFYTEXT',	'Text, welcher beinhaltet, welche Kriterien hochgeladene Bilder erfüllen müssen.');
 define('_USERPICTURESSEND',		'Abschicken');
@@ -11,7 +11,7 @@ define('_USERPICTURESADMINMAIN',	'Grundeinstellungen');
 define('_USERPICTURESTOACTIVETE',	'Freizuschaltende Bilder');
 define('_USERPICTURESCONVERT',		'Angabe zum Programm convert (normal: /usr/bin/convert)');
 define('_USERPICTURESDISABLEDTEXT',	'Text, welcher angezeigt werden soll, wenn durch den Betreiber dieser Seite das Hochladen von Bildern deaktiviert wurde');
-define('_USERPICTURESMAXFILESIZE',	'Maximale Größe hochgeladener Dateien in KB (Standard 1500) bevor diese verkleinert werden. Nach dem automatischen Verkleinern der Auflösung durch pnUserPictures sind diese natürlich auch in der Dateigröße kleiner.');
+define('_USERPICTURESMAXFILESIZE',	'Maximale Größe hochgeladener Dateien in KB (Standard 1500) bevor diese verkleinert werden. Nach dem automatischen Verkleinern der Auflösung durch UserPictures sind diese natürlich auch in der Dateigröße kleiner.');
 define('_USERPICTURESOWNUPLOADS',	'Wieviel Bilder sollen Communitynutzer zusätzlich zu den fest per Template eingestellten hochladen dürfen für eine eigene Galerie? (0=keine)');
 define('_USERPICTURESPICTURES',		'Bilder');
 define('_USERPICTURESMAXWIDTHUSERGALLERY',	'Maximale Bilderbreite für Benutzergalerien');
