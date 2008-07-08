@@ -1,7 +1,7 @@
 <?php
 
 // main
-define('_USERPICTURESMAINADMINPANEL',			'Administration of pnUserPictures');
+define('_USERPICTURESMAINADMINPANEL',			'Administration of UserPictures');
 define('_USERPICTURESALLOWUPLOADS',				'Allow picture uploads');
 define('_USERPICTURESVERIFYTEXT',				'Some text that is shown in the upload form (criteria for the pictures etc.');
 define('_USERPICTURESSEND',						'Submit');
@@ -21,7 +21,7 @@ define('_USERPICTURESTHUMBNAILSIZE',            'Size of the thumbnails');
 define('_USERPICTURESATTENTIONONCHANGE',        'Please notive that if you want to change the thumbnail size later you have to delete all thumbnail files manually - the new thumbnails will be generated on demand');
 define('_USERPICTURESPIXELCROSSPIXEL',          'Format: PixelsxPixels. Example value: 110x110 (use a x not a * or something else)');
 define('_USERPICTURESDATADIR',					'Path to the picture\'s directory. This has to be the relative path seen from the postnuke\'s root folder. This directory has to be writeable by the webserver!');
-define('_USERPICTURESALLOWAVATARMANAGEMENT',    'Allow the management of avatars in pnUserPictures');
+define('_USERPICTURESALLOWAVATARMANAGEMENT',    'Allow the management of avatars in UserPictures');
 define('_USERPICTURESAVATARSIZE',       		'Format of an avatar in your postnuke installation');
 define('_USERPICTURESTHUMBNAILCREATIONMETHOD',	'Method how to create thumbnails');
 define('_USERPICTURESTCCONVERT',				'convert (ImageMagick) via shell_exec');
