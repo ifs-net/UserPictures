@@ -19,9 +19,18 @@
 
 
 <!--[foreach item=picture from=$pictures]-->
+
+
 <p><center>
-<img src="<!--[$picture.filename]-->" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->"><br />
+<div class="userpictures_photonotes fn-container" id="PhotoContainer">
+	<img src="<!--[$picture.filename]-->" title="<!--[$picture.comment]-->" alt="<!--[$picture.comment]-->" />
+</div>
+<br class="userpictures_clearboth" />
+            <input type="button" value="Add a Note!" style="margin-left:30px;" onclick="AddNote();" />
+
+
 <strong><!--[$picture.comment]--></strong>
+
 
 <!--[pnmodapifunc modname="UserPictures" type="user" func="getPersons" picture_id=$picture.id assign="assocPersons"]-->
 <!--[if $assocPersons|@count gt 0]-->
@@ -31,7 +40,10 @@
     <!--[/foreach]-->
 <!--[/if]-->			
 </center>
+
+
 <!--[/foreach]-->
+
 <!--[* Display a pager to go to the pages   *]-->
 <!--[pager show="page" rowcount=$picturecounter limit=1 posvar=startnum shift=1]-->
 
@@ -41,3 +53,28 @@
 
 <!--[include file="userpictures_user_footer.htm"]-->
 
+<script type="text/javascript">
+/* create the Photo Note Container */
+var container = document.getElementById('PhotoContainer');
+var notes = new PhotoNoteContainer(container);
+
+/* create a note */
+var size = new PhotoNoteRect( 156,113,70,67);
+var note = new PhotoNote('Hello World!',1, size);
+
+/* implement the save/delete functions */
+note.onsave = function (note) { return 1; };
+note.ondelete = function (note) { return true; };
+     
+/* add it to the container */
+notes.AddNote(note);
+
+                function AddNote()
+                {
+                    var newNote = new PhotoNote('Add note text here...',-1,new PhotoNoteRect(10,10,50,50));
+                    newNote.onsave = function (note) { return 1; };
+                    newNote.ondelete = function (note) { return true; };
+                    notes.AddNote(newNote);
+                    newNote.Select();
+                }
+</script>
