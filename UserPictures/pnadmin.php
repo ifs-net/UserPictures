@@ -1,8 +1,10 @@
 <?php
 /**
- * the main administration function
+ * main
  *
- * @return       output       The main module admin page.
+ * This function shows the main administration page
+ *
+ * @return       output
  */
 function UserPictures_admin_main()
 {
@@ -69,7 +71,9 @@ function UserPictures_admin_main()
 /**
  * delete picture
  *
- * @return       output       The main module admin page.
+ * This is the delete-a-picture-function for the administrator
+ *
+ * @return       output
  */
 function UserPictures_admin_deletePicture()
 {
@@ -104,7 +108,10 @@ function UserPictures_admin_deletePicture()
 /**
  * find orphans
  *
- * @return       output       The main module admin page.
+ * This function searches for orphans in the filesystem, the data-
+ * base and tries to detect inconsistent in the database
+ *
+ * @return       output
  */
 function UserPictures_admin_findOrphans()
 {
@@ -180,7 +187,10 @@ function UserPictures_admin_browser()
 }
 
 /**
- * the main administration function for browsing stored images that have to be activated
+ * to activate
+ *
+ * This is the main administration function for browsing stored 
+ * images that have to be activated
  *
  * @return       output       The main module admin page.
  */
@@ -224,7 +234,9 @@ function UserPictures_admin_toactivate()
 }
 
 /**
- * the main administration function for template amnagement
+ * templates
+ *
+ * This is the administration function for template amnagement
  *
  * @return       output
  */
