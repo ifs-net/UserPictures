@@ -170,14 +170,7 @@ function UserPictures_adminapi_getNumberOfFiles()
  */
 function UserPictures_adminapi_storeTemplate($args)
 {
-
-    // Get DB Setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-    // Get Tables
-    $userpictures_templatestable  = &$pntable['userpictures_templates'];
-    $userpictures_templatescolumn = &$pntable['userpictures_templates_column'];
-
+	// get data
     list(	$id,
 		$title,
 		$max_width,
@@ -190,37 +183,19 @@ function UserPictures_adminapi_storeTemplate($args)
 							$args[defaultimage],
 							$args[to_verify]	);
 	
-    // Add it now
-    if ($id>0) $sql= "UPDATE $userpictures_templatestable
-		SET $userpictures_templatescolumn[title] = '". $title ."',
-		$userpictures_templatescolumn[max_width] = '". $max_width ."',
-		$userpictures_templatescolumn[max_height] = '". $max_height ."',
-		$userpictures_templatescolumn[defaultimage] = '". $defaultimage ."',
-		$userpictures_templatescolumn[to_verify] = '". $to_verify ."'
-		WHERE $userpictures_templatescolumn[id] = '". (int)$id ."'
-		";
-    else   $sql = "INSERT INTO $userpictures_templatestable (
-              $userpictures_templatescolumn[title],
-              $userpictures_templatescolumn[max_width],
-              $userpictures_templatescolumn[max_height],
-              $userpictures_templatescolumn[defaultimage],
-              $userpictures_templatescolumn[to_verify]	)
-            VALUES (
-              '".$title."',
-              '".(int)$max_width."',
-              '".(int)$max_height."',
-              '".$defaultimage."',
-              '".(int)$to_verify."'	
-              )";
-    $dbconn->Execute($sql);
-
-    // Check for an error with the database code, and if so set an
-    // appropriate error message and return
-    if ($dbconn->ErrorNo() != 0) {
-        pnSessionSetVar('errormsg', _CREATEFAILED);
-        return false;
-    }
-    return true;
+    // Store to DB
+  	$obj = array (
+  		'title'			=> $title, 
+  		'max_width'		=> (int)$max_width,
+  		'max_height'	=> (int)$max_height,
+  		'defaultimage'	=> $defaultimage,
+  		'to_verify'		=> (int)$to_verify
+	  );
+	if ($id > 0) {
+		$obj['id'] = $id;
+		return DBUtil::updateObject($obj,'userpictures_templates');
+	}
+	else return DBUtil::insertObject($obj,'userpictures_templates');
 }
 
 /**
@@ -332,7 +307,7 @@ function UserPictures_adminapi_activatePicture($args)
         pnSessionSetVar('errormsg', _MODULENOAUTH);
         return false;
     }
-
+    
     // Get datbase setup
     $dbconn =& pnDBGetConn(true);
     $pntable =& pnDBGetTables();
