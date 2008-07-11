@@ -1,5 +1,4 @@
 <?php
-
 /**
  * find orphan pictures
  *
@@ -18,18 +17,20 @@ function UserPictures_adminapi_getOrphanPictures($args)
     $templates[]=array('id'=>0);
     
     foreach ($templates as $template) {
-	$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('template_id'=>$template[id]));
-	foreach ($pictures as $picture) {
-	    $email=pnUserGetVar('email',$picture['uid']);
-	    if (!(strlen($email)>0)) {
-		$pic['picture_id']=$picture['id'];
-		$pic['uid']=$picture['uid'];
-		$pic['template_id']=$picture['template_id'];
-		$pics[]=$pic;
-		if ($args[delete]=="1") {
-		    pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id'=>$pic['picture_id'],'template_id'=>$pic['template_id'],'uid'=>$pic['uid']));
-		}
-	    }
+		$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('template_id'=>$template[id]));
+		foreach ($pictures as $picture) {
+		    $email=pnUserGetVar('email',$picture['uid']);
+		    if (!(strlen($email)>0)) {
+				$pic['picture_id']=$picture['id'];
+				$pic['uid']=$picture['uid'];
+				$pic['template_id']=$picture['template_id'];
+				$pics[]=$pic;
+				if ($args[delete]=="1") {
+				    pnModAPIFunc('UserPictures','user','deletePicture',array(	'picture_id'	=> $pic['picture_id'],
+																				'template_id'	=> $pic['template_id'],
+																				'uid'			=> $pic['uid']));
+				}
+			}
         }
     }
     return $pics;
@@ -53,21 +54,21 @@ function UserPictures_adminapi_getOrphanDBFiles($args)
     $templates[]=array('id'=>0);
     
     foreach ($templates as $template) {
-	$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('template_id'=>$template[id]));
-	foreach ($pictures as $picture) {
-	    if (!file_exists($picture[filename])) {
-		unset($file);
-		$file[filename]=$picture[filename];
-		$file[uid]=$picture[uid];
-		$files[]=$file;
-		if ($args[delete]=="1") {
-		    $f=explode("/",$picture[filename]);
-		    $filename=$f[(count($f)-1)];
-    		    $sql="DELETE FROM $userpicturestable WHERE $userpicturescolumn[filename] = '". pnVarPrepForStore($filename)  ."' LIMIT 1";
-		    $dbconn->Execute($sql);
+		$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('template_id'=>$template[id]));
+		foreach ($pictures as $picture) {
+		    if (!file_exists($picture[filename])) {
+				unset($file);
+				$file[filename]=$picture[filename];
+				$file[uid]=$picture[uid];
+				$files[]=$file;
+				if ($args[delete]=="1") {
+				    $f=explode("/",$picture[filename]);
+				    $filename=$f[(count($f)-1)];
+		    		    $sql="DELETE FROM $userpicturestable WHERE $userpicturescolumn[filename] = '". pnVarPrepForStore($filename)  ."' LIMIT 1";
+				    $dbconn->Execute($sql);
+				}
+		    }
 		}
-	    }
-	}
     }
     return $files;
 }
@@ -91,37 +92,37 @@ function UserPictures_adminapi_getOrphanFiles($args)
     $userpicturescolumn = &$pntable['userpictures_column'];
 
     while ($file=readdir($verz)) {
-	if ((filetype($path.$file)!="dir") && ($file != "..")  && ($file != ".") && ($file!="index.html") && ($file!="index.htm") && ($file!=".htaccess") 
-	    // and now check for thumbnails that are correct
-	    ){
-	    $sql = "SELECT $userpicturescolumn[id] 
-		    FROM $userpicturestable
-        	    WHERE $userpicturescolumn[filename] = '".$file."'";
-	    $result=$dbconn->Execute($sql);
-	    if ($dbconn->ErrorNo() == 0) {
-		$counter=$result->RecordCount();
-		if ($counter == 0) {
-    	    
-		    // there is no entry in the Database.
-		    // we must see if the entry is a valid thumbnail
-		    // thumbnails are not stored in the database.
-		    $thumbnail=false;
-		    if (eregi('thumb.jpg',$file)) {
-			unset($orgfile);
-    			$orgfile = $prefix.substr($file,0,(strlen($file)-strlen('thumb.jpg')-1));
-			if (file_exists($orgfile)) $thumbnail=true;
+		if ((filetype($path.$file)!="dir") && ($file != "..")  && ($file != ".") && ($file!="index.html") && ($file!="index.htm") && ($file!=".htaccess") 
+		    // and now check for thumbnails that are correct
+		    ) {
+		    $sql = "SELECT $userpicturescolumn[id] 
+			    FROM $userpicturestable
+	        	    WHERE $userpicturescolumn[filename] = '".$file."'";
+		    $result=$dbconn->Execute($sql);
+		    if ($dbconn->ErrorNo() == 0) {
+				$counter=$result->RecordCount();
+				if ($counter == 0) {
+		    	    
+				    // there is no entry in the Database.
+				    // we must see if the entry is a valid thumbnail
+				    // thumbnails are not stored in the database.
+				    $thumbnail=false;
+				    if (eregi('thumb.jpg',$file)) {
+					unset($orgfile);
+		    			$orgfile = $prefix.substr($file,0,(strlen($file)-strlen('thumb.jpg')-1));
+					if (file_exists($orgfile)) $thumbnail=true;
+				    }
+				    if (!$thumbnail) {
+					unset($item);
+					$item[filename]=$file;
+					if ($args[delete]=="1") {
+				    	    if (unlink($path.'/'.$file)) $item[deleted]=1;
+					}
+				    $items[]=$item;
+				    }
+		        }
 		    }
-		    if (!$thumbnail) {
-			unset($item);
-			$item[filename]=$file;
-			if ($args[delete]=="1") {
-		    	    if (unlink($path.'/'.$file)) $item[deleted]=1;
-			}
-		    $items[]=$item;
-		    }
-	        }
-	    }
-	}
+		}
     }
     return $items;
 }
@@ -140,9 +141,9 @@ function UserPictures_adminapi_deletethumbnails()
     while ($file=readdir($verz)) {
 	if ((filetype($path.$file)!="dir") && ($file != "..")  && ($file != ".") && ($file!="index.html") && ($file!="index.htm") && ($file!=".htaccess")){
 	    if (eregi('thumb',$file)) {
-		if (unlink($prefix."/".$file)) $c++;
-	    }
-	}
+			if (unlink($prefix."/".$file)) $c++;
+		    }
+		}
     }
     return $c;
 }
@@ -242,18 +243,18 @@ function UserPictures_adminapi_getTemplates($args)
     $id=$args[template_id];
     $oneonly=false;
     if (isset($id) && ($id>0)) {
-	$where=" WHERE $userpictures_templatescolumn[id] = '".(int)$id ."'";
-	$oneonly=true;
+		$where=" WHERE $userpictures_templatescolumn[id] = '".(int)$id ."'";
+		$oneonly=true;
     }
     else if (isset($id) && ($id==0)) {
-	// we don't have a real template... lets get the important things from the modul-vars
-	$item[id]=0;
-	$item[title]=_USERPICTURESOWNGALLERY;
-	$item[max_width]=pnModGetVar('UserPictures','maxwidth');
-	$item[max_height]=pnModGetVar('UserPictures','maxheight');
-	$item[defaultimage]='';
-	$item[to_verify]=0;
-	return $item;
+		// we don't have a real template... lets get the important things from the modul-vars
+		$item[id]=0;
+		$item[title]=_USERPICTURESOWNGALLERY;
+		$item[max_width]=pnModGetVar('UserPictures','maxwidth');
+		$item[max_height]=pnModGetVar('UserPictures','maxheight');
+		$item[defaultimage]='';
+		$item[to_verify]=0;
+		return $item;
     }
     
     $sql = "SELECT 	$userpictures_templatescolumn[id],
@@ -383,6 +384,4 @@ function UserPictures_adminapi_deletePicture($args)
 
     return true;
 }
-
-
 ?>
