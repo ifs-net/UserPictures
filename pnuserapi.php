@@ -41,21 +41,8 @@ function UserPictures_userapi_picturesDiff($args)
  */
 function UserPictures_userapi_addOrderLinkToPictures($args)
 {
-  	/**
-  	 * This function switches the value of two given positions
-  	 * in a given array
-  	 *
-  	 * @param 	$array	array
-  	 * @param	$pos1	int
-  	 * @param 	$pos2	int
-  	 * @return 	array
-  	 */
-  	function switchArrayElements($array,$pos1,$pos2) {
-	    $cache = $array[$pos1];
-	    $array[$pos1] = $array[$pos2];
-	    $array[$pos2] = $cache;
-	    return $array;
-	}
+  	// include external functions
+	Loader::requireOnce('modules/UserPictures/pnincludes/functions.userpictures.php');
 	
   	$fields = $args['pictures'];
   	if (!isset($fields)) return false;
@@ -101,7 +88,6 @@ function UserPictures_userapi_ajaxSaveList($args)
 	return true;
 }
 
-
 /**
  * add an associaiton to a picture
  *
@@ -111,40 +97,27 @@ function UserPictures_userapi_ajaxSaveList($args)
  */
 function UserPictures_userapi_addPerson($args)
 {
-    $picture_id=(int)$args['picture_id'];
-    $uname=$args['uname'];
-    $uid=pnUserGetIDFromName($uname);
+    $picture_id =	(int)$args['picture_id'];
+    $uname =		$args['uname'];
+    $uid =			pnUserGetIDFromName($uname);
     if (!isset($uid) || (!($uid>0))) return false;
     
     // we need to check if we are allowed to link the picture with the given username.
-    $uid = pnUserGetIDFromName($uname);
-    $picture = UserPictures_userapi_getPicture(array('picture_id'=>$picture_id,'uid'=>$uid));
-    $picture_uid=$picture[0]['uid'];
-    $settings = pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
-    if (($settings['nolinking']==1) and ($settings['uid']!=$picture_uid)) return false;
+    $uid = 			pnUserGetIDFromName($uname);
+    $picture = 		UserPictures_userapi_getPicture(array(	'picture_id'	=> $picture_id,
+															'uid'			=> $uid));
+    $picture_uid =	$picture[0]['uid'];
+    $settings = 	pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
+    if (($settings['nolinking'] ==1 ) && ($settings['uid'] != $picture_uid)) return false;
     
     // first delete association to avoid doubles
     UserPictures_userapi_delPerson(array('uname'=>$uname,'picture_id'=>$picture_id));
     
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpictures_personstable = $pntable['userpictures_persons'];
-    $userpictures_personscolumn = &$pntable['userpictures_persons_column'];
-
-    // SQL statement 
-    $sql = "INSERT INTO  $userpictures_personstable (".$userpictures_personscolumn['uid'].",".$userpictures_personscolumn['picture_id'].")
-	    VALUES ('". $uid ."','". $picture_id ."')";
-
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-
-    return true;
+    $obj = array (
+    		'picture_id'	=> $picture_id,
+    		'uid'			=> $uid
+		);
+    return DBUtil::insertObject($obj,'userpictures_persons');
 } 
 
 /**
@@ -164,27 +137,16 @@ function UserPictures_userapi_addToCategory($args)
     if (!isset($cat_id) || (!($cat_id>0))) return false;
     if (!isset($picture_id) || (!($picture_id>0))) return false;
     
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpictures_catassoctable = $pntable['userpictures_catassoc'];
-    $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
-
     // delete an association if there is an existing (to avoid doubles)
     UserPictures_userapi_delFromCategory(array('uid'=>$uid,'picture_id'=>$picture_id,'cat_id'=>$cat_id));
 
-    // SQL statement 
-    $sql = "INSERT INTO  $userpictures_catassoctable (".$userpictures_catassoccolumn['uid'].",".$userpictures_catassoccolumn['picture_id'].",".$userpictures_catassoccolumn['cat_id'].")
-	    VALUES ('". $uid ."','". $picture_id ."','". $cat_id ."')";
-
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-    return true;
+	// store in DB
+	$obj = array (
+			'picture_id'	=> $picture_id,
+			'cat_id'		=> $cat_id,
+			'uid'			=> $uid
+		);
+    return DBUtil::insertObject($obj,'userpictures_catassoc');
 } 
 
 /**
@@ -197,9 +159,9 @@ function UserPictures_userapi_addToCategory($args)
  */
 function UserPictures_userapi_delFromCategory($args)
 {
-    $uid=(int)$args['uid'];
-    $picture_id=(int)$args['picture_id'];
-    $cat_id=(int)$args['cat_id'];
+    $uid =			(int)$args['uid'];
+    $picture_id =	(int)$args['picture_id'];
+    $cat_id =		(int)$args['cat_id'];
     if (!isset($uid) || (!($uid>0))) return false;
     if (!isset($cat_id) || (!($cat_id>0))) return false;
     if (!isset($picture_id) || (!($picture_id>0))) return false;
@@ -237,30 +199,19 @@ function UserPictures_userapi_delFromCategory($args)
  */
 function UserPictures_userapi_addCategory($args)
 {
-    $uid=(int)$args['uid'];
-    $title=$args['title'];
-    $text=$args['text'];
+    $uid =		(int)$args['uid'];
+    $title =	$args['title'];
+    $text =		$args['text'];
     if (!isset($uid) || (!($uid>0))) return false;
     if (!isset($title) || (!(strlen($title)>0))) return false;
-    
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
 
-    // get Tables
-    $userpictures_categoriestable = $pntable['userpictures_categories'];
-    $userpictures_categoriescolumn = &$pntable['userpictures_categories_column'];
-
-    // SQL statement 
-    $sql = "INSERT INTO  $userpictures_categoriestable (".$userpictures_categoriescolumn['uid'].",".$userpictures_categoriescolumn['title'].",".$userpictures_categoriescolumn['text'].")
-	    VALUES ('". $uid ."','". $title ."','". $text ."')";
-
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-    return true;
+	// store in DB
+	$obj = array (
+			'uid'		=> $uid,
+			'title'		=> $title,
+			'text'		=> $text
+		);
+	return DBUtil::insertObject($obj,'userpictures_categories');
 } 
 
 /**
@@ -975,32 +926,17 @@ function UserPictures_userapi_storePictureDB($args)
     // we want to store it without that long path....
     $filename=$dummy[(count($dummy)-1)];
 
-    // SQL statement 
-    $sql = "INSERT INTO $userpicturestable (
-		".$userpicturescolumn['uid'].",
-		".$userpicturescolumn['template_id'].",
-		".$userpicturescolumn['comment'].",
-		".$userpicturescolumn['filename']." )
-	    VALUES ('". (int)pnVarPrepForStore(pnUserGetVar('uid'))  ."',
-		    '". (int)pnVarPrepForStore($template_id)  ."',
-		    '". pnVarPrepForStore($comment)  ."',
-		    '". pnVarPrepForStore($filename)  ."' )	";
-    $result = $dbconn->Execute($sql);
-
-    // Check for an error with the database code, and if so set an appropriate
-    // error message and return
-    if ($dbconn->ErrorNo() != 0) {
-        pnSessionSetVar('errormsg', _CREATEFAILED);
-        return false;
-    }
-
+	// store in DB
+	$obj = array (
+			'uid'			=> pnUserGetVar('uid'),
+			'template_id'	=> $template_id,
+			'comment'		=> $comment,
+			'filename'		=> $filename
+		);
+	DBUtil::insertObject($obj,'userpictures');
     // now we can associate the picture with its owner's user id
-    $picture_id = $dbconn->PO_Insert_ID($userpicturestable, $userpicturescolumn['id']);
-    UserPictures_userapi_addPerson(array('uname'=>pnUserGetVar('uname'),'picture_id'=>$picture_id));
-
-    // set should be closed when it has been finished with
-    $result->Close();
-    return true;
+    return UserPictures_userapi_addPerson(array(	'uname'			=> pnUserGetVar('uname'),
+											'picture_id'	=> $obj['id']));
 }
 
 /**
@@ -1133,13 +1069,14 @@ function UserPictures_userapi_getPictures($args)
  */
 function UserPictures_userapi_createThumbnail($args)
 {
-	$filename=$args['filename'];
-	$thumbnail = $filename.".thumb.jpg";
-
-        $convert=pnModGetVar('UserPictures','convert');
-        $thumbnailsize=pnModGetVar('UserPictures','thumbnailsize');
-
-	if (!(file_exists($thumbnail))) return UserPictures_userapi_resizePicture(array('filename'=>$filename,'size'=>$thumbnailsize,'targetfilename'=>$thumbnail,'hint'=>pnModGetVar('UserPictures','hint')));
+	$filename =			$args['filename'];
+	$thumbnail = 		$filename.".thumb.jpg";
+    $convert =			pnModGetVar('UserPictures','convert');
+    $thumbnailsize =	pnModGetVar('UserPictures','thumbnailsize');
+	if (!(file_exists($thumbnail))) return UserPictures_userapi_resizePicture(array(	'filename'			=> $filename,
+																						'size'				=> $thumbnailsize,
+																						'targetfilename'	=> $thumbnail,
+																						'hint'				=> pnModGetVar('UserPictures','hint')));
 	else return true;
 }
 
@@ -1403,6 +1340,5 @@ function UserPictures_userapi_resizeImage($args)
     // return true when file was resized sucessfully
     return true;
     */
-} 
- 
+}
 ?>
