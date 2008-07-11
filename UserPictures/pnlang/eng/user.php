@@ -43,20 +43,20 @@ define('_USERPICTURESMOVEUPEERROR',				'An error occured while trying to change 
 define('_USERPICTURESMOVEDUP',					'Position of the pictures was changed');
 define('_USERPICTURESADDTOCAT',					'add to a category');
 define('_USERPICTURESCATEGORYMANAGEMENT',		'Manage my categories');
-define('_USERPICTURESCOPYASAVATAR',				'Use that image as avatar');
-define('_USERPICTURESSETASAVATAR',				'The image is now our active avatar');
+define('_USERPICTURESCOPYASAVATAR',				'Set as avatar');
+define('_USERPICTURESSETASAVATAR',				'Image set as avatar');
 
 // assoc persons
 define('_USERPICTURESASSOCPERSONS',				'Add an association');
 define('_USERPICTURESPICTURENOTFOUND',			'The image does not exist or there is no association to other users for this image stored');
-define('_USERPICTURESNOCONTACTNAMEGIVEN',		'No username was given');
-define('_USERPICTURESCONTACTADDED',				'Association was stored');
+define('_USERPICTURESNOCONTACTNAMEGIVEN',		'No username given');
+define('_USERPICTURESCONTACTADDED',				'Association stored');
 define('_USERPICTURESUSERNOTFOUNDORADDED',		'This username is invalid!');
 define('_USERPICTURESASSOCIATEPERSON',			'associate username with picture');
 define('_USERPICTURESADD',						'add association');
 define('_USERPICTURESASSOCIATEDPERSONS',		'existing associations');
-define('_USERPICTURESDELETE',					'remove association');
-define('_USERPICTURESCONTACTDELETED',			'Association was deleted');
+define('_USERPICTURESDELETE',					'remove');
+define('_USERPICTURESCONTACTDELETED',			'Association deleted');
 define('_USERPICTURESBACKTOMANAGE',				'Go back to the management for the own pictures');
 define('_USERPICTURESPERSONSASSOCIATED',		'person(s) associated');
 define('_USERPICTURESGOONTOP',					'go on top');

@@ -13,22 +13,22 @@
 <!--[/if]-->
 
 <!--[if $pictures eq 0 or $template.id eq 0]-->
-<!--[if $template.id gt -1]-->
-	<div class="userpictures_uploadform">
-	<!--[if $pictures ne 0]-->
-	<!--[pnml name="_USERPICTURESAMOUNT"]-->: <!--[$pictures|@count]-->
-	<!--[if $template.id eq 0]--> / <!--[pnmodgetvar module="UserPictures" name="ownuploads"]--> <!--[/if]--><br />
-    <form action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->" method="post" enctype="multipart/form-data" name="upload">
-    <!--[if $verifytext ne '']--><!--[$verifytext|pnvarprepfordisplay|nl2br]--><br /><!--[/if]-->
-    <input type="hidden" name="authid" value="<!--[pnsecgenauthkey module="UserPictures"]-->" />
-    <input type="hidden" name="action" value="upload" />
-    <input type="file" name="file" id="file" size="32" />
-    <br /><!--[pnml name="_USERPICTURESCOMMENT"]-->:<br />
-    <input name="comment" />
-	<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->">
-    </form>
-    </div>
-<!--[/if]-->
+	<!--[if $template.id gt -1]-->
+		<div class="userpictures_uploadform">
+		<!--[if $pictures ne 0]-->
+		<!--[pnml name="_USERPICTURESAMOUNT"]-->: <!--[$pictures|@count]-->
+		<!--[if $template.id eq 0]--> / <!--[pnmodgetvar module="UserPictures" name="ownuploads"]--> <!--[/if]--><br />
+	    <form action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->" method="post" enctype="multipart/form-data" name="upload">
+	    <!--[if $verifytext ne '']--><!--[$verifytext|pnvarprepfordisplay|nl2br]--><br /><!--[/if]-->
+	    <input type="hidden" name="authid" value="<!--[pnsecgenauthkey module="UserPictures"]-->" />
+	    <input type="hidden" name="action" value="upload" />
+	    <input type="file" name="file" id="file" size="32" />
+	    <br /><!--[pnml name="_USERPICTURESCOMMENT"]-->:<br />
+	    <input name="comment" />
+		<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->">
+	    </form>
+	    </div>
+	<!--[/if]-->
 <!--[/if]-->
 
 	<ul id="userpictures_list" class="userpictures_sortablelist">
@@ -48,7 +48,7 @@
 	    <br />
 	    <!--[pnsecgenauthkey module="UserPictures" assign=authid]-->
 	    <center>
-	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a>
+	    <span id="item_delete_<!--[$picture.id]-->"><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a></span>
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=90|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockwith.gif" title="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" alt="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" /></a>
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=270|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockagainst.gif" title="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" alt="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" /></a>
 		<noscript>
