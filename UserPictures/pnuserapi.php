@@ -100,7 +100,7 @@ function UserPictures_userapi_addPerson($args)
     $picture_id =	(int)$args['picture_id'];
     $uname =		$args['uname'];
     $uid =			pnUserGetIDFromName($uname);
-    if (!isset($uid) || (!($uid>0))) return false;
+    if (!isset($uid) || (!($uid>1))) return false;
     
     // we need to check if we are allowed to link the picture with the given username.
     $uid = 			pnUserGetIDFromName($uname);
@@ -1155,7 +1155,7 @@ function UserPictures_userapi_getPicture($args)
 	// if pictures have to be activated?
 	unset($tpl);
 	$show=true;
-	$tpl=pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$item['template_id']));
+	$tpl =	pnModAPIFunc('UserPictures','admin','getTemplates',array(	'template_id'	=> $item['template_id']));
 	if (($tpl['to_verify']==1) && ($item['verified']==0)) $show=false;
 	if (pnUserGetVar('uid')==$item[uid]) $show=true;
 	// now show if there's sth. to show
@@ -1206,63 +1206,66 @@ function UserPictures_userapi_getPicture($args)
 function UserPictures_userapi_handleUploadedPicture($args)
 {
     // some variables
-    $template_id = $args['template_id'];
-    $uid = $args['uid'];
-    $prefix = pnModGetVar('UserPictures','datadir');
+    $template_id = 	$args['template_id'];
+    $uid = 			$args['uid'];
+    $prefix = 		pnModGetVar('UserPictures','datadir');
 
     // Here the function starts...
-    $file=pnVarCleanFromInput('file');
-    $filename=$_FILES['file']['name'];
-    $tempfile =$_FILES['file']['tmp_name'];
-    $filesize=$_FILES['file']['size']/1024;
-    $filetype=$_FILES['file']['type'];
+    $file =			FormUtil::getPassedValue('file');
+    $filename =		$_FILES['file']['name'];
+    $tempfile =		$_FILES['file']['tmp_name'];
+    $filesize =		$_FILES['file']['size']/1024;
+    $filetype =		$_FILES['file']['type'];
 
     // now check the extension
-    $arr = explode(".",$filename);
-    $ext=strtolower($arr[count($arr)-1]);
+    $arr = 			explode(".",$filename);
+    $ext =			strtolower($arr[count($arr)-1]);
     if (!preg_match('(gif|jpg|jpeg|png)',$ext)) return 2;
-    $max_filesize=pnModGetVar('UserPictures','maxfilesize');
+    $max_filesize =	pnModGetVar('UserPictures','maxfilesize');
     if ($filesize>$max_filesize) return 3;
     // the filename is <template_id>_<user_id>.<ext> timestamp included in filename for not having caching problems :)
     $addon='-'.time();
 
-    $filename_noext=$prefix.$template_id.$addon.'_'.pnUserGetVar('uid');
-    $filename=$filename_noext.".".$ext;
+    $filename_noext = $prefix.$template_id.$addon.'_'.pnUserGetVar('uid');
+    $filename =		$filename_noext.".".$ext;
 
     if ($_FILES['file']['error']!=0) return 4;
 
     // Move the uploaded file that is now stored in the temp folder to the right folder...
-    $success=move_uploaded_file($tempfile,$filename) or die(_USERPICTURESCOPYFAILURE.' tempfile '.$tempfile.' filename '.$filename);
+    $success =		move_uploaded_file($tempfile,$filename) or die(_USERPICTURESCOPYFAILURE.' tempfile '.$tempfile.' filename '.$filename);
 
     // convert jsut handles png and jpg-files. so gif hast to be converted to jpg before it can be resized
-    if ($ext=="gif") {
-	// source file
-	$srcFile = $filename;
-	// this comes out after converting
-	$destFile = $filename_noext.'.jpg';
-	// now let us convert the file using "convert" via shell execution
-	$convert=pnModGetVar('UserPictures','convert');
-	// the flatten option is to avoid problems with animated gif files
-	$cmd="$convert $srcFile -flatten $destFile";
-	shell_exec($cmd);
-	// delete the gif source file
-	unlink($srcFile);
-	// set the new filename with jpg at the end because file is jpg now!
-	$ext="jpg";
-	$filename=$filename_noext.'.'.$ext;
+    if ($ext == "gif") {
+		// source file
+		$srcFile = $filename;
+		// this comes out after converting
+		$destFile = $filename_noext.'.jpg';
+		// now let us convert the file using "convert" via shell execution
+		$convert=pnModGetVar('UserPictures','convert');
+		// the flatten option is to avoid problems with animated gif files
+		$cmd="$convert $srcFile -flatten $destFile";
+		shell_exec($cmd);
+		// delete the gif source file
+		unlink($srcFile);
+		// set the new filename with jpg at the end because file is jpg now!
+		$ext="jpg";
+		$filename=$filename_noext.'.'.$ext;
     }
     // we now have a jpg or a png file... $filename and $filename_noext have a correct value now!
-    $template   = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
-    $max_height = $template['max_height'];
-    $max_width  = $template['max_width'];
+    $template =		pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
+    $max_height = 	$template['max_height'];
+    $max_width = 	$template['max_width'];
     
     // resize the image
-    if (!UserPictures_userapi_resizeImage(array('filename'=>$filename,'max_width'=>$max_width,'max_height'=>$max_height))) return 5;
+    if (!UserPictures_userapi_resizeImage(array(	'filename' 		=> $filename,
+													'max_width'		=> $max_width,
+													'max_height'	=> $max_height))) return 5;
     
     // let the API write it into the database that we now have a picture stored...
-    if (!pnModAPIFunc('UserPictures','user','storePictureDB',array('template_id'=>$template_id,'filename'=>$filename,'comment'=>pnVarCleanFromInput('comment')))) return 6;
+    if (!pnModAPIFunc('UserPictures','user','storePictureDB',array(	'template_id'		=> $template_id,
+																	'filename'			=> $filename,
+																	'comment' 			=> FormUtil::getPassedValue('comment')))) return 6;
     
-//    die("UPLOAD NICHT MÖGLICH DERZEIT");
     return false;
     // upload successfull...
     return 1;
@@ -1278,67 +1281,12 @@ function UserPictures_userapi_handleUploadedPicture($args)
  */
 function UserPictures_userapi_resizeImage($args) 
 {
-    $filename=$args['filename'];
-    $max_width=$args['max_width'];
-    $max_height=$args['max_height'];
-    $size=$max_width."x".$max_height;
-    return UserPictures_userapi_resizePicture(array('filename'=>$filename,'size'=>$size,'targetfilename'=>$filename));
-    
-    // no longer needewd
-    /*
-    $prefix = pnModGetVar('UserPictures','datadir');
-    $ext = 'jpg';
-
-    // now we need to know if we have to resize the image and calculate the new size with max_width-... restrictions
-    // UserPictures_userapi_resizeImage(array('filename'=>$filename));
-    $size=getimagesize($filename);
-    $size_str=$size[3];
-    $size_str=explode("\"",$size_str);
-    $a_width=$size_str[1];
-    $a_height=$size_str[3];
-
-    // should the picture's witdh be decreased?
-    if ($a_width > $max_width) {
-        $decf=($max_width/$a_width);
-        $a_width=$max_width;
-        $a_height=$a_height*$decf;
-    }
-
-    // should the picture's height be decreased?
-    if ($a_height > $max_height) {
-	$decf=($max_height/$a_height);
-	$a_height=$max_height;
-        $a_width=$a_width*$decf;
-    }
-
-    // round the size
-    $width  = floor($a_width);
-    $height = floor($a_height);
-
-    // now we need the grater value - better for the resize-class that is included...
-    if ($width>$height) $height=$width;
-    else $width=$height;
-
-    // now resize the image if it is necessary
-    include_once("pnincludes/ImageResizeFactory.php");
-    // set destination file name
-    $destFile = $prefix.'tmp_'.pnUserGetVar('uid').".".$ext;
-
-    // Instantiate the correct object depending on type of image i.e jpg or png
-    $objResize = ImageResizeFactory::getInstanceOf($filename, $destFile, $width, $height);
-
-    // Call the method to resize the image
-    $objResize->getResizedImage();
-
-    // delete the sourcefile
-    unlink($filename);
-    unset($objResize);
-
-    // rename temp file to filename
-    rename($destFile,$filename);
-    
-    // return true when file was resized sucessfully
-    return true;
-    */
+    $filename =		$args['filename'];
+    $max_width =	$args['max_width'];
+    $max_height =	$args['max_height'];
+    $size =			$max_width."x".$max_height;
+    return UserPictures_userapi_resizePicture(array(	'filename'			=> $filename,
+														'size'				=> $size,
+														'targetfilename'	=> $filename));
 }
 ?>
