@@ -5,15 +5,11 @@
 
 <!--[* if upload deactivated we'll return this part *]-->
 
-<!--[if $activated eq 0]-->
-    <!--[pnml name="_USERPICTURESDISABLED"]-->
-    <br /><!--[$disabledtext]-->
-<!--[else]-->
-	<a href="<!--[pnmodurl modname="UserPictures" type="user" func="main"|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESBACKTOALLTEMPLATES"]--></a><br />
-	<!--[if $template.id eq 0]-->
-	<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$uid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESGALLERYVIEW"]--></a><br />
-	<!--[/if]-->
+<a href="<!--[pnmodurl modname="UserPictures" type="user" func="main"|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESBACKTOALLTEMPLATES"]--></a><br />
+<!--[if $template.id eq 0]-->
+<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$uid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESGALLERYVIEW"]--></a><br />
 <!--[/if]-->
+
 
 <!--[if $pictures eq 0 or $template.id eq 0]-->
 	<!--[if $template.id gte 0]-->
