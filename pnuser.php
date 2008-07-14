@@ -406,6 +406,15 @@ function UserPictures_user_managePicture()
 		return pnRedirect(pnModURL('UserPictures','user','main'));
     }
 
+	// is userpictures module activated?
+    $activated = pnModGetVar('UserPictures','activated');
+    if ($activated != 1) {
+		$disabledtext = 	pnModGetVar('UserPictures','disabledtext');
+		if ($disabledtest != '') $addon = ': '.$disabledtext;
+	  	LogUtil::registerError(_USERPICTURESDISABLED.' '.$addon);
+	  	return pnRedirect(pnModURL('Userpictures','user','main'));
+	}
+	
     $action 		= FormUtil::getPassedValue('action');
     $template_id 	= FormUtil::getPassedValue('template_id');
     $picture_id 	= FormUtil::getPassedValue('picture_id');
@@ -507,8 +516,6 @@ function UserPictures_user_managePicture()
 		$render->assign('pictures',	$pictures);
 	}
     $render->assign('uid',				pnUserGetVar('uid'));
-    $render->assign('activated',		pnModGetVar('UserPictures','activated'));
-    $render->assign('disabledtext',		pnModGetVar('UserPictures','disabledtext'));
     $render->assign('ownuploads',		pnModGetVar('UserPictures','ownuploads'));
     $render->assign('verifytext',		pnModGetVar('UserPictures','verifytext'));
     $render->assign('avatarmanagement',	pnModGetVar('UserPictures','avatarmanagement'));
