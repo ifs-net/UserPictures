@@ -422,32 +422,32 @@ function UserPictures_user_managePicture()
     $id 			= FormUtil::getPassedValue('template_id',0);
     
     if (isset($action) && ($action=='delete')) {
-	// is the auth-key correct?
-	if (!SecurityUtil::confirmAuthKey()) {
-	  	LogUtil::registerAuthIDError();
-        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-    }
-	if (pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESDELETED);
-	else LogUtil::registerError(_USERPICTURESDELETEERROR);
-    }    
-    if (isset($action) && ($action=='avatar')) {
-	// is the auth-key correct?
-	if (!SecurityUtil::confirmAuthKey()) {
-	  	LogUtil::registerAuthIDError();
-		return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-    }
-	if (pnModAPIFunc('UserPictures','user','copyPictureAsAvatar',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
-	else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
-    }    
-    if (isset($action) && ($action=='comment')) {
-	// is the auth-key correct?
-	if (!SecurityUtil::confirmAuthKey()) {
-	  	LogUtil::registerAuthIDError();
-        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-    }
-	$comment = pnVarCleanFromInput('comment');
-	if (pnModAPIFunc('UserPictures','user','setComment',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
-	else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
+		// is the auth-key correct?
+		if (!SecurityUtil::confirmAuthKey()) {
+		  	LogUtil::registerAuthIDError();
+	        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
+	    }
+		if (pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESDELETED);
+		else LogUtil::registerError(_USERPICTURESDELETEERROR);
+	    }    
+	    if (isset($action) && ($action=='avatar')) {
+		// is the auth-key correct?
+		if (!SecurityUtil::confirmAuthKey()) {
+		  	LogUtil::registerAuthIDError();
+			return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
+	    }
+		if (pnModAPIFunc('UserPictures','user','copyPictureAsAvatar',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
+		else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
+	    }    
+	    if (isset($action) && ($action=='comment')) {
+		// is the auth-key correct?
+		if (!SecurityUtil::confirmAuthKey()) {
+		  	LogUtil::registerAuthIDError();
+	        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
+	    }
+		$comment = pnVarCleanFromInput('comment');
+		if (pnModAPIFunc('UserPictures','user','setComment',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
+		else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
     }    
     if (isset($action) && ($action=='rotate')) {
 		// is the auth-key correct?
@@ -497,7 +497,6 @@ function UserPictures_user_managePicture()
     // avoid errors caused by navigating with the browser buttons
     if ($action != '') return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id))."#$picture_id");
 
-
     // Create regular output - no action was to be done
     $render = pnRender::getInstance('UserPictures');
 
@@ -509,8 +508,7 @@ function UserPictures_user_managePicture()
     // Assign some values to some variables
     $pictures = pnModAPIFunc('UserPictures','user','getPicture',array(
 					'uid' 			=> pnUserGetVar('uid'),
-					'template_id'	=> $id
-											));
+					'template_id'	=> $id		));
 	if (count($pictures) > 0 ) {
 		$pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array('pictures' => $pictures));
 		$render->assign('pictures',	$pictures);
