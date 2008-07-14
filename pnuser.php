@@ -206,7 +206,8 @@ function UserPictures_user_showGallery()
     $pnRender->assign('settings',pnModAPIFunc('UserPictures','user','getSettings',array('uid'	=> $uid)));
     
     // we need the pager's value
-    $startnum=FormUtil::getPassedValue('startnum',1);
+    $startnum=FormUtil::getPassedValue('startnum');
+    if (!($startnum > 0)) $startnum = 1;
 
     $pictures=pnModAPIFunc('UserPictures','user','getPictures',array(	'template_id'	=> 0,
 																		'uid'			=> $uid,

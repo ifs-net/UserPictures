@@ -969,12 +969,12 @@ function UserPictures_userapi_getPictures($args)
     $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
 
     // Get Arguments
-    $uid=$args['uid'];
-    $cat_id=$args['cat_id'];
-    $template_id=$args['template_id'];
-    $picture_id=$args['picture_id'];
+    $uid =			$args['uid'];
+    $cat_id =		$args['cat_id'];
+    $template_id =	$args['template_id'];
+    $picture_id =	$args['picture_id'];
+    $verified =		$args[verified];
     if (!isset($template_id) || !($template_id>=0)) return false;
-    $verified=$args[verified];
 
     if ($verified=='0') $and = " AND $userpicturestable.".$userpicturescolumn['verified']." = '0' ";
     if ($uid>0) $and.=" AND $userpicturestable.".$userpicturescolumn['uid']." = '". (int)$uid."' ";
