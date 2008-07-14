@@ -12,7 +12,7 @@ function UserPictures_init()
   	if (!DBUtil::createTable('userpictures_persons')) return false;
   	if (!DBUtil::createTable('userpictures_settings')) return false;
   	if (!DBUtil::createTable('userpictures_categories')) return false;
-  	if (!DBUtil::createTable('userpictures_catrassoc')) return false;
+  	if (!DBUtil::createTable('userpictures_catassoc')) return false;
 
 
     // If the interactive installation has run, we hve some values now in sessionvars

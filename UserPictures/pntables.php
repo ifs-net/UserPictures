@@ -96,7 +96,7 @@ function UserPictures_pntables()
 				'uid'					=> 'pn_uid',
 				'title'					=> 'pn_title',
 				'text'					=> 'pn_text',
-				'sortnr'				=> 'pn_uid'
+				'sortnr'				=> 'pn_sortnr'
 				);
     $pntable['userpictures_categories_column_def'] = array(
 		        'id'					=> "I	AUTOINCREMENT PRIMARY",
