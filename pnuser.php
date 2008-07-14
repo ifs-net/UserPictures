@@ -498,12 +498,14 @@ function UserPictures_user_managePicture()
 		return pnRedirect(pnModURL('UserPictures','user','main'));
     }
     // Assign some values to some variables
-	$pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array(
-					'pictures' => pnModAPIFunc('UserPictures','user','getPicture',array(
+    $pictures = pnModAPIFunc('UserPictures','user','getPicture',array(
 					'uid' 			=> pnUserGetVar('uid'),
 					'template_id'	=> $id
-											))));
-    $render->assign('pictures',			$pictures);
+											));
+	if (count($pictures) > 0 ) {
+		$pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array('pictures' => $pictures));
+		$render->assign('pictures',	$pictures);
+	}
     $render->assign('uid',				pnUserGetVar('uid'));
     $render->assign('activated',		pnModGetVar('UserPictures','activated'));
     $render->assign('disabledtext',		pnModGetVar('UserPictures','disabledtext'));
