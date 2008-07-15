@@ -7,8 +7,8 @@ class UserPictures_user_SettingsHandler
 	{	    
 	  	// Admins should be able to modify user's profile data
 	  	$this->uid = pnUserGetVar('uid');
-		$data = pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$this->uid));
-		$render->assign($data);
+		$render->assign('ezcomments', pnModAvailable('EZComments'));
+		$render->assign(pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$this->uid)));
 		return true;
     }
 	function handleCommand(&$render, &$args)
