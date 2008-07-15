@@ -18,6 +18,9 @@ function UserPictures_userapi_showPicture($args)
 /**
  * get not displayed pictures of a page for slideshow
  *
+ * This function is essential if the embedded lightbox is used to
+ * get all and not only the pictures of one page into the slideshow
+ *
  * @param	$args['allPics']	array
  * @param	$args['shownPics']	array
  * @return	array
