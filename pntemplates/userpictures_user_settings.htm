@@ -7,8 +7,8 @@
 <!--[pnformvalidationsummary]-->
 <!--[pnsecgenauthkey assign="authid"]-->
 <!--[pnformcheckbox id="nolinking"  checked="0"]--><!--[pnformlabel for="nolinking"  text="_USERPICTURESFORBIDOTHERSTOLINKME"]--> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="settings" action="deleteMyLinks" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETEMYLINKS"]--></a><br />
-<!--[pnformcheckbox id="nocomments" checked="0"]--><!--[pnformlabel for="nocomments" text="_USERPICTURESPICTURESNOTCOMMENTABLE"]--><br />
 <!--[pnformcheckbox id="picspublic" checked="0"]--><!--[pnformlabel for="picspublic" text="_USERPICTUREALLOWGUESTSTOSEEMYPICTURES"]--><br />
+<!--[if $ezcomments]--><!--[pnformcheckbox id="nocomments" checked="0"]--><!--[pnformlabel for="nocomments" text="_USERPICTURESPICTURESNOTCOMMENTABLE"]--><br /><!--[/if]-->
 <!--[pnformbutton commandName="update" text="_USERPICTURESSUBMITSETTINGS"]-->
 
 <!--[/pnform]-->
