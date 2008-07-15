@@ -74,7 +74,7 @@ function UserPictures_pntables()
 				'picspublic'			=> 'pn_picspublic'
 				);
     $pntable['userpictures_settings_column_def'] = array(
-		        'uid'					=> "I	AUTOINCREMENT PRIMARY",
+		        'uid'					=> "I	NOTNULL DEFAULT 0",
 		        'nolinking'				=> "I	NOTNULL DEFAULT 0",
 		        'nocomments'			=> "I	NOTNULL DEFAULT 0",
 		        'picspublic'			=> "I	NOTNULL DEFAULT 0"

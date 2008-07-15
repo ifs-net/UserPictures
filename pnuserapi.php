@@ -274,43 +274,11 @@ function UserPictures_userapi_editCategory($args)
  * get general settings of a user
  *
  * @param	$args['uid']	int
- * @return	aray
+ * @return	array
  */
 function UserPictures_userapi_getSettings($args)
 {
-    $uid=$args['uid'];
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // Get tables
-    $table = $pntable['userpictures_settings'];
-    $column = &$pntable['userpictures_settings_column'];
-    
-    // Make SQL statement
-    $sql = "SELECT ".$column['nolinking'].", ".$column['nocomments'].", ".$column['picspublic']."
-	    FROM $table
-	    WHERE ".$column['uid']." ='".(int)$uid."' ";
-    // Execute Statement
-    $result = $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get settings!'.$sql);
-         return false;
-    }
-
-    // If there are no settings yet for this user we will create the standard settings
-    if ($result->recordCount()==0) UserPictures_userapi_storeSettings(array('uid'=>$uid,'nolinking'=>0,'nocomments'=>0,'picspublic'=>0));
-    list($nolinking,$nocomments,$picspublic) = $result->fields;
-    $item= array(	'uid'=>$args['uid'],
-			'nolinking'=>$nolinking,
-			'nocomments'=>$nocomments,
-			'picspublic'=>$picspublic
-			);
-			
-    // Close the SQL Query
-    $result->Close();
-    return $item;
+	return DBUtil::selectObjectByID('userpictures_settings',(int)$args['uid'],'uid');
 }
 
 /**
@@ -322,39 +290,21 @@ function UserPictures_userapi_getSettings($args)
  * @param	$args['picspublic']	int
  * @return	bool
  */
-function UserPictures_userapi_storeSettings($args)
+function UserPictures_userapi_setSettings($args)
 {
-    $uid=$args['uid'];
-    if (!($uid>0)) return false;
-    
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // Get tables
-    $table = $pntable['userpictures_settings'];
-    $column = &$pntable['userpictures_settings_column'];
-    
-    // Make SQL statement
-    $sql = "INSERT INTO $table (".$column['uid'].", ".$column['nolinking'].", ".$column['nocomments'].", ".$column['picspublic'].")
-	    VALUES ('".(int)$args['uid']."','".(int)$args['nolinking']."','".(int)$args['nocomments']."','".(int)$args['picspublic']."')	";
-    // Execute Statement
-    $result = $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-	// it seems as if there are settings stored yet... lets update the stored settings!
-	$sql = "UPDATE $table
-		SET ".$column['nolinking']."='".(int)$args['nolinking']."',
-		".$column['nocomments']."='".(int)$args['nocomments']."',
-		".$column['picspublic']."='".(int)$args['picspublic']."'
-		WHERE ".$column['uid']." = '".(int)$args['uid']."'";
-        $result = $dbconn->Execute($sql);
-	if ($dbconn->ErrorNo() != 0) {
-	    pnSessionSetVar('errormsg', 'Failed to store settings!'.$sql);
-	    return false;
-	    }
-	else return true;
-    }
-    else return true;
+    $uid = (int)$args['uid'];
+    if (!($uid > 0)) return false;
+    // build settings object
+    $obj = array (
+    		'uid' 			=> $uid,
+    		'nolinking' 	=> (int)$args['nolinking'],
+    		'nocomments' 	=> (int)$args['nocomments'],
+    		'picspublic' 	=> (int)$args['picspublic']
+		);
+	// get old settings
+	$settings = UserPictures_userapi_getSettings(array('uid' => $uid));
+	if (is_array($settings)) return DBUtil::updateObject($obj,'userpictures_settings','','uid');
+	else return DBUtil::insertObject($obj,'userpictures_settings');
 }
  
 
