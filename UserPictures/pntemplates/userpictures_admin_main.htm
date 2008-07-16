@@ -6,6 +6,7 @@
 <form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="main"]-->">
 <!--[pnmodgetvar module="UserPictures" name="activated" assign=activated]-->
 <!--[pnmodgetvar module="UserPictures" name="avatarmanagement" assign=avatarmanagement]-->
+<!--[pnmodgetvar module="UserPictures" name="avatardir" assign=avatardir]-->
 <!--[pnmodgetvar module="UserPictures" name="avatarsize" assign=avatarsize]-->
 <!--[pnmodgetvar module="UserPictures" name="ownuploads" assign=ownuploads]-->
 <!--[pnmodgetvar module="UserPictures" name="verifytext" assign=verifytext]-->
@@ -48,6 +49,8 @@
 <p /><!--[pnml name="_USERPICTURESTHUMBNAILSIZE"]-->: <!--[pnml name="_USERPICTURESATTENTIONONCHANGE"]--><br />
 <input name="thumbnailsize" value="<!--[$thumbnailsize]-->" size="9" /> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
 <p /><input type="checkbox" name="avatarmanagement" value="1" <!--[if $avatarmanagement]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESALLOWAVATARMANAGEMENT"]-->
+<p /><!--[pnml name="_USERPICTURESAVATARDIRECTORY"]-->:<br />
+<input name="avatardir" value="<!--[$avatardir]-->" /> 
 <p /><!--[pnml name="_USERPICTURESAVATARSIZE"]-->:<br />
 <input name="avatarsize" value="<!--[$avatarsize]-->" size="9" /> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
 <p /><input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />

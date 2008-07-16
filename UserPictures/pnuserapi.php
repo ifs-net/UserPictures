@@ -738,7 +738,8 @@ function UserPictures_userapi_copyPictureAsAvatar($args)
     $picture=UserPictures_userapi_getPicture(array('picture_id'=>$picture_id));
     $picture=$picture[0];
     $filename=$picture['filename'];
-    $targetfilename="images/avatar/pers_".$uid.".jpeg";
+    $avatardir=pnModGetVar('UserPictures','avatardir');
+    $targetfilename=$avatardir."/pers_".$uid.".jpeg";
     $avatarsize=pnModGetVar('UserPictures','avatarsize');
     
     // if a avatar with this name exists we have to delete it!
