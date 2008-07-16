@@ -13,6 +13,7 @@ define('_USERPICTURESCONVERT',		'Angabe zum Programm convert (normal: /usr/bin/c
 define('_USERPICTURESDISABLEDTEXT',	'Text, welcher angezeigt werden soll, wenn durch den Betreiber dieser Seite das Hochladen von Bildern deaktiviert wurde');
 define('_USERPICTURESMAXFILESIZE',	'Maximale Größe hochgeladener Dateien in KB (Standard 1500) bevor diese verkleinert werden. Nach dem automatischen Verkleinern der Auflösung durch UserPictures sind diese natürlich auch in der Dateigröße kleiner.');
 define('_USERPICTURESOWNUPLOADS',	'Wieviel Bilder sollen Communitynutzer zusätzlich zu den fest per Template eingestellten hochladen dürfen für eine eigene Galerie? (0=keine)');
+define('_USERPICTURESAVATARDIRECTORY',			'Avatar-Verzeichnis');
 define('_USERPICTURESPICTURES',		'Bilder');
 define('_USERPICTURESMAXWIDTHUSERGALLERY',	'Maximale Bilderbreite für Benutzergalerien');
 define('_USERPICTURESMAXHEIGHTUSERGALLERY',	'Maximale Bilderhöhe für Benutzergalerien');

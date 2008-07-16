@@ -18,6 +18,7 @@ define('_USERPICTURESMAXWIDTHUSERGALLERY',		'Maximal width for pcitures in the o
 define('_USERPICTURESMAXHEIGHTUSERGALLERY',		'Maximal height for pictures in the own gallery of a user');
 define('_USERPICTURESPIXEL',					'Pixels');
 define('_USERPICTURESTHUMBNAILSIZE',            'Size of the thumbnails');
+define('_USERPICTURESAVATARDIRECTORY',			'Avatar directory');
 define('_USERPICTURESATTENTIONONCHANGE',        'Please notive that if you want to change the thumbnail size later you have to delete all thumbnail files manually - the new thumbnails will be generated on demand');
 define('_USERPICTURESPIXELCROSSPIXEL',          'Format: PixelsxPixels. Example value: 110x110 (use a x not a * or something else)');
 define('_USERPICTURESDATADIR',					'Path to the picture\'s directory. This has to be the relative path seen from the postnuke\'s root folder. This directory has to be writeable by the webserver!');
