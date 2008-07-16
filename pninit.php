@@ -41,6 +41,8 @@ function UserPictures_init()
     pnModSetVar('UserPictures', 'thumbnailcreation', (($thumbnailcreation<>false) ? $thumbnailcreation : 'gdlib'));
     $hint = pnSessionGetVar('userpictures_hint');
     pnModSetVar('UserPictures', 'hint', (($hint<>false) ? $hint : 1));
+    $avatardir = pnSessionGetVar('userpictures_avatardir');
+    pnModSetVar('UserPictures', 'avatardir', (($avatardir<>false) ? $avatardir : 'images/avatar'));
 
     // clean up
     pnSessionDelVar('userpictures_hint');
@@ -54,6 +56,7 @@ function UserPictures_init()
     pnSessionDelVar('userpictures_verifytext');
     pnSessionDelVar('userpictures_disabledtext');
     pnSessionDelVar('userpictures_datadir');
+    pnSessionDelVar('userpictures_avatardir');
 
     // Initialisation successful
     return true;

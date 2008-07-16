@@ -19,6 +19,7 @@ function UserPictures_admin_main()
     	else if ($action=='deletethumbnails') LogUtil::registerStatus(_USERPICTURESDELETEDTHUMBNAILS.": ".pnModAPIFunc('UserPictures','admin','deletethumbnails'));
     	else if ($action=='send') {
 		    $thumbnailsize=FormUtil::getPassedValue('thumbnailsize');
+		    $avatardir=FormUtil::getPassedValue('avatardir','images/avatar');
 		    $avatarsize=FormUtil::getPassedValue('avatarsize');
 		    $datadir=FormUtil::getPassedValue('datadir');
 		    if (!isset($datadir) || (!(strlen($datadir)>0))) $datadir="modules/UserPictures/data/";
@@ -46,6 +47,7 @@ function UserPictures_admin_main()
 		    // set new value for module var
 		    pnModSetVar('UserPictures','thumbnailsize',$thumbnailsize);
 		    pnModSetVar('UserPictures','avatarsize',$avatarsize);
+		    pnModSetVar('UserPictures','avatardir',$avatardir);
 		    pnModSetVar('UserPictures','activated',$activated);
 		    pnModSetVar('UserPictures','avatarmanagement',$avatarmanagement);
 		    pnModSetVar('UserPictures','verifytext',$verifytext);
