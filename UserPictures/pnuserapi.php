@@ -68,7 +68,6 @@ function UserPictures_userapi_addOrderLinkToPictures($args)
 		if (count($down)>0)$field['orderlink']['down'] = htmlentities(serialize($down));
 		$fieldRes[]=$field;
 	}
-	prayer($filedRes);
 	return $fieldRes;
 }
 
@@ -169,27 +168,14 @@ function UserPictures_userapi_delFromCategory($args)
     if (!isset($cat_id) || (!($cat_id>0))) return false;
     if (!isset($picture_id) || (!($picture_id>0))) return false;
     
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
+	// Delete category assiciation
     $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpictures_catassoctable = $pntable['userpictures_catassoc'];
     $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
-
-    // SQL statement 
-    $sql = "
-	DELETE FROM $userpictures_catassoctable 
-	WHERE ".$userpictures_catassoccolumn['uid']." = '" . $uid . "'
-	AND ".$userpictures_catassoccolumn['cat_id']." = '" . $cat_id . "'
-	AND ".$userpictures_catassoccolumn['picture_id']." = '" . $picture_id . "'
-	";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-    return true;
+	$where = 	$userpictures_catassoccolumn['uid']." = '" . $uid . "'
+				AND ".$userpictures_catassoccolumn['cat_id']." = '" . $cat_id . "'
+				AND ".$userpictures_catassoccolumn['picture_id']." = '" . $picture_id . "'";
+	
+	return DBUtil::deleteWhere('userpictures_catassoc',$where);
 } 
 
 /**
@@ -228,49 +214,38 @@ function UserPictures_userapi_addCategory($args)
  */
 function UserPictures_userapi_editCategory($args)
 {
-    $uid=(int)$args['uid'];
-    $title=$args['title'];
-    $text=$args['text'];
-    $id=(int)$args['id'];
-    $delete=(int)$args['delete'];
-    if (!isset($id) || (!($id>0))) return false;
-    if (!isset($uid) || (!($uid>0))) return false;
-    if (!isset($text) || (!(strlen($uid)>0))) return false;
+    $uid 	= (int)$args['uid'];
+    $title 	= $args['title'];
+    $text	= $args['text'];
+    $id		= (int)$args['id'];
+    $delete	= (int)$args['delete'];
+    if (!isset($id) 	|| (!($id>0))) 			return false;
+    if (!isset($uid)	|| (!($uid>0))) 		return false;
+    if (!isset($text) 	|| (!(strlen($uid)>0)))	return false;
     
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
+    // Get datbase setup and pntables array
     $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpictures_categoriestable = $pntable['userpictures_categories'];
     $userpictures_categoriescolumn = &$pntable['userpictures_categories_column'];
 
     // SQL statement 
     if (isset($delete) && ($delete == '1')) {
-	// we now have to delete all associations between pictures and this category
-	$catAssocs = UserPictures_userapi_getCategoryAssociations(array('cat_id'=>$id));
-	foreach ($catAssocs as $assoc) {
-	    if (!(pnModAPIFunc('UserPictures','user','delFromCategory',array('uid'=>$uid,'picture_id'=>$assoc['picture_id'],'cat_id'=>$id)))) return false;
-	}
-	$sql = "
-	    DELETE FROM $userpictures_categoriestable 
-	    WHERE ". $userpictures_categoriescolumn['uid']." = '".$uid."'
-	    AND ". $userpictures_categoriescolumn['id']." = '".$id."'
-	    LIMIT 1 ";
+		// we now have to delete all associations between pictures and this category
+		$catAssocs = UserPictures_userapi_getCategoryAssociations(array('cat_id'=>$id));
+		foreach ($catAssocs as $assoc) {
+		    if (!(pnModAPIFunc('UserPictures','user','delFromCategory',array('uid'=>$uid,'picture_id'=>$assoc['picture_id'],'cat_id'=>$id)))) return false;
+		}
+		$where = $userpictures_categoriescolumn['uid']." = '".$uid."'
+			    AND ". $userpictures_categoriescolumn['id']." = '".$id."'";
+		return DBUtil::deleteWhere('userpictures_categories',$where);
     }
-    else $sql = "
-	    UPDATE $userpictures_categoriestable 
-	    SET ".$userpictures_categoriescolumn['title']." = '".$title."',
-		".$userpictures_categoriescolumn['text']." = '".$text."'
-	    WHERE ".$userpictures_categoriescolumn['id']." = '".$id."'
-	    AND  ".$userpictures_categoriescolumn['uid']." = '".$uid."'
-	    LIMIT 1 ";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-    return true;
+    else {
+	  	// get object
+	  	$obj = DBUtil::selectObjectByID('userpictures_categories',$id);
+	  	if ($obj['uid'] != $uid) return false;
+	  	$obj['text'] 	= $text;
+	  	$obj['title'] 	= $title;
+	  	return DBUtil::updateObject($obj,'userpictures_categories');
+	}
 } 
 
 /**
@@ -310,7 +285,6 @@ function UserPictures_userapi_setSettings($args)
 	else return DBUtil::insertObject($obj,'userpictures_settings');
 }
  
-
 /**
  * get categories
  *
@@ -319,43 +293,17 @@ function UserPictures_userapi_setSettings($args)
  */
 function UserPictures_userapi_getCategories($args)
 {
-
+	// get user id
     $uid=(int)$args['uid'];
 
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
+	// get table array    
     $pntable =& pnDBGetTables();
-
-    // Get tables
-    $userpictures_categoriestable = $pntable['userpictures_categories'];
     $userpictures_categoriescolumn = &$pntable['userpictures_categories_column'];
-
-    // Get associated persons
-    $sql = "SELECT ".$userpictures_categoriescolumn['id'].", ".$userpictures_categoriescolumn['title'].", ".$userpictures_categoriescolumn['text']."
-            FROM $userpictures_categoriestable
-	    WHERE ".$userpictures_categoriescolumn['uid']." = '". (int)pnVarPrepForStore($uid) ."'
-	    ORDER BY ".$userpictures_categoriescolumn['title'];
-
-    $result = $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list($id,$title,$text) = $result->fields;
-	$item= array(	'uid'=>$uid,
-			'title'=>$title,
-			'text'=>$text,
-			'id'=>$id
-			);
-	$items[]=$item;
-    }
-    // Return the item array
-    $result->Close();
-    return $items;
-
+    
+    // get objects
+    $where 		= $userpictures_categoriescolumn['uid']." = ". (int)$uid;
+    $orderby 	= $userpictures_categoriescolumn['title'];
+    return DBUtil::selectObjectArray('userpictures_categories',$where,$orderby);
 }
 
 /**
@@ -366,127 +314,43 @@ function UserPictures_userapi_getCategories($args)
  */
 function UserPictures_userapi_getCategory($args)
 {
-
-    $id=(int)$args['cat_id'];
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // Get tables
-    $userpictures_categoriestable = $pntable['userpictures_categories'];
-    $userpictures_categoriescolumn = &$pntable['userpictures_categories_column'];
-
-    // Get associated persons
-    $sql = "SELECT ".$userpictures_categoriescolumn['uid'].", ".$userpictures_categoriescolumn['id'].", ".$userpictures_categoriescolumn['title'].", 
-		    ".$userpictures_categoriescolumn['text'].", ".$userpictures_categoriescolumn['uid']."
-            FROM $userpictures_categoriestable
-	    WHERE ".$userpictures_categoriescolumn['id']." = '". (int)pnVarPrepForStore($id) ."'";
-
-    $result = $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list($uid,$id,$title,$text) = $result->fields;
-	$item= array(	'uid'=>$uid,
-			'id'=>$id,
-			'title'=>$title,
-			'text'=>$text,
-			'id'=>$id
-			);
-    }
-    // Return the item array
-    $result->Close();
-    return $item;
+    return DBUtil::selectObjectByID('userpictures_categories',(int)$args['cat_id']);
 }
 
-
 /**
- * get associations for a category to its pictures
+ * get associations category -> pictures of this category
  *
  * @param	$args['cat_id']	int
  * @return	array
  */
 function UserPictures_userapi_getCategoryAssociations($args)
 {
-
     $cat_id=(int)$args['cat_id'];
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
+    // get table array
     $pntable =& pnDBGetTables();
-
-    // Get tables
-    $userpictures_catassoctable = $pntable['userpictures_catassoc'];
     $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
-
-    // Get associated persons
-    $sql = "SELECT $userpictures_catassoccolumn[picture_id]
-            FROM $userpictures_catassoctable
-	    WHERE ".$userpictures_catassoccolumn['cat_id']." = '". (int)pnVarPrepForStore($cat_id) ."'";
-
-    $result = $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list($picture_id) = $result->fields;
-	$item= array(	'picture_id'=>$picture_id);
-	$items[]=$item;
-    }
-    // Return the item array
-    $result->Close();
-    return $items;
+    $where = $userpictures_catassoccolumn['cat_id']." = ". $cat_id;
+    // return objects
+    return DBUtil::selectObjectArray('userpictures_catassoc',$where);
 }
 
 
 /**
- * get associations for a picture to its categories
+ * get associations for picture -> categories
  *
  * @param	$args['picture_id']	int
  * @return	array
  */
 function UserPictures_userapi_getCategoriesAssociation($args)
 {
-
     $picture_id=(int)$args['picture_id'];
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
+    // get table array
     $pntable =& pnDBGetTables();
-
-    // Get tables
-    $userpictures_catassoctable = $pntable['userpictures_catassoc'];
     $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
-
-    // Get associated persons
-    $sql = "SELECT $userpictures_catassoccolumn[cat_id]
-            FROM $userpictures_catassoctable
-	    WHERE ".$userpictures_catassoccolumn['picture_id']." = '". (int)pnVarPrepForStore($picture_id) ."'";
-    $result = $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list($cat_id) = $result->fields;
-	$item= array(	'cat_id'=>$cat_id);
-	$items[]=$item;
-    }
-    // Return the item array
-    $result->Close();
-    return $items;
+    $where = $userpictures_catassoccolumn['picture_id']." = ". $picture_id;
+    // return objects
+    return DBUtil::selectObjectArray('userpictures_catassoc',$where);
 }
-
 
 /**
  * delete an associaiton to a picture
@@ -497,29 +361,17 @@ function UserPictures_userapi_getCategoriesAssociation($args)
  */
 function UserPictures_userapi_delPerson($args)
 {
-    $picture_id=(int)$args['picture_id'];
-    $uname=$args['uname'];
-    $uid=pnUserGetIDFromName($uname);
+    $picture_id	= (int)$args['picture_id'];
+    $uname 		= $args['uname'];
+    $uid 		= pnUserGetIDFromName($uname);
     if (!isset($uid) || (!($uid>0))) return false;
     
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpictures_personstable = $pntable['userpictures_persons'];
-    $userpictures_personscolumn = &$pntable['userpictures_persons_column'];
-
-    // SQL statement 
-    $sql = "DELETE FROM $userpictures_personstable 
-	    WHERE  	".$userpictures_personscolumn['uid']." = '". $uid  ."'";
-    if ($picture_id>0) $sql.="    AND 	".$userpictures_personscolumn['picture_id']." = '". $picture_id ."'";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code
-    if ($dbconn->ErrorNo() != 0) return false;
-    // set should be closed when it has been finished with
-    $result->Close();
-    return true;
+    // Get db table array
+    $tables =& pnDBGetTables();
+    $userpictures_personscolumn = &$tables['userpictures_persons_column'];
+	$where = $userpictures_personscolumn['uid']." = '". $uid  ."'";
+    if ($picture_id>0) $where.="    AND 	".$userpictures_personscolumn['picture_id']." = '". $picture_id ."'";
+    return DBUtil::deleteWhere('userpictures_persons',$where);
 } 
 
 /**
@@ -530,38 +382,19 @@ function UserPictures_userapi_delPerson($args)
  */
 function UserPictures_userapi_getPersons($args)
 {
-
-    $picture_id=(int)$args['picture_id'];
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // Get tables
-    $userpictures_personstable = $pntable['userpictures_persons'];
-    $userpictures_personscolumn = &$pntable['userpictures_persons_column'];
-
-    // Get associated persons
-    $sql = "SELECT ".$userpictures_personscolumn['uid']."
-            FROM $userpictures_personstable
-	    WHERE ".$userpictures_personscolumn['picture_id']." = '". (int)pnVarPrepForStore($picture_id) ."'";
-
-    $result =& $dbconn->Execute($sql);
-
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list($uid) = $result->fields;
-	$uname=pnUserGetVar('uname',$uid);
-	if (isset($uname) && (strlen($uname)>0))$items[]=array('uid'=>$uid,'uname'=>$uname);
-    }
-    // Return the item array
-    $result->Close();
-    return $items;
+  	// get db table array
+    $tables =& pnDBGetTables();
+    $userpictures_personscolumn = &$tables['userpictures_persons_column'];
+    
+    $joinInfo[] = array (
+    		'join_table'			=> 'users',	// table to join with
+    		'join_field'			=> 'uname',	// field that should be in the result
+    		'object_field_name'		=> 'uname',	// how the field should be named in the array
+    		'compare_field_table'	=> 'uid',	// connection to join
+    		'compare_field_join'	=> 'uid'	// field that should be equal in the join
+		);
+    $where = $userpictures_personscolumn['picture_id']." = ". (int)$args['picture_id'];
+    return DBUtil::selectExpandedObjectArray('userpictures_persons',$joinInfo,$where);
 }
 
 /**
@@ -692,29 +525,12 @@ function UserPictures_userapi_rotatePicture($args)
  */
 function UserPictures_userapi_setComment($args)
 {
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpicturestable = $pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-
-    // SQL statement 
-    $sql = "UPDATE $userpicturestable 
-	    SET ".$userpicturescolumn['comment']." = '".pnVarPrepForStore($args['comment'])."'
-	    WHERE ".$userpicturescolumn['id']." = '".pnVarPrepForStore($args['picture_id'])."'
-	    AND ".$userpicturescolumn['uid']." = '".(int)$args['uid']."'
-	    ";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code, and if so set an appropriate
-    // error message and return
-    if ($dbconn->ErrorNo() != 0) return false;
-
-    // set should be closed when it has been finished with
-    $result->Close();
-	
-    return true;
+  	// get object
+	$obj = DBUtil::selectObjectByID('userpictures',(int)$args['picture_id']);
+	if ($obj['uid'] != (int)$args['uid']) return false;
+	$obj['comment'] = $args['comment'];
+	// update object
+	return DBUtil::updateObject($obj,'userpictures');
 }
 
 /**
@@ -805,9 +621,7 @@ function UserPictures_userapi_deletePicture($args)
 
     // delete all associated persons
     $dummy = UserPictures_userapi_getPersons(array('picture_id'=>$picture_id));
-    foreach ($dummy as $assoc) {
-	if (!UserPictures_userapi_delPerson(array('picture_id'=>$picture_id,'uname'=>$assoc['uname']))) return false;
-    }
+    foreach ($dummy as $assoc) if (!UserPictures_userapi_delPerson(array('picture_id'=>$picture_id,'uname'=>$assoc['uname']))) return false;
     
     // delete all associated categories
     $dummy = UserPictures_userapi_getCategoriesAssociation(array('picture_id'=>$picture_id));
@@ -824,29 +638,13 @@ function UserPictures_userapi_deletePicture($args)
     $res=unlink($filename);
     if (!$res) return false;
 
-    // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
+    // Get db table array
     $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpicturestable = $pntable['userpictures'];
     $userpicturescolumn = &$pntable['userpictures_column'];
-
-    
-    // SQL statement 
-    $sql = "DELETE FROM $userpicturestable 
-	    WHERE ".$userpicturescolumn['uid']." = '". (int)$uid ."'
-	    AND   ".$userpicturescolumn['template_id']." = '". (int)$template_id ."'
-	    AND   ".$userpicturescolumn['id']." = '". (int)$picture_id ."'
-	    LIMIT 1 ";
-    $result = $dbconn->Execute($sql);
-    // Check for an error with the database code, and if so set an appropriate
-    // error message and return
-    if ($dbconn->ErrorNo() != 0) return false;
-
-    // set should be closed when it has been finished with
-    $result->Close();
-
+	$where = 	$userpicturescolumn['uid']." = '". (int)$uid ."'
+			    AND   ".$userpicturescolumn['template_id']." = '". (int)$template_id ."'
+			    AND   ".$userpicturescolumn['id']." = '". (int)$picture_id ."'";
+	if (!DBUtil::deleteWhere('userpictures',$where)) return false;
 
     // delete the thumbnail too
     $res=unlink($filename.'.thumb.jpg');
