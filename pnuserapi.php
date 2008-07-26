@@ -639,8 +639,8 @@ function UserPictures_userapi_deletePicture($args)
     if (!$res) return false;
 
     // Get db table array
-    $pntable =& pnDBGetTables();
-    $userpicturescolumn = &$pntable['userpictures_column'];
+    $tables =& pnDBGetTables();
+    $userpicturescolumn = &$tables['userpictures_column'];
 	$where = 	$userpicturescolumn['uid']." = '". (int)$uid ."'
 			    AND   ".$userpicturescolumn['template_id']." = '". (int)$template_id ."'
 			    AND   ".$userpicturescolumn['id']." = '". (int)$picture_id ."'";
@@ -660,12 +660,7 @@ function UserPictures_userapi_deletePicture($args)
 function UserPictures_userapi_storePictureDB($args)
 {
     // Get datbase setup 
-    $dbconn =& pnDBGetConn(true);
     $pntable =& pnDBGetTables();
-
-    // get Tables
-    $userpicturestable = $pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
 
     //get args
     $filename	= $args['filename'];
@@ -688,7 +683,7 @@ function UserPictures_userapi_storePictureDB($args)
 	DBUtil::insertObject($obj,'userpictures');
     // now we can associate the picture with its owner's user id
     return UserPictures_userapi_addPerson(array(	'uname'			=> pnUserGetVar('uname'),
-											'picture_id'	=> $obj['id']));
+													'picture_id'	=> $obj['id']));
 }
 
 /**
@@ -728,14 +723,14 @@ function UserPictures_userapi_getPictures($args)
     $verified =		$args[verified];
     if (!isset($template_id) || !($template_id>=0)) return false;
 
-    if ($verified=='0') $and = " AND $userpicturestable.".$userpicturescolumn['verified']." = '0' ";
-    if ($uid>0) $and.=" AND $userpicturestable.".$userpicturescolumn['uid']." = '". (int)$uid."' ";
-    if ($picture_id>0) $and.= " AND $userpicturestable.".$userpicturescolumn['picture_id']." = '". (int)pnVarPrepForStore($picture_id) ."'";
+    if ($verified=='0') 	$and = " AND $userpicturestable.".$userpicturescolumn['verified']." = '0' ";
+    if ($uid>0) 			$and.=" AND $userpicturestable.".$userpicturescolumn['uid']." = '". (int)$uid."' ";
+    if ($picture_id>0) 		$and.= " AND $userpicturestable.".$userpicturescolumn['picture_id']." = '". (int)pnVarPrepForStore($picture_id) ."'";
     if ($cat_id > 0 ) {
-	$cat_assoc_and = " 
-		AND $userpicturestable.".$userpicturescolumn['id']." = $userpictures_catassoctable.".$userpictures_catassoccolumn['picture_id']."
-		AND $userpictures_catassoctable.".$userpictures_catassoccolumn['cat_id']." = '".pnVarPrepForStore($cat_id)  ."'";
-	$cat_assoc_from = ", ".$userpictures_catassoctable;
+			$cat_assoc_and = " 
+				AND $userpicturestable.".$userpicturescolumn['id']." = $userpictures_catassoctable.".$userpictures_catassoccolumn['picture_id']."
+				AND $userpictures_catassoctable.".$userpictures_catassoccolumn['cat_id']." = '".pnVarPrepForStore($cat_id)  ."'";
+			$cat_assoc_from = ", ".$userpictures_catassoctable;
     }
     $startnum=$args[startnum];
     if (isset($startnum) && ($startnum >= 0)) $limit = "  LIMIT ".($startnum-1)." ,1 ";

@@ -8,6 +8,7 @@
  * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
 
+// Load handlers
 Loader::requireOnce('modules/UserPictures/pnincludes/userhandlers.php');
 
 /**
