@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package      UserPictures
+ * @version      $Id$
+ * @author       Florian Schießl
+ * @link         http://www.ifs-net.de
+ * @copyright    Copyright (C) 2008
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ */
+
 // main
 define('_USERPICTURESMANAGEYOURPICTURES',		'Manage my pictures');
 define('_USERPICTURESMANAGEYOURPICSHERE',		'The admin of this site has created possibillities for picture uploads. For each possibillity you can upload one picture');
