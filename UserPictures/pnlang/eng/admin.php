@@ -31,6 +31,20 @@ define('_USERPICTURESSHOWHINTONTHUMBNAILS',		'Show a hint on the thumbnails (you
 define('_USERPICTURESDELETETHUMBNAILSFORRECREATION',	'Delete all existing thumbnails for recreation (this may take a while!)');
 define('_USERPICTURESDELETEDTHUMBNAILS',		'Number of deleted thumbnails');
  
+// global category management
+define('_USERPICTURESGLOBALCATEGORYMANAGEMENT',	'Global picture category management');
+define('_USERPICTURESCATEGORIES',				'Global categories');
+define('_USERPICTURESADDGLOBALCATEGORY',		'Modify or add global picture category');
+define('_USERPICTURESGLOBALCATEGORYEXPL',		'If you create global categories all users can assign their images with these categories and this will make real community photo galleries possible');
+define('_USERPICTURESTEXT',						'Description of the global category');
+define('_USERPICTURESDATE',						'Assigned date (will be used as sort criteria)');
+define('_USERPICTUREDELETEGLOBALCATEGORY',		'Delete this global category');
+define('_USERPICTURESSAVEGLOBALCAT',			'save / update');
+define('_USERPICTURESCLEARFORM',				'Clear form');
+define('_USERPICTURESEXISTINGCATEGORIES',		'Existing global categories');
+define('_USERPICTURESNUMBEROFCATEGORIES',		'Number of existing global categories');
+define('_USERPICTURESACTIONDONE',				'Action done successfully');
+
 // templates
 define('_USERPICTURESTEMPLATESADMINPANEL',		'Management for templates');
 define('_USERPICTURESWHATARETEMPLATES',			'For each type of picture a user should be able to upload beside the own gallery you have to create an own template');

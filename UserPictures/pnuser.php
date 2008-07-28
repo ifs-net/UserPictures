@@ -401,44 +401,42 @@ function UserPictures_user_managePicture()
     $picture_id 	= FormUtil::getPassedValue('picture_id');
     $uid 			= pnUserGetVar('uid');
     $id 			= FormUtil::getPassedValue('template_id',0);
-    
-    if (isset($action) && ($action=='delete')) {
+    $cat_id			= FormUtil::getPassedValue('cat_id',0);
+        
+    // check auth key first
+    if (isset($action) && (strlen($action)>0)) {
 		// is the auth-key correct?
 		if (!SecurityUtil::confirmAuthKey()) {
 		  	LogUtil::registerAuthIDError();
 	        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
 	    }
+	}
+	// now check for actions 
+    if (isset($action) && ($action=='delete')) {
 		if (pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESDELETED);
 		else LogUtil::registerError(_USERPICTURESDELETEERROR);
-	    }    
-	    if (isset($action) && ($action=='avatar')) {
-		// is the auth-key correct?
-		if (!SecurityUtil::confirmAuthKey()) {
-		  	LogUtil::registerAuthIDError();
-			return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-	    }
+	}    
+    else if (isset($action) && ($action=='avatar')) {
 		if (pnModAPIFunc('UserPictures','user','copyPictureAsAvatar',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
 		else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
-	    }    
-	    if (isset($action) && ($action=='comment')) {
-		// is the auth-key correct?
-		if (!SecurityUtil::confirmAuthKey()) {
-		  	LogUtil::registerAuthIDError();
-	        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-	    }
+    }    
+    else if (isset($action) && ($action=='addtoglobalcat')) {
+		if (pnModAPIFunc('UserPictures','user','addToGlobalCategory',array('picture_id'=>$picture_id,'cat_id' => $cat_id))) LogUtil::registerStatus(_USERPICTURESADDEDTOGLOBALCAT);
+		else LogUtil::registerError(_USERPICTURESERRORADDINGTOGLOBALCAT);
+    }    
+    else if (isset($action) && ($action=='delglobalassoc')) {
+		if (pnModAPIFunc('UserPictures','user','delGlobalCategoryAssociation',array('picture_id'=>$picture_id,'uid' => $uid))) LogUtil::registerStatus(_USERPICTURESGLOBALCATASSOCDELETED);
+		else LogUtil::registerError(_USERPICTURESERRORDELETINGGLOBALCATASSOC);
+    }    
+    else if (isset($action) && ($action=='comment')) {
 		$comment = pnVarCleanFromInput('comment');
 		if (pnModAPIFunc('UserPictures','user','setComment',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
 		else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
     }    
-    if (isset($action) && ($action=='rotate')) {
-		// is the auth-key correct?
-		if (!SecurityUtil::confirmAuthKey()) {
-		  	LogUtil::registerAuthIDError();
-            return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-        }
+    else if (isset($action) && ($action=='rotate')) {
 		if (pnModAPIFunc('UserPictures','user','rotatePicture',array('angle'=>pnVarCleanFromInput('angle'),'uid'=>pnUserGetVar('uid'),'template_id'=>$template_id,'picture_id'=>$picture_id)  ) ) LogUtil::registerStatus(_USERPICTURESROTATED);
 		else LogUtil::registerError(_USERPICTURESROTATEDERROR);
-    }    
+    }
     else if ($action=='upload') {
 		// check if the user's picture limit is alread reached
 		$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('uid'=>$uid,'template_id'=>$template_id));
@@ -450,13 +448,7 @@ function UserPictures_user_managePicture()
 		    LogUtil::registerError(_USERPICTURESUPLOADLIMITREACHED);
 	        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
 		}
-	
-		// is the auth-key correct?
-		if (!SecurityUtil::confirmAuthKey()) {
-		  	LogUtil::registerAuthIDError();
-            return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
-        }
-	
+		
 		// now we will handle the upload
 		$res=pnModAPIFunc('UserPictures','user','handleUploadedPicture',array('uid'=>$uid,'template_id'=>$template_id));
 		if ($res == 2) {
@@ -481,6 +473,8 @@ function UserPictures_user_managePicture()
     // Create regular output - no action was to be done
     $render = pnRender::getInstance('UserPictures');
 
+    // are there global categories?
+	$render->assign('globalcategories',pnModAPIFunc('UserPictures','admin','getGlobalCategory'));
     $template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$id));
     if (!($template[id]>=0)) {
 		LogUtil::registerError(_USERPICTURESTEMPLATENUMBERFALSE);

@@ -1,4 +1,32 @@
 <?php
+
+/**
+ * get global category
+ *
+ * @param	$args['id']		int		optional
+ * @return	array
+ */
+function UserPictures_adminapi_getGlobalCategory($args)
+{
+  	$id = (int)$args['id'];
+  	if ($id > 0) return DBUtil::selectObjectByID('userpictures_globalcategories',$id);
+	else return DBUtil::selectObjectArray('userpictures_globalcategories','date');
+}
+
+/**
+ * delete global category
+ *
+ * @param	$args['id']		int		global category id
+ * @return	boolean
+ */
+function UserPictures_adminapi_delGlobalCategory($args)
+{
+	// get category
+	$obj = UserPictures_adminapi_getGlobalCategory(array('id' => (int)$args['id']));
+	// and delete it
+	return DBUtil::deleteObject($obj,'userpictures_globalcategories');
+}
+
 /**
  * find orphan pictures
  *
