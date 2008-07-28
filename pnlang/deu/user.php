@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package      UserPictures
+ * @version      $Id$
+ * @author       Florian Schießl
+ * @link         http://www.ifs-net.de
+ * @copyright    Copyright (C) 2008
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ */
+
 // main
 define('_USERPICTURESMANAGEYOURPICTURES', 	'Verwalten der eigenen Bilder');
 define('_USERPICTURESMANAGEYOURPICSHERE',	'Der Betreiber der Internetseite hat verschiedene Möglichkeiten festgelegt, für welche Bilder hochgeladen werden können. Pro Möglichkeit kann ein Bild hochgeladen werden.');

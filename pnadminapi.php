@@ -1,4 +1,12 @@
 <?php
+/**
+ * @package      UserPictures
+ * @version      $Id$
+ * @author       Florian Schießl
+ * @link         http://www.ifs-net.de
+ * @copyright    Copyright (C) 2008
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ */
 
 /**
  * get global category
@@ -23,6 +31,7 @@ function UserPictures_adminapi_delGlobalCategory($args)
 {
 	// get category
 	$obj = UserPictures_adminapi_getGlobalCategory(array('id' => (int)$args['id']));
+	// todo: delete all existing associations
 	// and delete it
 	return DBUtil::deleteObject($obj,'userpictures_globalcategories');
 }
