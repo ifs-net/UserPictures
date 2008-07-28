@@ -8,6 +8,11 @@ define('_USERPICTURESCANBEUPLOADED',			'pictures can be uploaded for the own gal
 define('_USERPICTURESUPLOADPICTURES',			'Manage my own gallery');
 define('_USERPICTURESMANAGECATEGORIES',			'Manage categories for the own gallery');
 
+// managepicture global categories
+define('_USERPICTURESADDEDTOGLOBALCAT',			'Added to global category');
+define('_USERPICTURESADDTOGLOBALCAT',			'Add to community photo category');
+define('_',		'');
+
 // managepicture
 define('_USERPICTURESMOVEDOWN',					'down');
 define('_USERPICTURESMOVEUP',					'up');

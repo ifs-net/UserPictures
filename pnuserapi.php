@@ -123,6 +123,54 @@ function UserPictures_userapi_addPerson($args)
 } 
 
 /**
+ * associate a picture with a global category
+ *
+ * @param	$args['picture_id']	int
+ * @param	$args['cat_id']		int
+ * @return	bool
+ */
+function UserPictures_userapi_addToGlobalCategory($args)
+{
+    $picture_id =	(int)$args['picture_id'];
+    $cat_id =		(int)$args['cat_id'];
+    if (!isset($cat_id) || (!($cat_id>0))) return false;
+    if (!isset($picture_id) || (!($picture_id>0))) return false;
+    
+    // delete an association if there is an existing (to avoid doubles)
+	UserPictures_userapi_delFromGlobalCategory(array('picture_id'=>$picture_id,'cat_id'=>$cat_id));
+
+	// store in DB
+	$obj = array (
+			'picture_id'	=> $picture_id,
+			'cat_id'		=> $cat_id,
+			'date'			=> date("Y-m-d",time())
+		);
+    return DBUtil::insertObject($obj,'userpictures_globalcatassoc');
+} 
+
+/**
+ * delete an assoziation from a global category
+ *
+ * @param	$args['picture_id']	int
+ * @param	$args['cat_id']		int
+ * @return	bool
+ */
+function UserPictures_userapi_delFromGlobalCategory($args)
+{
+    $picture_id =	(int)$args['picture_id'];
+    $cat_id =		(int)$args['cat_id'];
+    if (!isset($cat_id) || (!($cat_id>0))) return false;
+    if (!isset($picture_id) || (!($picture_id>0))) return false;
+    
+	// Delete category assiciation
+    $table =& pnDBGetTables();
+    $column = &$table['userpictures_globalcatassoc_column'];
+	$where = 	$column['cat_id']." = '" . $cat_id . "'
+				AND ".$column['picture_id']." = '" . $picture_id . "'";
+		return DBUtil::deleteWhere('userpictures_globalcatassoc',$where);
+} 
+
+/**
  * associate a picture with a category
  *
  * @param	$args['uid']		int
@@ -343,13 +391,55 @@ function UserPictures_userapi_getCategoryAssociations($args)
  */
 function UserPictures_userapi_getCategoriesAssociation($args)
 {
-    $picture_id=(int)$args['picture_id'];
+    $picture_id = (int)$args['picture_id'];
     // get table array
     $pntable =& pnDBGetTables();
     $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
     $where = $userpictures_catassoccolumn['picture_id']." = ". $picture_id;
     // return objects
     return DBUtil::selectObjectArray('userpictures_catassoc',$where);
+}
+
+/**
+ * get global associations for picture -> categories
+ *
+ * @param	$args['picture_id']	int
+ * @return	array
+ */
+function UserPictures_userapi_getGlobalCategoriesAssociation($args)
+{
+    $picture_id = (int)$args['picture_id'];
+    // get table array
+    $table =& pnDBGetTables();
+    $column = &$table['userpictures_globalcatassoc_column'];
+    $where = $column['picture_id']." = ". $picture_id;
+    // return objects
+    return DBUtil::selectObjectArray('userpictures_globalcatassoc',$where);
+}
+
+/**
+ * delete global association for picture -> categories
+ *
+ * @param	$args['picture_id']	int
+ * @param	$args['uid']		int
+ * @return	array
+ */
+function UserPictures_userapi_delGlobalCategoryAssociation($args)
+{
+    $picture_id = (int)$args['picture_id'];
+    if (!($picture_id > 0)) return false;
+    $uid = (int)$args['uid'];
+    if (!($uid > 1)) return false;
+    // get table array
+    $table =& pnDBGetTables();
+    $column = &$table['userpictures_globalcatassoc_column'];
+    $where = $column['picture_id']." = ". $picture_id;
+    // check if user is owner of picture!
+    $pic = UserPictures_userapi_getPicture(array(	'uid' 			=> $uid,
+													'template_id' 	=> 0,
+													'picture_id' 	=> $picture_id));
+	if ($uid != $pic[0]['uid']) return false;
+	else return DBUtil::deleteWhere('userpictures_globalcatassoc',$where);
 }
 
 /**

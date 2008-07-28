@@ -25,6 +25,20 @@ define('_USERPICTURESDATADIR',		'Pfad (mit Schrägstrich zwingend am Ende) zum Bi
 define('_USERPICTURESALLOWAVATARMANAGEMENT',	'Erlaube es, hochgeladene Bilder als pers. Avatar zu kopieren');
 define('_USERPICTURESAVATARSIZE',	'Größe des zu erstellenden Avatars');
 
+// global category management
+define('_USERPICTURESGLOBALCATEGORYMANAGEMENT',	'Globale Bilderkategorien verwalten');
+define('_USERPICTURESCATEGORIES',				'Globale Kategorien');
+define('_USERPICTURESADDGLOBALCATEGORY',		'Ändern oder Erstellen einer globalen Kategorie');
+define('_USERPICTURESGLOBALCATEGORYEXPL',		'Globale Bilderkategorien machen es jedem Benutzer möglich, seine Bilder einer globalen Bilderkategorie zuzuordnen. So ist es möglich, dass richtige Community-Fotoalben entstehen können.');
+define('_USERPICTURESTEXT',						'Beschreibung');
+define('_USERPICTURESDATE',						'Zugewiesenes Datum (zugleich Sortierkriterium)');
+define('_USERPICTUREDELETEGLOBALCATEGORY',		'Kategorie löschen');
+define('_USERPICTURESSAVEGLOBALCAT',			'speichern / aktualisieren');
+define('_USERPICTURESCLEARFORM',				'Formular löschen');
+define('_USERPICTURESEXISTINGCATEGORIES',		'Bestehende globale Bilderkategorien');
+define('_USERPICTURESNUMBEROFCATEGORIES',		'Anzahl angelegter globaler Kategorien');
+define('_USERPICTURESACTIONDONE',				'Aktion erfolgreich ausgeführt');
+
 // templates
 define('_USERPICTURESTEMPLATESADMINPANEL',	'Verwaltung der Templates');
 define('_USERPICTURESWHATARETEMPLATES',	'Je unterschiedliches Bild das ein Benutzer hochladen können soll muss ein Template existieren.');

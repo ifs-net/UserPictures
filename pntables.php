@@ -12,12 +12,14 @@ function UserPictures_pntables()
     $UserPictures = pnConfigGetVar('prefix') . '_userpictures';
 
     // Set the table name
-    $pntable['userpictures'] 			= $UserPictures;
-    $pntable['userpictures_templates'] 	= $UserPictures."_templates";
-    $pntable['userpictures_persons'] 	= $UserPictures."_persons";
-    $pntable['userpictures_settings'] 	= $UserPictures."_settings";
-    $pntable['userpictures_categories']	= $UserPictures."_categories";
-    $pntable['userpictures_catassoc'] 	= $UserPictures."_catassoc";
+    $pntable['userpictures'] 					= $UserPictures;
+    $pntable['userpictures_templates'] 			= $UserPictures."_templates";
+    $pntable['userpictures_persons'] 			= $UserPictures."_persons";
+    $pntable['userpictures_settings'] 			= $UserPictures."_settings";
+    $pntable['userpictures_categories']			= $UserPictures."_categories";
+    $pntable['userpictures_catassoc'] 			= $UserPictures."_catassoc";
+    $pntable['userpictures_globalcategories']	= $UserPictures."_globalcategories";
+    $pntable['userpictures_globalcatassoc'] 	= $UserPictures."_globalcatassoc";
 
     // Set the column names.  Note that the array has been formatted
     // on-screen to be very easy to read by a user.
@@ -104,6 +106,30 @@ function UserPictures_pntables()
 		        'title'					=> "XL	NOTNULL DEFAULT ''",
 		        'text'					=> "XL	NOTNULL DEFAULT ''",
 		        'sortnr'				=> "I	NOTNULL DEFAULT 0"
+    			);
+    $pntable['userpictures_globalcatassoc_column'] = array(
+				'id'					=> 'id',
+				'picture_id'			=> 'picture_id',
+				'cat_id'				=> 'cat_id',
+				'date'					=> 'date'
+				);
+    $pntable['userpictures_globalcatassoc_column_def'] = array(
+		        'id'					=> "I	AUTOINCREMENT PRIMARY",
+		        'picture_id'			=> "I	NOTNULL DEFAULT 0",
+		        'cat_id'				=> "I	NOTNULL DEFAULT 0",
+		        'date'					=> "D	NOTNULL DEFAULT '0000-00-00'"		        
+    			);
+    $pntable['userpictures_globalcategories_column'] = array(
+				'id'					=> 'id',
+				'title'					=> 'title',
+				'text'					=> 'text',
+				'date'					=> 'date'
+				);
+    $pntable['userpictures_globalcategories_column_def'] = array(
+		        'id'					=> "I	AUTOINCREMENT PRIMARY",
+		        'title'					=> "XL	NOTNULL DEFAULT ''",
+		        'text'					=> "XL	NOTNULL DEFAULT ''",
+		        'date'					=> "D	NOTNULL DEFAULT '0000-00-00'"
     			);
     // Return the table information
     return $pntable;
