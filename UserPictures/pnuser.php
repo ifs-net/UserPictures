@@ -31,6 +31,27 @@ function UserPictures_user_main()
 }
 
 /**
+ * show pictures
+ *
+ * @return       output       
+ */
+function UserPictures_user_show()
+{
+    // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
+
+	pnModAPIFunc('UserPictures','user','get',array(
+		'uid' => pnUserGetVar('uid'),
+		'cat_id' => 5
+		));
+
+    // Create output, assign data and return output
+    $render = pnRender::getInstance('UserPictures');    
+    $render->assign('startnumthumb',$startnumthumb);
+    return $render->fetch('userpictures_user_main.htm');
+}
+
+/**
  * user's settings
  *
  * Users can manage their personal UserPicture settings here
@@ -398,12 +419,13 @@ function UserPictures_user_managePicture()
 	// is userpictures module activated?
     $activated = pnModGetVar('UserPictures','activated');
     if ($activated != 1) {
-		$disabledtext = 	pnModGetVar('UserPictures','disabledtext');
+		$disabledtext = pnModGetVar('UserPictures','disabledtext');
 		if ($disabledtest != '') $addon = ': '.$disabledtext;
 	  	LogUtil::registerError(_USERPICTURESDISABLED.' '.$addon);
 	  	return pnRedirect(pnModURL('Userpictures','user','main'));
 	}
-	
+
+	// get some passed values	
     $action 		= FormUtil::getPassedValue('action');
     $template_id 	= FormUtil::getPassedValue('template_id');
     $picture_id 	= FormUtil::getPassedValue('picture_id');
@@ -428,12 +450,20 @@ function UserPictures_user_managePicture()
 		if (pnModAPIFunc('UserPictures','user','copyPictureAsAvatar',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
 		else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
     }    
+    else if (isset($action) && ($action=='addtocat')) {
+		if (pnModAPIFunc('UserPictures','user','setCategory',array('picture_id'=>$picture_id,'cat_id' => $cat_id, 'uid' => $uid))) LogUtil::registerStatus(_USERPICTURESADDEDTOCAT);
+		else LogUtil::registerError(_USERPICTURESERRORADDINGTOCAT);
+    }    
+    else if (isset($action) && ($action=='delassoc')) {
+		if (pnModAPIFunc('UserPictures','user','setCategory',array('picture_id'=>$picture_id,'uid' => $uid,'cat_id' => 0))) LogUtil::registerStatus(_USERPICTURESCATASSOCDELETED);
+		else LogUtil::registerError(_USERPICTURESERRORDELETINGCATASSOC);
+    }    
     else if (isset($action) && ($action=='addtoglobalcat')) {
-		if (pnModAPIFunc('UserPictures','user','addToGlobalCategory',array('picture_id'=>$picture_id,'cat_id' => $cat_id))) LogUtil::registerStatus(_USERPICTURESADDEDTOGLOBALCAT);
+		if (pnModAPIFunc('UserPictures','user','setGlobalCategory',array('picture_id'=>$picture_id,'cat_id' => $cat_id, 'uid' => $uid))) LogUtil::registerStatus(_USERPICTURESADDEDTOGLOBALCAT);
 		else LogUtil::registerError(_USERPICTURESERRORADDINGTOGLOBALCAT);
     }    
     else if (isset($action) && ($action=='delglobalassoc')) {
-		if (pnModAPIFunc('UserPictures','user','delGlobalCategoryAssociation',array('picture_id'=>$picture_id,'uid' => $uid))) LogUtil::registerStatus(_USERPICTURESGLOBALCATASSOCDELETED);
+		if (pnModAPIFunc('UserPictures','user','setGlobalCategory',array('picture_id'=>$picture_id,'uid' => $uid,'cat_id' => 0))) LogUtil::registerStatus(_USERPICTURESGLOBALCATASSOCDELETED);
 		else LogUtil::registerError(_USERPICTURESERRORDELETINGGLOBALCATASSOC);
     }    
     else if (isset($action) && ($action=='comment')) {
@@ -482,30 +512,38 @@ function UserPictures_user_managePicture()
     $render = pnRender::getInstance('UserPictures');
 
     // are there global categories?
-	$render->assign('globalcategories',pnModAPIFunc('UserPictures','admin','getGlobalCategory'));
     $template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$id));
     if (!($template[id]>=0)) {
 		LogUtil::registerError(_USERPICTURESTEMPLATENUMBERFALSE);
 		return pnRedirect(pnModURL('UserPictures','user','main'));
     }
+
     // Assign some values to some variables
-    $pictures = pnModAPIFunc('UserPictures','user','getPicture',array(
-					'uid' 			=> pnUserGetVar('uid'),
-					'template_id'	=> $id		));
+	$pictures = pnModAPIFunc('UserPictures','user','get',array (
+			'uid' 			=> $uid,
+			'template_id' 	=> $template_id
+		));
 	if (count($pictures) > 0 ) {
 		$pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array('pictures' => $pictures));
-		$render->assign('pictures',	$pictures);
 	}
+    $globalCategories = pnModAPIFunc('UserPictures','admin','getGlobalCategory');
+    $categories = pnModAPIFunc('UserPictures','user','getCategory',array('uid'=>$uid));
+    if (count($globalCategories)>0) $render->assign('globalcategories',$globalCategories);
+    if (count($categories)>0) $render->assign('categories',$categories);
+	$render->assign('globalcategories',	pnModAPIFunc('UserPictures','admin','getGlobalCategory'));
     $render->assign('uid',				pnUserGetVar('uid'));
     $render->assign('ownuploads',		pnModGetVar('UserPictures','ownuploads'));
     $render->assign('verifytext',		pnModGetVar('UserPictures','verifytext'));
     $render->assign('avatarmanagement',	pnModGetVar('UserPictures','avatarmanagement'));
     $render->assign('template',			$template);
+	$render->assign('ajaxurl',			pnGetBaseUrl().pnModURL('UserPictures','ajax','ajaxSaveList'));
+	$render->assign('pictures',			$pictures);
     
-    $categories = pnModAPIFunc('UserPictures','user','getCategories',array('uid'=>$uid));
-    if (count($categories)>0) $render->assign('categories',$categories);
-
-	$render->assign('ajaxurl',pnGetBaseUrl().pnModURL('UserPictures','ajax','ajaxSaveList'));
+    // Add some page vars
+    PageUtil::addVar('stylesheet','modules/UserPictures/pnincludes/lightbox/css/lightbox.css');
+    PageUtil::addVar('javascript','modules/UserPictures/pnincludes/lightbox/js/prototype.js');
+    PageUtil::addVar('javascript','modules/UserPictures/pnincludes/scriptaculous/src/scriptaculous.js?load=effects,builder,dragdrop');
+    PageUtil::addVar('javascript','modules/UserPictures/pnincludes/lightbox/js/lightbox.js');
 
     // Return the output that has been generated by this function
     return $render->fetch('userpictures_user_managepicture.htm');
