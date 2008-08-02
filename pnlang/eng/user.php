@@ -16,13 +16,16 @@ define('_USERPICTURESOWNUPLOADSPOSSIBLE',		'It is possible to upload some pictur
 define('_USERPICTURESCANBEUPLOADED',			'pictures can be uploaded for the own gallery for each user');
 define('_USERPICTURESUPLOADPICTURES',			'Manage my own gallery');
 define('_USERPICTURESMANAGECATEGORIES',			'Manage categories for the own gallery');
-
-// managepicture global categories
-define('_USERPICTURESADDEDTOGLOBALCAT',			'Added to global category');
-define('_USERPICTURESADDTOGLOBALCAT',			'Add to community photo category');
-define('_',		'');
-
 // managepicture
+// new
+define('_USERPICTURESASSOCIATEPERSONDESC',		'Link each person that is shown at the picture and make you pictures "social"');
+define('_USERPICTURESASSOCIATEPERSONSNOW',		'Associate persons');
+define('_USERPICTURESPRIVATECATEGORIES',		'Private categories');
+define('_USERPICTURESASSOCIATEDWITHPRIVATE',	'You can manage some private categories and associate your pictures and create private "albums" this way');
+define('_USERPICTURESGLOBALCATEGORIES',			'Global community categories');
+define('_USERPICTURESADDEDTOGLOBALCAT',			'Added to global category');
+define('_USERPICTURESADDTOGLOBALCAT',			'If you associate this picture with a global category it will be added to the community album');
+// old
 define('_USERPICTURESMOVEDOWN',					'down');
 define('_USERPICTURESMOVEUP',					'up');
 define('_USERPICTURESUPLOADDELETESEXISTINGPICTURE',	'Whenever you upload a new picture the old picture will be overwritten');
@@ -56,7 +59,7 @@ define('_USERPICTURESCOMMENTCHANGEERROR',		'An error occured while trying to cha
 define('_USERPICTURESMOVEUPEERROR',				'An error occured while trying to change the position of the picture');
 define('_USERPICTURESMOVEDUP',					'Position of the pictures was changed');
 define('_USERPICTURESADDTOCAT',					'add to a category');
-define('_USERPICTURESCATEGORYMANAGEMENT',		'Manage categories');
+define('_USERPICTURESCATEGORYMANAGEMENT',		'Manage your private categories');
 define('_USERPICTURESCOPYASAVATAR',				'Set as avatar');
 define('_USERPICTURESSETASAVATAR',				'Image set as avatar');
 
@@ -67,7 +70,7 @@ define('_USERPICTURESNOCONTACTNAMEGIVEN',		'No username given');
 define('_USERPICTURESCONTACTADDED',				'Association stored');
 define('_USERPICTURESUSERNOTFOUNDORADDED',		'This username is invalid!');
 define('_USERPICTURESASSOCIATEPERSON',			'associate username with picture');
-define('_USERPICTURESADD',						'add association');
+define('_USERPICTURESADD',						'add');
 define('_USERPICTURESASSOCIATEDPERSONS',		'existing associations');
 define('_USERPICTURESDELETE',					'remove');
 define('_USERPICTURESCONTACTDELETED',			'Association deleted');

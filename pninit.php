@@ -21,9 +21,7 @@ function UserPictures_init()
   	if (!DBUtil::createTable('userpictures_persons')) return false;
   	if (!DBUtil::createTable('userpictures_settings')) return false;
   	if (!DBUtil::createTable('userpictures_categories')) return false;
-  	if (!DBUtil::createTable('userpictures_catassoc')) return false;
   	if (!DBUtil::createTable('userpictures_globalcategories')) return false;
-  	if (!DBUtil::createTable('userpictures_globalcatassoc')) return false;
 
 
     // If the interactive installation has run, we hve some values now in sessionvars
@@ -231,10 +229,12 @@ function UserPictures_upgrade($oldversion)
 		case '0.91':
 		case '0.92':
 		// all for 1.0 now!
-		case '0.93':
+		case '0.94':
 			if (!DBUtil::changeTable('userpictures')) return false;
 			if (!DBUtil::changeTable('userpictures_globalcategories')) return false;
-			if (!DBUtil::changeTable('userpictures_globalcatassoc')) return false;
+			if (!DBUtil::changeTable('userpictures_categories')) return false;
+			// todo: alte kategorien in neue tabelle reinschreiben!
+		  	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
 		default:
 		    return true;
 	}
@@ -252,9 +252,7 @@ function UserPictures_delete()
   	if (!DBUtil::dropTable('userpictures_persons')) return false;
   	if (!DBUtil::dropTable('userpictures_settings')) return false;
   	if (!DBUtil::dropTable('userpictures_categories')) return false;
-  	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
   	if (!DBUtil::dropTable('userpictures_globalcategories')) return false;
-  	if (!DBUtil::dropTable('userpictures_globalcatassoc')) return false;
 
     // Delete any module variables
     pnModDelVar('UserPictures');

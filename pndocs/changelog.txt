@@ -13,12 +13,40 @@ UPGRADE INFORMATION:
 
 1.0:
 ====
-- added coords field to each picture to add some gps coordinates
-- added position field to each picture
+- new requirements: zikula 1.0, PHP 5.x, MySQL 5.x
+
+fixed bugs:
+-----------
 - fixed bug with paged thumbnail galleries and wrong links
-- added myprofile plugin
-- zikula compatible now - UserPictures does not run with PostNuke
-  any more!
+
+new features:
+-------------
+- introduced global categories
+- drag-and-drop sorting for pictures
+- lightbox.js added for slideshows and some optical effects
+- privacy status for pictures (all, registered, "friends")
+
+plugins:
+--------
+- added plugin for myprofile
+
+database design:
+----------------
+- added fields:
+  o userpictures: coord_lat & coord_lng (float): gps coordinates
+  o userpictures: position
+  o userpictures: category & global_category (int): 1:1 association
+  o userpictures: date (date): date of picture upload
+  o userpictures: privacy_status (int): privacy status of a picture
+  o userpictures_category: title_image (int): "album cover" image
+- dropped tables:
+  o cuserpictures_catassoc: 1:1 replaces not really used 1:n association
+
+todo:
+-----
+- MyMap integration
+- Transform hook / Multihook needle
+- expand preparation for album cover image in db
 
 0.93:
 =====

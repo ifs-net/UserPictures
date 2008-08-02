@@ -38,9 +38,14 @@ function UserPictures_pntables()
                 'position'				=> 'pn_position',
 				'template_id'			=> 'pn_template_id',
 				'comment'				=> 'pn_comment',
-				'coords'				=> 'pn_coords',
 				'filename'				=> 'pn_filename',
-			    'verified'  			=> 'pn_verified'
+			    'verified'  			=> 'pn_verified',
+			    'date'		  			=> 'date',
+			    'global_category'		=> 'global_category',
+			    'category'				=> 'category',
+			    'coord_lat'				=> 'coord_lat',
+			    'coord_lng'				=> 'coord_lng',
+			    'privacy_status'		=> 'privacy_status'
 			    );
     $pntable['userpictures_column_def'] = array(
     			'id'					=> "I	AUTOINCREMENT PRIMARY",
@@ -48,9 +53,14 @@ function UserPictures_pntables()
     			'position'				=> "I	NOTNULL DEFAULT 0",
     			'template_id'			=> "I	NOTNULL DEFAULT 0",
         		'comment'				=> "XL	NOTNULL DEFAULT ''",
-        		'coords'				=> "XL	NOTNULL DEFAULT ''",
         		'filename'				=> "XL	NOTNULL DEFAULT ''",
-        		'verified'				=> "C(1)	NOTNULL DEFAULT '0'"
+        		'verified'				=> "C(1)	NOTNULL DEFAULT '0'",
+        		'date'					=> "D	NOTNULL DEFAULT '0000-00-00'",
+        		'global_category'		=> "I	NOTNULL DEFAULT 0",
+        		'category'				=> "I	NOTNULL DEFAULT 0",
+        		'coord_lat'				=> "F	NOTNULL DEFAULT 0",
+        		'coord_lng'				=> "F	NOTNULL DEFAULT 0",
+        		'privacy_status'		=> "I	NOTNULL DEFAULT 0"
     			);
     $pntable['userpictures_templates_column'] = array (
 				'id'					=> 'pn_id',
@@ -60,7 +70,7 @@ function UserPictures_pntables()
 				'defaultimage'			=> 'pn_defaultimage',
 				'to_verify'				=> 'pn_to_verify'
 			    );
-    $pntable['userpictures_templates_column_def'] = array (
+	$pntable['userpictures_templates_column_def'] = array (
         		'id'					=> "I	AUTOINCREMENT PRIMARY",
         		'title'					=> "XL	NOTNULL DEFAULT ''",
         		'max_width'				=> "I	NOTNULL DEFAULT 320",
@@ -68,7 +78,7 @@ function UserPictures_pntables()
         		'defaultimage'			=> "XL	NOTNULL DEFAULT ''",
         		'to_verify'				=> "C(1)	NOTNULL DEFAULT '0'"
 				);
-    $pntable['userpictures_persons_column'] = array(
+	$pntable['userpictures_persons_column'] = array(
 				'id'					=> 'pn_id',
 				'picture_id'			=> 'pn_picture_id',
 				'uid'					=> 'pn_uid'
@@ -90,43 +100,19 @@ function UserPictures_pntables()
 		        'nocomments'			=> "I	NOTNULL DEFAULT 0",
 		        'picspublic'			=> "I	NOTNULL DEFAULT 0"
     			);
-    $pntable['userpictures_catassoc_column'] = array(
-				'id'					=> 'pn_id',
-				'picture_id'			=> 'pn_picture_id',
-				'cat_id'				=> 'pn_cat_id',
-				'uid'					=> 'pn_uid'
-				);
-    $pntable['userpictures_catassoc_column_def'] = array(
-		        'id'					=> "I	AUTOINCREMENT PRIMARY",
-		        'picture_id'			=> "I	NOTNULL DEFAULT 0",
-		        'cat_id'				=> "I	NOTNULL DEFAULT 0",
-		        'uid'					=> "I	NOTNULL DEFAULT 0"
-    			);
     $pntable['userpictures_categories_column'] = array(
 				'id'					=> 'pn_id',
 				'uid'					=> 'pn_uid',
+				'title_image'			=> 'title_img',
 				'title'					=> 'pn_title',
-				'text'					=> 'pn_text',
-				'sortnr'				=> 'pn_sortnr'
+				'text'					=> 'pn_text'
 				);
     $pntable['userpictures_categories_column_def'] = array(
 		        'id'					=> "I	AUTOINCREMENT PRIMARY",
 		        'uid'					=> "I	NOTNULL DEFAULT 0",
+		        'title_image'			=> "I	NOTNULL DEFAULT 0",
 		        'title'					=> "XL	NOTNULL DEFAULT ''",
-		        'text'					=> "XL	NOTNULL DEFAULT ''",
-		        'sortnr'				=> "I	NOTNULL DEFAULT 0"
-    			);
-    $pntable['userpictures_globalcatassoc_column'] = array(
-				'id'					=> 'id',
-				'picture_id'			=> 'picture_id',
-				'cat_id'				=> 'cat_id',
-				'date'					=> 'date'
-				);
-    $pntable['userpictures_globalcatassoc_column_def'] = array(
-		        'id'					=> "I	AUTOINCREMENT PRIMARY",
-		        'picture_id'			=> "I	NOTNULL DEFAULT 0",
-		        'cat_id'				=> "I	NOTNULL DEFAULT 0",
-		        'date'					=> "D	NOTNULL DEFAULT '0000-00-00'"		        
+		        'text'					=> "XL	NOTNULL DEFAULT ''"
     			);
     $pntable['userpictures_globalcategories_column'] = array(
 				'id'					=> 'id',
