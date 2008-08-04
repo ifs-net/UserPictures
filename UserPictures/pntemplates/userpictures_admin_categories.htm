@@ -1,0 +1,38 @@
+<!--[include file="userpictures_admin_menu.htm"]-->
+
+<h1><!--[pnml name=_USERPICTURESGLOBALCATEGORYMANAGEMENT]--></h1>
+
+<h3><!--[pnml name="_USERPICTURESADDGLOBALCATEGORY"]--></h3>
+
+<!--[pnml name="_USERPICTURESGLOBALCATEGORYEXPL"]--><br /><br />
+<!--[pnform]-->
+
+	<!--[pnformvalidationsummary]-->
+
+    <!--[pnformlabel for="title" text="_USERPICTURESTITLE"]-->:<br />
+    <!--[pnformtextinput maxLength="120" id="title" mandatory="1"]-->
+	<br /><br />
+    <!--[pnformlabel for="text" text="_USERPICTURESTEXT"]-->:<br />
+    <!--[pnformtextinput maxLength="120" textMode="multiLine" mandatory="0"]-->
+	<br /><br />
+    <!--[pnformlabel for="date" text="_USERPICTURESDATE"]-->:<br />
+	<!--[pnformdateinput id="date" mandatory="0"]-->
+	<br /><br />
+	<!--[if $id gt 0]-->
+	    <!--[pnformcheckbox id="delete" checked="0"]--><!--[pnformlabel for="delete" text="_USERPICTUREDELETEGLOBALCATEGORY]-->
+		<br /><br />
+	<!--[/if]-->
+	<!--[pnformbutton commandName="update" text="_USERPICTURESSAVEGLOBALCAT"]-->
+	<a href="<!--[pnmodurl modname="UserPictures" type="admin" func="categories"]-->"><!--[pnml name="_USERPICTURESCLEARFORM"]--></a>
+	<br /><br />
+<!--[/pnform]-->
+
+<h3><!--[pnml name="_USERPICTURESEXISTINGCATEGORIES"]--></h3>
+<!--[pnml name="_USERPICTURESNUMBEROFCATEGORIES"]-->: <!--[$categories|@count]-->.
+<br /><br />
+
+<ul>
+<!--[foreach from=$categories item="category"]-->
+	<li><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="categories" cat_id=$category.id]-->"><!--[$category.title]--> [<!--[pnml name="_USERPICTURESEDIT"]-->]</a></li>
+<!--[/foreach]-->
+</ul>
