@@ -1,0 +1,92 @@
+/** user **/
+
+.userpictures_picleftbox {
+	border:0px;
+	float:left;
+	margin:2px;
+	min-height:100px;
+	padding:5px;
+	text-align:center;
+	width:100px;
+	font-size: 0.9em;
+}
+
+.userpictures_picinfobox {
+	border:0px;
+	float:left;
+	margin:2px;
+	min-height:100px;
+	padding:5px;
+	text-align:left;
+	width: 180px;
+	font-size: 0.9em;
+}
+
+.userpictures_sortableitem{
+	background-color: #C0C0C0; 
+	padding:10px; 
+	margin: 10px; 
+	border: 1px dotted #000000;
+	cursor: move;
+	list-style: none;
+}
+
+.userpictures_uploadform{
+	background-color: #EEEEEE; 
+	border: 1px dotted #000000;
+	margin: 2px;
+	padding: 5px;
+}
+
+.userpictures_sortablelist {
+	background-color: #E0E0E0; 
+	margin: 2px;
+	padding: 5px;
+	border: 1px dotted #000000;
+	list-style: none;
+}
+
+.userpictures_photo
+{
+	background: #eee;
+	border-color: #ddd #bbb #aaa #ccc;
+	border-style: solid;
+	border-width: 1px;
+	color: inherit;
+	padding: 3px;
+	margin: 5px;
+}
+
+ .userpictures_clearboth { 
+	clear: both; 
+}
+
+.userpictures_thumbnails {
+	 float:clear;
+
+}
+
+.userpictures_thumbnail {
+	 border:1px dotted #bbb;
+	 float:left;
+	 margin:2px;
+	 padding:5px;
+	 width: 150px;
+	 font-size: 0.8em;
+	 text-align: center;
+}
+
+.userpictures_pager {
+	text-align: center;
+	margin: 5px;
+	padding: 5px;
+}
+
+.userpictures_infobox {
+	background-color: #eee;
+	text-align: left;
+}
+
+.userpictures_bold {
+  	font-weight: bold;
+}
