@@ -55,6 +55,7 @@
 	    </form>
 	    <!--[if $p.template_id eq 0]-->
 			<noscript>
+			<br />
 			<!--[if $picture.orderlink.up ne ""]-->
 				<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="saveList"]-->" >
 				<input type="hidden" name="template_id" value="<!--[$template.id]-->">
@@ -79,12 +80,12 @@
 			<!--[$picture.assoc_persons|@count]--> <!--[pnml name="_USERPICTURESPERSONSASSOCIATED"]-->:<br />
 			<ul>
 			<!--[foreach item="person" from=$picture.assoc_persons]-->
-			    <li><!--[$person.uname|userprofilelink]--> (<a href="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id uname=$person.uname authid=$authid action="delete"]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>)</li>
+			    <li><!--[$person.uname|userprofilelink]--> (xxxx<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture"]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>)</li>
 			<!--[/foreach]-->
 			</ul>
-			<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id]-->">
+			<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" picture_id=$picture.id]-->">
 			<input type="hidden" name="authid" value="<!--[$authid]-->" />
-			<input type="hidden" name="action" value="add" />
+			<input type="hidden" name="action" value="addperson" />
 			<input type="text" size="8" name="uname" /><input type="submit" value="<!--[pnml name="_USERPICTURESADD"]-->" />
 			</form>
 		</dl>

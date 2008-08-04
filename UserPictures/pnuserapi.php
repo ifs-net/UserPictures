@@ -285,23 +285,26 @@ function UserPictures_userapi_ajaxSaveList($args)
  */
 function UserPictures_userapi_addPerson($args)
 {
-    $picture_id =	(int)$args['picture_id'];
-    $uname =		$args['uname'];
-    $uid =			pnUserGetIDFromName($uname);
+ 
+ 	// ToDo
+ 	die("addperson");
+ 
+    $picture_id 	= (int)$args['picture_id'];
+    $uname 			= $args['uname'];
+    $uid 			= pnUserGetIDFromName($uname);
     if (!isset($uid) || (!($uid>1))) return false;
     
     // we need to check if we are allowed to link the picture with the given username.
-    $uid = 			pnUserGetIDFromName($uname);
-    $picture = 		UserPictures_userapi_get(array(	'picture_id'	=> $picture_id,
+    $uid 			= pnUserGetIDFromName($uname);
+    $picture 		= UserPictures_userapi_get(array(	'picture_id'	=> $picture_id,
 													'uid'			=> $uid));
-    $picture_uid =	$picture[0]['uid'];
-    $settings = 	pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
+    $picture_uid 	= $picture[0]['uid'];
+    $settings 		= pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
     if (($settings['nolinking'] ==1 ) && ($settings['uid'] != $picture_uid)) return false;
     
     // first delete association to avoid doubles
     UserPictures_userapi_delPerson(array(	'uname'			=> $uname,
 											'picture_id'	=>$picture_id));
-    
     $obj = array (
     		'picture_id'	=> $picture_id,
     		'uid'			=> $uid
