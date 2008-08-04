@@ -1,45 +1,38 @@
 <!--[include file="userpictures_user_menu.htm"]-->
 <h1><!--[pnml name="_USERPICTURESMANAGEYOURPICTURES"]--></h1>
-<br /><!--[pnml name="_USERPICTURESMANAGEYOURPICSHERE"]-->
-<!--[pnmodapifunc modname="UserPictures" type="admin" func="getTemplates" assign=templates]-->
-<ul>
-<!--[foreach from=$templates item=template]-->
-    <li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[$template.title]--> <!--[pnml name="_USERPICTURESMANAGE"]--></a></li>
-<!--[/foreach]-->
-</ul>
-<!--[pnmodgetvar module="UserPictures" name="ownuploads" assign=ownuploads]-->
+<!--[pnml name="_USERPICTURESMANAGEYOURPICSHERE"]-->
+<!--[if $templates|@count gt 0]-->
+	<ul>
+	<!--[foreach from=$templates item=template]-->
+	    <li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[$template.title]--></a></li>
+	<!--[/foreach]-->
+	</ul>
+<!--[/if]-->
 <!--[if $ownuploads gt 0]-->
-    <br /><!--[pnml name="_USERPICTURESOWNUPLOADSPOSSIBLE"]-->. <!--[$ownuploads]--> <!--[pnml name="_USERPICTURESCANBEUPLOADED"]-->.
+    <!--[pnml name="_USERPICTURESOWNUPLOADSPOSSIBLE"]-->. <!--[$ownuploads]--> <!--[pnml name="_USERPICTURESCANBEUPLOADED"]-->.
     <ul>
 	<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=0|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESUPLOADPICTURES"]--></a></li>
     </ul>
-
-<hr />
-
-<h1><!--[pnml name="_USERPICTURESLATESTIMAGESGALLERY"]--></h1>
-
-<p /><!--[pnml name="_USERPICTURESLATESTIMAGESGALLERYTEXT"]--><br /><br />
-<a href="<!--[pnmodurl modname="UserPictures" type="user" func="latest"]-->"><!--[pnml name="_USERPICTURESMORELATESTIMAGES"]--></a><br /><br />
-
-
-<!--[pnmodapifunc modname="UserPictures" type="user" func="getPictures" template_id="0" startnumthumb="1" index="1" amount="10" assign="thumbnails"]-->
-<center>
-<br />
-
-<table cellpadding='5' cellspacing='5' border='0'>
-<!--[foreach from=$thumbnails item="picture"]-->
-    <td align='center' width='100' onmouseover="this.style.backgroundColor='#cfcfcf';" onmouseout="this.style.backgroundColor='';">
-    <br />
-    &nbsp;<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$picture.uid]-->"><img border="0" src="<!--[$picture.filename]-->.thumb.jpg" title="<!--[$picture.comment|pnvarprepfordisplay]-->" alt="<!--[$picture.comment|pnvarprepfordisplay]-->"></a>&nbsp;
-    <!--[pnusergetvar name="uname" uid=$picture.uid assign="uname"]-->
-    <br /><a href="user.php?op=userinfo&amp;uname=<!--[$uname]-->"><img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$uname|truncate:10|pnvarprepfordisplay]--></a><br />
-    <!--[cycle values=",,,,</tr><tr>"]-->
-    </td>
-<!--[/foreach]-->
-</td></tr></table>
-</center>
 <!--[/if]-->
 
+
+<h1><!--[pnml name="_USERPICTURESVIEWOPTIONS"]--></h1>
+	<!--[if $templates|@count gt 0]-->
+		<ul>
+		<h3><!--[pnml name="_USERPICTURESTEMPLATEGALLERIES"]--></h3>
+		<!--[foreach from=$templates item=template]-->
+			<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id=$template.id]-->"><!--[pnml name="_USERPICTURESTEMPLATEGALLERY"]-->: <!--[$template.title]--></a></li>
+		<!--[/foreach]-->
+		</ul>
+	<!--[/if]-->
+	<!--[if $ownuploads gt 0]-->
+		<ul>
+		<h3><!--[pnml name="_USERPICTURESUSERGALLERYVIEWOPTIONS"]--></h3>
+		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0"]-->"><!--[pnml name="_USERPICTURESVIEWLATEST"]--></a></li>
+		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" assoc_uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESASSOCEDWITHYOU"]--></a></li>
+		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESYOURPICTURES"]--></a></li>
+		</ul>
+	<!--[/if]-->
 
 <!--[include file="userpictures_user_footer.htm"]-->
 

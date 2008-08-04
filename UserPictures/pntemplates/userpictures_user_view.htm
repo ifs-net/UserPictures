@@ -1,3 +1,5 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+
 <!--[if $pictures|@count eq 0]-->
 	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
 <!--[else]-->
@@ -53,4 +55,18 @@
 	<!--[/foreach]-->
 	</div>
 	<br class="userpictures_clearboth" />
+	<!--[if $ezcommentsavailable eq 1]-->
+		<!--[pnml name="_USERPICTURESPUBLICCOMMENTS"]-->:
+		<!--[* 			integrate EZComments 					
+						====================
+						+ get user settings to check if picture should be commentable
+						+ integrate EZComments if picture is commentable
+																								*]-->
+		<!--[pnmodapifunc modname="UserPictures" type="user" func="getSettings" uid=$p.uid assign="settings"]-->
+		<!--[if $settings.nocomments ne 1]-->
+			<!--[pnmodcallhooks hookobject=item hookaction=display hookid=$p.id module="UserPictures" returnurl=$viewUrl owneruid=$p.uid implode=false]-->
+			<!--[$hooks.EZComments]-->
+		<!--[/if]-->
+	<!--[/if]-->
 <!--[/if]-->	
+<!--[include file="userpictures_user_footer.htm"]-->

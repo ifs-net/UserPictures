@@ -36,11 +36,17 @@ database design:
   o userpictures: coord_lat & coord_lng (float): gps coordinates
   o userpictures: position
   o userpictures: category & global_category (int): 1:1 association
-  o userpictures: date (date): date of picture upload
+  o userpictures: date (timestamp): date of picture upload
   o userpictures: privacy_status (int): privacy status of a picture
   o userpictures_category: title_image (int): "album cover" image
 - dropped tables:
   o cuserpictures_catassoc: 1:1 replaces not really used 1:n association
+
+other technical changes:
+------------------------
+- resizing images now done with gd-lib
+- almost 80% lines of code rewritten and functions restructured 
+  and renamed
 
 todo:
 -----

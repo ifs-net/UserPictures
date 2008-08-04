@@ -1,17 +1,9 @@
 <!--[include file="userpictures_user_menu.htm"]-->
-<!--[pnsecgenauthkey module="UserPictures" assign=authid]-->
 
 <h1><!--[pnml name="_USERPICTURESMANAGEYOURPICTURES"]-->: <!--[$template.title]--></h1>
-
-<!--[* if upload deactivated we'll return this part *]-->
-
-<a href="<!--[pnmodurl modname="UserPictures" type="user" func="main"|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESBACKTOALLTEMPLATES"]--></a><br />
-<!--[if $template.id eq 0]-->
-<a href="<!--[pnmodurl modname="UserPictures" type="user" func="showGallery" uid=$uid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESGALLERYVIEW"]--></a><br />
-<!--[/if]-->
-
 <!--[* upload *]-->
-<!--[if $pictures eq 0 or $template.id eq 0]-->
+<!--[if $pictures|@count eq 0 or $template.id eq 0]-->
+<ul>
 	<!--[if $template.id gte 0]-->
 		<div class="userpictures_uploadform">
 		<!--[if $pictures ne 0]-->
@@ -29,8 +21,11 @@
 		    </form>
 	    </div>
 	<!--[/if]-->
+</ul>
 <!--[/if]-->
 <!--[* /upload *]-->
+
+<!--[if $template.id eq 0]--><ul><!--[pnml name="_USERPICTURESDRAGANDDROP"]--></ul><!--[/if]-->
 
 <div>
 <ul id="userpictures_list" class="userpictures_sortablelist">
@@ -48,8 +43,8 @@
 			<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="avatar" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESCOPYASAVATAR"]--></a>
 	    <!--[/if]-->
 	    <span id="item_delete_<!--[$picture.id]-->"><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a></span>
-	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=90|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockwith.gif" title="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" alt="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" /></a>
-	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=270|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockagainst.gif" title="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" alt="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" /></a>
+	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=270|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockwith.gif" title="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" alt="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" /></a>
+	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=90|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockagainst.gif" title="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" alt="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" /></a>
 
 	    <!--[pnml name="_USERPICTURESMODIFYCOMMENT"]-->:<br />
 	    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id]-->" />
@@ -59,7 +54,8 @@
 	    <input type="text" name="comment" size="12" value="<!--[$picture.comment|pnvarprepfordisplay]-->" /><br />
 		<input type="submit" value="<!--[pnml name="_USERPICTURESUPDATE"]-->" />
 	    </form>
-		<noscript>
+	    <!--[if $p.template_id eq 0]-->
+			<noscript>
 			<!--[if $picture.orderlink.up ne ""]-->
 				<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="saveList"]-->" >
 				<input type="hidden" name="template_id" value="<!--[$template.id]-->">
@@ -74,10 +70,11 @@
 				<input type="submit" value="<!--[pnml name="_USERPICTURESMOVEDOWN"]-->" />
 				</form>
 			<!--[/if]-->
-		</noscript>
+			</noscript>
+		<!--[/if]-->
 	</dl>
-	<dl class="userpictures_picinfobox">
-	    <!--[if $picture.template_id lt 1]-->
+    <!--[if $picture.template_id lt 1]-->
+		<dl class="userpictures_picinfobox">
 		    <h3><!--[pnml name="_USERPICTURESASSOCIATEPERSONSNOW"]--></h3>
 		    <!--[pnml name="_USERPICTURESASSOCIATEPERSONDESC"]-->;
 			<!--[$picture.assoc_persons|@count]--> <!--[pnml name="_USERPICTURESPERSONSASSOCIATED"]-->:<br />
@@ -91,10 +88,8 @@
 			<input type="hidden" name="action" value="add" />
 			<input type="text" size="8" name="uname" /><input type="submit" value="<!--[pnml name="_USERPICTURESADD"]-->" />
 			</form>
-		<!--[/if]-->
-	</dl>
-	<dl class="userpictures_picinfobox">
-	    <!--[if $picture.template_id lt 1]-->
+		</dl>
+		<dl class="userpictures_picinfobox">
 			<h3><!--[pnml name="_USERPICTURESPRIVATECATEGORIES"]--></h3>
 			<!--[if $categories|@count gt 0]-->
 					<!--[pnml name="_USERPICTURESASSOCIATEDWITHPRIVATE"]-->: <br />
@@ -114,30 +109,30 @@
 				<!--[/if]-->
 			<!--[/if]-->
 	        <a href="<!--[pnmodurl modname="UserPictures" type="user" func="manageCategories"]-->"><!--[pnml name="_USERPICTURESCATEGORYMANAGEMENT"]--></a><br />
-	</dl>
-	<dl class="userpictures_picinfobox">
+		</dl>
+		<dl class="userpictures_picinfobox">
+			<!--[if $globalcategories|@count gt 0]-->
 			<h3><!--[pnml name="_USERPICTURESGLOBALCATEGORIES"]--></h3>
-				<!--[if $globalcategories|@count gt 0]-->
-					<!--[if $picture.global_category ne null]-->
-						<!--[pnml name="_USERPICTURESASSOCIATEDWITH"]--><br />
-					    <!--[$picture.global_category.title]-->
-				        <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delglobalassoc" picture_id=$picture.id authid=$authid]-->">(<!--[pnml name="_USERPICTURESDELETE"]-->)</a>
-					<!--[else]-->
-						<!--[pnml name="_USERPICTURESADDTOGLOBALCAT"]-->
-					    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture"]-->">
-					    <input type="hidden" name="authid" value="<!--[$authid]-->" />
-					    <input type="hidden" name="action" value="addtoglobalcat" />
-					    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
-					    <select name="cat_id">
-						<!--[foreach item="cat" from=$globalcategories]-->
-							<option value="<!--[$cat.id]-->"><!--[if $cat.date ne "0000-00-00"]--><!--[$cat.date]-->: <!--[/if]--><!--[$cat.title]--></option>
-						<!--[/foreach]-->
-					    </select><input type="submit" value="<!--[pnml name="_USERPICTURESADD"]-->" />
-					    </form>
-					<!--[/if]-->
+				<!--[if $picture.global_category ne null]-->
+					<!--[pnml name="_USERPICTURESASSOCIATEDWITHGLOBALCAT"]--><br />
+				    <!--[$picture.global_category.title]-->
+			        <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delglobalassoc" picture_id=$picture.id authid=$authid]-->">(<!--[pnml name="_USERPICTURESDELETE"]-->)</a>
+				<!--[else]-->
+					<!--[pnml name="_USERPICTURESADDTOGLOBALCAT"]-->
+				    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture"]-->">
+				    <input type="hidden" name="authid" value="<!--[$authid]-->" />
+				    <input type="hidden" name="action" value="addtoglobalcat" />
+				    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
+				    <select name="cat_id">
+					<!--[foreach item="cat" from=$globalcategories]-->
+						<option value="<!--[$cat.id]-->"><!--[if $cat.date ne "0000-00-00"]--><!--[$cat.date]-->: <!--[/if]--><!--[$cat.title]--></option>
+					<!--[/foreach]-->
+				    </select><input type="submit" value="<!--[pnml name="_USERPICTURESADD"]-->" />
+				    </form>
 				<!--[/if]-->
-		<!--[/if]-->
-	</dl>
+			<!--[/if]-->
+		</dl>
+	<!--[/if]-->
 	<br class="userpictures_clearboth" />
 	</li>
 <!--[/foreach]-->

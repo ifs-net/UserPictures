@@ -18,7 +18,7 @@ function UserPictures_adminapi_getGlobalCategory($args)
 {
   	$id = (int)$args['id'];
   	if ($id > 0) return DBUtil::selectObjectByID('userpictures_globalcategories',$id);
-	else return DBUtil::selectObjectArray('userpictures_globalcategories','date');
+	else return DBUtil::selectObjectArray('userpictures_globalcategories','','date');
 }
 
 /**
@@ -29,10 +29,16 @@ function UserPictures_adminapi_getGlobalCategory($args)
  */
 function UserPictures_adminapi_delGlobalCategory($args)
 {
-	// get category
-	$obj = UserPictures_adminapi_getGlobalCategory(array('id' => (int)$args['id']));
-	// todo: delete all existing associations
-	// and delete it
+	// get oarameter
+	$id = (int)$args['id'];
+	// delete all existing associations
+	$objArray = pnModAPIFunc('UserPictures','user','get',array('globalcat_id' => $id));
+	foreach ($objArray as $obj) {
+	  	$obj['global_category'] = 0;
+	  	DBUtil::updateObject($obj,'userpictures');
+	}
+	// get category and delete it
+	$obj = UserPictures_adminapi_getGlobalCategory(array('id' => $id));
 	return DBUtil::deleteObject($obj,'userpictures_globalcategories');
 }
 
@@ -212,21 +218,18 @@ function UserPictures_adminapi_storeTemplate($args)
 		$title,
 		$max_width,
 		$max_height,
-		$defaultimage,
-		$to_verify	) = pnVarPrepForStore(	$args[id],
+		$defaultimage	) = pnVarPrepForStore(	$args[id],
 							$args[title],
 							$args[max_width],
 							$args[max_height],
-							$args[defaultimage],
-							$args[to_verify]	);
+							$args[defaultimage]	);
 	
     // Store to DB
   	$obj = array (
   		'title'			=> $title, 
   		'max_width'		=> (int)$max_width,
   		'max_height'	=> (int)$max_height,
-  		'defaultimage'	=> $defaultimage,
-  		'to_verify'		=> (int)$to_verify
+  		'defaultimage'	=> $defaultimage
 	  );
 	if ($id > 0) {
 		$obj['id'] = $id;
@@ -265,7 +268,6 @@ function UserPictures_adminapi_getTemplates($args)
 		$item[max_width]=pnModGetVar('UserPictures','maxwidth');
 		$item[max_height]=pnModGetVar('UserPictures','maxheight');
 		$item[defaultimage]='';
-		$item[to_verify]=0;
 		return $item;
     }
     
@@ -273,8 +275,7 @@ function UserPictures_adminapi_getTemplates($args)
 			$userpictures_templatescolumn[title],
 			$userpictures_templatescolumn[max_width],
 			$userpictures_templatescolumn[max_height],
-			$userpictures_templatescolumn[defaultimage],
-			$userpictures_templatescolumn[to_verify]
+			$userpictures_templatescolumn[defaultimage]
 	    FROM $userpictures_templatestable	
 	    ".$where;
     $result = $dbconn->Execute($sql);
@@ -289,8 +290,7 @@ function UserPictures_adminapi_getTemplates($args)
 		$item[title],
 		$item[max_width],
 		$item[max_height],
-		$item[defaultimage],
-		$item[to_verify]	) = $result->fields;
+		$item[defaultimage]) = $result->fields;
 	if ($oneonly) return $item;
 	$items[]=$item;
     }
