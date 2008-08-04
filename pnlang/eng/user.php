@@ -19,6 +19,9 @@ define('_USERPICTURESTEMPLATEGALLERIES',		'Template gallery');
 define('_USERPICTURESVIEWOPTIONS',				'View uploaded pictures');
 define('_USERPICTURESPICTURESTODISPLAY',		'pictures to display');
 define('_USERPICTURESUPLOADDATE',				'Upload date');
+define('_USERPICTURESGCOMMUNITYGALLERIES',		'Community galleries');
+define('_USERPICTURESGCOMMUNITYGALLERY',		'Global category');
+define('_USERPICTURESHASNOGALLERY',				'No pictures found');
 // old
 define('_USERPICTURESMANAGEYOURPICTURES',		'Manage my pictures');
 define('_USERPICTURESMANAGEYOURPICSHERE',		'The admin of this site has created possibillities for picture uploads. For each possibillity you can upload one picture');

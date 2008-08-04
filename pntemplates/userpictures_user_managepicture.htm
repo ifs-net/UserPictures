@@ -29,7 +29,6 @@
 
 <div>
 <ul id="userpictures_list" class="userpictures_sortablelist">
-
 <!--[foreach item=picture from=$pictures]-->
    	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">
 	<a name="<!--[$picture.id]-->">&nbsp;</a>
@@ -37,7 +36,7 @@
 	    <!--[if $template.id gt 0]-->
 			<!--[$picture.code]-->
 	    <!--[else]-->
-			<a rel="lightbox[<!--[$picture.id]-->]" title="<!--[$picture.comment]--> " href="<!--[$picture.filename]-->" target="_blanc"><!--[$picture.code_thumbnail]--></a>
+			<!--[$picture.code_thumbnail]-->
 	    <!--[/if]--><br />
 	    <!--[if $avatarmanagement]-->
 			<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="avatar" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESCOPYASAVATAR"]--></a>
@@ -80,7 +79,7 @@
 			<!--[$picture.assoc_persons|@count]--> <!--[pnml name="_USERPICTURESPERSONSASSOCIATED"]-->:<br />
 			<ul>
 			<!--[foreach item="person" from=$picture.assoc_persons]-->
-			    <li><a href="user.php?op=userinfo&amp;uname=<!--[$person.uname]-->"><!--[$person.uname]--></a> (<a href="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id uname=$person.uname authid=$authid action="delete"]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>)</li>
+			    <li><!--[$person.uname|userprofilelink]--> (<a href="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id uname=$person.uname authid=$authid action="delete"]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>)</li>
 			<!--[/foreach]-->
 			</ul>
 			<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="assocPersons" picture_id=$picture.id]-->">

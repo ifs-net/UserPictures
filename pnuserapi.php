@@ -188,7 +188,8 @@ function UserPictures_userapi_get($args)
 				  	$c++;
 				}
 			}
-			$info = '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
+			$title 	= $info.$assoc_string;
+			$info 	= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
 	  	}
 
 		// add code part
@@ -200,8 +201,18 @@ function UserPictures_userapi_get($args)
 		if ($cat_id >= 0) 		$viewarray['cat_id']		= $cat_id;
 		if ($globalcat_id >= 0) $viewarray['globalcat_id']	= $globalcat_id;
 		
-		$obj['code_thumbnail'] 	= '<a id="p'.$obj['id'].'" javascript:void(0);" onmouseover="return overlib(\''.htmlentities($info).'\')" onmouseout="return nd();" href="'.pnModURL('UserPictures','user','view',$viewarray).'" title="'.$obj['comment'].' <br />'.$assoc_string.'" rel="lightbox[set]"><img class="userpictures_photo" title="'.$obj['comment'].' " src="'.$obj['filename_absolute'].'.thumb.jpg" /></a>';
-		$obj['code'] 			= '<img title="'.$obj['comment'].' " class="userpictures_photo" src="'.$obj['filename_absolute'].'" />';
+		$obj['code_thumbnail'] 	= '<a 	id="p'.$obj['id'].'" javascript:void(0);" 
+										onmouseover="return overlib(\''.up_prepDisplay($info).'\')" 
+										onmouseout="return nd();" 
+										href="'.pnModURL('UserPictures','user','view',$viewarray).'" 
+										rel="lightbox[set]"><img class="userpictures_photo" 
+										src="'.$obj['filename_absolute'].'.thumb.jpg" /></a>
+									<script type="text/javascript">
+										$(\'p'.$obj['id'].'\').href="'.$obj['filename_absolute'].'";
+										$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
+									</script>';
+
+		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.$obj['filename_absolute'].'" />';
 
 		$res[] = $obj;
 	}

@@ -28,9 +28,10 @@ function UserPictures_user_main()
     $render = pnRender::getInstance('UserPictures');    
     
     // assign data
-    $render->assign('templates',	pnModAPIFunc('UserPictures','admin','getTemplates'));
-    $render->assign('ownuploads',	pnModGetVar('UserPictures','ownuploads'));
-    $render->assign('viewer_uid',	pnUserGetVar('uid'));
+    $render->assign('templates',		pnModAPIFunc('UserPictures','admin','getTemplates'));
+    $render->assign('globalcategories',	pnModAPIFunc('UserPictures','admin','getGlobalCategory'));
+    $render->assign('ownuploads',		pnModGetVar('UserPictures','ownuploads'));
+    $render->assign('viewer_uid',		pnUserGetVar('uid'));
     
     // return output
     return $render->fetch('userpictures_user_main.htm');
@@ -213,7 +214,7 @@ function UserPictures_user_manageCategories()
 	// get variables    
     $action 	= FormUtil::getPassedValue('action','');
     $uid		= pnUserGetVar('uid');
-    $categories = pnModAPIFunc('UserPictures','user','getCategories',array(	'uid'	=> $uid));
+    $categories = pnModAPIFunc('UserPictures','user','getCategory',array(	'uid'	=> $uid));
     $pnRender->assign('uid',		$uid);
     $pnRender->assign('categories',	$categories);
 
@@ -421,8 +422,8 @@ function UserPictures_user_managePicture()
 		));
 
 	// Add order link to make position changes possible if javascript is disabled
-	if ($template_id > 0) {
-		if (count($pictures) > 0) $pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array('pictures' => $pictures));
+	if (count($pictures) > 0) $pictures = pnModAPIFunc('UserPictures','user','addOrderLinkToPictures',array('pictures' => $pictures));
+	if ($template_id == 0) {
 	    $globalCategories 	= pnModAPIFunc('UserPictures','admin','getGlobalCategory');
 	    $categories 		= pnModAPIFunc('UserPictures','user','getCategory',array('uid'=>$uid));
 	    if (count($globalCategories)>0)		$render->assign('globalcategories',$globalCategories);
