@@ -2,56 +2,54 @@
 
 
 <h1><!--[pnml name="_USERPICTURESMAINADMINPANEL"]--></h1>
-<p />
-<form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="main"]-->">
-<!--[pnmodgetvar module="UserPictures" name="activated" assign=activated]-->
-<!--[pnmodgetvar module="UserPictures" name="avatarmanagement" assign=avatarmanagement]-->
-<!--[pnmodgetvar module="UserPictures" name="avatardir" assign=avatardir]-->
-<!--[pnmodgetvar module="UserPictures" name="avatarsize" assign=avatarsize]-->
-<!--[pnmodgetvar module="UserPictures" name="ownuploads" assign=ownuploads]-->
-<!--[pnmodgetvar module="UserPictures" name="verifytext" assign=verifytext]-->
-<!--[pnmodgetvar module="UserPictures" name="convert" assign=convert]-->
-<!--[pnmodgetvar module="UserPictures" name="maxfilesize" assign=maxfilesize]-->
-<!--[pnmodgetvar module="UserPictures" name="disabledtext" assign=disabledtext]-->
-<!--[pnmodgetvar module="UserPictures" name="maxwidth" assign=maxwidth]-->
-<!--[pnmodgetvar module="UserPictures" name="maxheight" assign=maxheight]-->
-<!--[pnmodgetvar module="UserPictures" name="thumbnailsize" assign=thumbnailsize]-->
-<!--[pnmodgetvar module="UserPictures" name="thumbnailcreation" assign=thumbnailcreation]-->
-<!--[pnmodgetvar module="UserPictures" name="datadir" assign=datadir]-->
-<!--[pnmodgetvar module="UserPictures" name="hint" assign=hint]-->
-<!--[pnsecgenauthkey module="UserPictures" assign=authid]-->
 
-<input type="hidden" name="action" value="send" />
-<input type="hidden" name="authid" value="<!--[$authid]-->" />
-<input type="checkbox" name="activated" value="1" <!--[if $activated]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESALLOWUPLOADS"]-->
-<p /><!--[pnml name="_USERPICTURESDISABLEDTEXT"]-->:<br />
-<textarea name="disabledtext" rows=5 cols=50><!--[$disabledtext]--></textarea>
-<p /><!--[pnml name="_USERPICTURESVERIFYTEXT"]-->:<br />
-<textarea name="verifytext" rows=5 cols=50><!--[$verifytext]--></textarea>
-<p /><!--[pnml name="_USERPICTURESCONVERT"]-->:<br />
-<input name="convert" value="<!--[$convert]-->" />
-<p /><!--[pnml name="_USERPICTURESMAXFILESIZE"]-->:<br />
-<input name="maxfilesize" value="<!--[$maxfilesize]-->" size="6" /> KB
-<p /><!--[pnml name="_USERPICTURESDATADIR"]-->:<br />
-<input name="datadir" value="<!--[$datadir]-->" />
-<p /><!--[pnml name="_USERPICTURESOWNUPLOADS"]-->:<br />
-<input name="ownuploads" value="<!--[$ownuploads]-->" size="6" /> <!--[pnml name="_USERPICTURESPICTURES"]-->
-<p /><!--[pnml name="_USERPICTURESMAXWIDTHUSERGALLERY"]-->:<br />
-<input name="maxwidth" value="<!--[$maxwidth]-->" size="6" /> <!--[pnml name="_USERPICTURESPIXEL"]-->
-<p /><!--[pnml name="_USERPICTURESMAXHEIGHTUSERGALLERY"]-->:<br />
-<input name="maxheight" value="<!--[$maxheight]-->" size="6" /> <!--[pnml name="_USERPICTURESPIXEL"]-->
-<p /><!--[pnml name="_USERPICTURESTHUMBNAILCREATIONMETHOD"]-->:
-<select name="thumbnailcreation">
-<option value="convert" <!--[if $thumbnailcreation eq 'convert']-->selected="selected"<!--[/if]-->><!--[pnml name="_USERPICTURESTCCONVERT"]--></option>
-<option value="gdlib" <!--[if $thumbnailcreation eq 'gdlib']-->selected="selected"<!--[/if]-->><!--[pnml name="_USERPICTURESTCGDLIB"]--></option>
-</select>
-<p /><input type="checkbox" name="hint" value="1" <!--[if $hint]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESSHOWHINTONTHUMBNAILS"]--> <a href="<!--[pnmodurl modname="Userpictures" type="admin" func="main" action="deletethumbnails" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETETHUMBNAILSFORRECREATION"]--></a>.
-<p /><!--[pnml name="_USERPICTURESTHUMBNAILSIZE"]-->: <!--[pnml name="_USERPICTURESATTENTIONONCHANGE"]--><br />
-<input name="thumbnailsize" value="<!--[$thumbnailsize]-->" size="9" /> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
-<p /><input type="checkbox" name="avatarmanagement" value="1" <!--[if $avatarmanagement]-->checked="checked"<!--[/if]--> /><!--[pnml name="_USERPICTURESALLOWAVATARMANAGEMENT"]-->
-<p /><!--[pnml name="_USERPICTURESAVATARDIRECTORY"]-->:<br />
-<input name="avatardir" value="<!--[$avatardir]-->" /> 
-<p /><!--[pnml name="_USERPICTURESAVATARSIZE"]-->:<br />
-<input name="avatarsize" value="<!--[$avatarsize]-->" size="9" /> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
-<p /><input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
-</form>
+<!--[pnform]-->
+
+	<!--[pnformvalidationsummary]-->
+
+    <!--[pnformcheckbox id="activated" checked="0"]--><!--[pnformlabel for="hint" text="_USERPICTURESALLOWUPLOADS"]-->
+	<br /><br />
+    <!--[pnformlabel for="disabledtext" text="_USERPICTURESDISABLEDTEXT"]-->:<br />
+    <!--[pnformtextinput id="disabledtext" textMode=multiLine]-->
+	<br /><br />
+    <!--[pnformlabel for="verifytext" text="_USERPICTURESVERIFYTEXT"]-->:<br />
+    <!--[pnformtextinput id="verifytext" textMode=multiLine]-->
+	<br /><br />
+    <!--[pnformlabel for="convert" text="_USERPICTURESCONVERT"]-->:<br />
+    <!--[pnformtextinput id="convert" maxLength="120" textMode="singleLine" mandatory="1"]-->
+	<br /><br />
+    <!--[pnformlabel for="maxfilesize" text="_USERPICTURESCONVERT"]-->:<br />
+    <!--[pnformintinput id="maxfilesize" minValue="0" textMode="singleLine" mandatory="1"]--> KB
+	<br /><br />
+    <!--[pnformlabel for="datadir" text="_USERPICTURESDATADIR"]-->:<br />
+    <!--[pnformtextinput id="datadir" maxLength="120" textMode="singleLine" mandatory="1"]-->
+	<br /><br />
+    <!--[pnformlabel for="ownuploads" text="_USERPICTURESOWNUPLOADS"]--><br />
+    <!--[pnformintinput id="ownuploads" minValue="0" textMode="singleLine" mandatory="1"]-->
+	<br /><br />
+    <!--[pnformlabel for="maxwidth" text="_USERPICTURESMAXWIDTHUSERGALLERY"]--><br />
+    <!--[pnformintinput id="maxwidth" minValue="0" textMode="singleLine" mandatory="1"]--> px
+	<br /><br />
+    <!--[pnformlabel for="maxheight" text="_USERPICTURESMAXHEIGHTUSERGALLERY"]--><br />
+    <!--[pnformintinput id="maxheight" minValue="0" textMode="singleLine" mandatory="1"]--> px
+	<br /><br />
+    <!--[pnformlabel for="thumbnailcreation" text="_USERPICTURESTHUMBNAILCREATIONMETHOD"]--><br />
+    <!--[pnformdropdownlist id="provider" items=$items_thumbnailcreation]-->
+	<br /><br />
+    <!--[pnformcheckbox id="hint" checked="0"]--><!--[pnformlabel for="hint" text="_USERPICTURESSHOWHINTONTHUMBNAILS"]-->
+	<br /><br />
+    <!--[pnformlabel for="thumbnailsize" text="_USERPICTURESTHUMBNAILSIZE"]-->:<!--[pnml name="_USERPICTURESATTENTIONONCHANGE"]--><br />
+    <!--[pnformtextinput id="thumbnailsize" maxLength="12" textMode="singleLine" mandatory="1"]-->
+	<br /><br />
+    <!--[pnformcheckbox id="avatarmanagement" checked="0"]--><!--[pnformlabel for="avatarmanagement" text="_USERPICTURESALLOWAVATARMANAGEMENT"]-->
+	<br /><br />
+    <!--[pnformlabel for="avatardir" text="_USERPICTURESAVATARDIRECTORY"]-->:<br />
+    <!--[pnformtextinput id="avatardir" maxLength="120" textMode="singleLine" mandatory="0"]-->
+	<br /><br />
+    <!--[pnformlabel for="avatarsize" text="_USERPICTURESAVATARSIZE"]-->:<br />
+    <!--[pnformtextinput id="avatarsize" maxLength="120" textMode="singleLine" mandatory="0"]--> <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
+	<br /><br />
+
+	<!--[pnformbutton commandName="update" text="_USERPICTURESSAVEGLOBALCAT"]-->
+<!--[/pnform]-->
+
