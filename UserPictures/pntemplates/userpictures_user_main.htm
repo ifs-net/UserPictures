@@ -33,6 +33,13 @@
 		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESYOURPICTURES"]--></a></li>
 		</ul>
 	<!--[/if]-->
-
+	<!--[if $globalcategories|@count gt 0]-->
+		<ul>
+		<h3><!--[pnml name="_USERPICTURESGCOMMUNITYGALLERIES"]--></h3>
+		<!--[foreach from=$globalcategories item="globalcategory"]-->
+			<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" globalcat_id=$globalcategory.id]-->"><!--[pnml name="_USERPICTURESGCOMMUNITYGALLERY"]-->: <!--[$globalcategory.title]--></a></li>
+		<!--[/foreach]-->
+		</ul>
+	<!--[/if]-->
 <!--[include file="userpictures_user_footer.htm"]-->
 

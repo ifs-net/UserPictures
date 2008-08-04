@@ -27,6 +27,15 @@ function up_addPageVars()
 }
 
 /**
+ * prepare string to be display in title-tag
+ * @param	string
+ * @return 	string
+ */
+function up_prepDisplay($s)
+{
+  	return htmlentities(str_replace("'","\'",$s));
+}
+/**
  * build where string for sql statement
  *
  * @param	array
