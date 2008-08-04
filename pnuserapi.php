@@ -7,6 +7,36 @@
  * @copyright    Copyright (C) 2008
  * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
+ 
+/**
+ * show picture
+ *
+ * This function shows a picture of a given template
+ *
+ * @param	$args['template_id']
+ * @return	string
+ */
+function UserPictures_userapi_showPicture($args)
+{
+  	// get parameters
+  	$uid 			= (int)$args['uid'];
+  	$template_id 	= (int)$args['template_id'];
+  	if (!($template_id > 0) || (!($uid > 1))) return false;
+	// get picture
+  	$picture 		= UserPictures_userapi_get(array(
+	  		'uid'			=> $uid,
+	  		'template_id'	=> $template_id
+		  ));
+	$template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id' => $template_id));
+	if (count($picture) == 0) return array (
+			'code'			=> "<img src=\"".$template['defaultimage']."\" />",
+			'template_id'	=> $template_id,
+			'uid'			=> $uid,
+			'uname'			=> pnUserGetVar('uname',$uid)
+		);
+	else return $picture[0];
+}
+ 
 
 /**
  * get fuction
@@ -17,104 +47,27 @@
  *  + associated global category
  *  + associated persons
  *  + comment
- * @return array
+ * @param	$args['uid']			int		user id to get pictures of a given user
+ * @param	$args['template_id']	int		id-number of a special template (0=own gallery)
+ * @param	$args['expand']			bool	additional information
+ * @param	$args['countonly']		bool	only return number of pictures
+ * @return 	array; see inline code documentation for details
  */
 function UserPictures_userapi_get($args)
 {
-  	/*
-		Some little documentation now...
-		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  		If there is a request for all pictures in the database
-  		(ok - there might be some filters like user-id, category etc.)
-  		it would be a sql-query that effects 8 tables minimum.
-
-		The way this function works:
-		1. step
-		=======
-		o retrieve picture core information
-			- get filter for pictures (where-statement), Possible filters:
-				o user-id
-				o pictures associated with a given global category
-				o pictures associated with a given user's category
-				o pictures associated with a given user-id
-				o pager-filter to return results only of a given interval
-				o verified pictures
-			- get statement to order pictures
-				o position-nr (default)
-				o date
-				o user-id
-				o category
-				o user's category
-			- core-information:
-				o user-id
-				o position
-				o template-id
-				o comment
-				o coordinates
-				o filename
-				o verified
-		2. step
-		=======
-		o retrieve additional information
-			- categories
-				o array of user-categories with category-name
-			- global category
-				o get global category with category-name
-			- associated persons
-				o get all associated persons and their user-name
-			- comments
-				o nr of comments from the ezcomments-module
-		3. step
-		=======
-		o return the result as array
-		array (
-			array	(
-					'id'		=> (int) the picture id
-					'uid'		=> (int) the owner's user id
-					'comment'	=> (string) comment for the picture
-					'date'		=> (date) upload date
-					'template'	=> (int) id of global template
-					'coords'	=> (array,serialized) gps-coordinates of the picture
-					'filename'	=> (string)	filename
-					'verified'	=> (boolean) picture was verifiec
-					'position'	=> (int) sort number
-					'global_category_id'		=> (array) array (
-													'id'	=> category_id
-													'title'	=> title of category
-													'text'	=> description of category
-													'date'	=> date assigned to global category
-											)
-
-					// additional info, if needed...
-					'global_category_array'		=> (array) global category information
-					'assoc_persons'				=> (array) array (
-													'uid'	=> (int) users-id
-													'uname'	=> (string) username
-											)
-					'assoc_categories'			=> (array) array (
-													'id'	=> (int) category-id
-													'title'	=> (string) title of category
-													'text'	=> (string) description of category
-											)
-					'assoc_comments'			=> (int) number of comments (EZComments module)
-				)
-			// and so on...
-			// next picture here the same way
-			)	
-  	*/
-
-	// get parameters
-	
-	// if we want associated pictures with a person, pictures of a 
-	// special category etc. we will first take a look which pictures
-	// have to be loaded and then we'll load each picture with a
-	// where 'id' in (id1,id2,id3,...) sql statement.
-
-	$assoc_uid		= (int)$args['assoc_uid'];	// get pics associated with given user
-	$cat_id			= (int)$args['cat_id'];		// get id values first
-	$uid			= (int)$args['uid'];		// get pictures of a special user
+	// get parameters	
+	$assoc_uid		= (int)$args['assoc_uid'];
+	$cat_id			= (int)$args['cat_id'];
+	$uid			= (int)$args['uid'];
+	$picture_id		= (int)$args['id'];
 	$globalcat_id 	= (int)$args['globalcat_id'];
-	$template_id 	= (int)$args['template_id'];
+	$template_id 	= $args['template_id'];
+	$startwith		= $args['startwith']-1;
+	$showmax		= $args['showmax'];
+	$expand			= $args['expand'];
+	if (!isset($expand) || !is_bool($expand)) $expand = true;
+	if (isset($args['countonly'])) 	$countonly = true;
+	else 							$countonly = false;
 	
   	// get db table array
     $tables =& pnDBGetTables();
@@ -124,216 +77,138 @@ function UserPictures_userapi_get($args)
     $globalcategoriescolumn 	= &$tables['userpictures_globalcategories_column'];
     $userscolumn 				= &$tables['userpictures_persons_column'];
     $templatescolumn 			= &$tables['userpictures_templates_column'];
-    
-	// always load global categories
-	$res = pnModAPIFunc('UserPictures','admin','getGlobalCategory');
-	foreach ($res as $obj) {
-	  	$id = $obj['id'];
-	  	$globalCategoryArray[$id] = $obj;
+
+	// always load global categories except when expand is false
+	if ($expand) {
+		$res = pnModAPIFunc('UserPictures','admin','getGlobalCategory');
+		foreach ($res as $obj) {
+		  	$id = $obj['id'];
+		  	$globalCategoryArray[$id] = $obj;
+		}
+	}
+	// we need private catories when we have a category or a user filter
+	if ( ($expand) && (($uid > 0) || ($cat_id > 0))) {
+		// load private categories
+		$res = pnModAPIFunc('UserPictures','user','getCategory',array(
+										'uid' 		=> $uid, 
+										'cat_id' 	=> $cat_id));
+		foreach ($res as $obj) {
+		  	$id = $obj['id'];
+		  	$categoryArray[$id] = $obj;
+		}
 	}
 
-	// load private categories
-	$res = pnModAPIFunc('UserPictures','user','getCategory',array('uid' => $uid));
-	foreach ($res as $obj) {
-	  	$id = $obj['id'];
-	  	$categoryArray[$id] = $obj;
+	// construct where part for sql statement
+	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = ".$template_id;
+	if (isset($uid) 		&& ($uid > 0))	 		$whereArray['uid'] 			= "tbl.".$picturescolumn['uid']." = ".$uid;
+	if (isset($picture_id)	&& ($picture_id > 0))	$whereArray['id'] 			= "tbl.".$picturescolumn['id']." = ".$picture_id;
+	if (isset($cat_id) 		&& ($cat_id > 0)) 		$whereArray['cat_id']		= "tbl.".$picturescolumn['category']." = ".$cat_id;
+	if (isset($globalcat_id)&& ($globalcat_id > 0))	$whereArray['globalcat_id'] = "tbl.".$picturescolumn['global_category']." = ".$globalcat_id;
+	// ToDo: assoced persons
+
+	// Load common lib
+	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
+
+	// table join information
+	$joinInfo[] = array (	'join_table'          =>  'users',			// table for the join
+							'join_field'          =>  'uname',			// field in the join table that should be in the result with
+                         	'object_field_name'   =>  'uname',			// ...this name for the new column
+                         	'compare_field_table' =>  'uid',			// regular table column that should be equal to
+                         	'compare_field_join'  =>  'uid');			// ...the table in join_table
+
+	// get pictures
+	if ($assoc_uid > 1) {	// associated with user id
+	  	// we have to make a join array now...
+		$joinInfo[] = array (	'join_table'          =>  'userpictures_persons',	// table for the join
+								'join_field'          =>  'picture_id',				// field in the join table that should be in the result with
+                             	'object_field_name'   =>  'assoc_uid',				// ...this name for the new column
+                             	'compare_field_table' =>  'id',						// regular table column that should be equal to
+                             	'compare_field_join'  =>  'picture_id');			// ...the table in join_table
+        $whereArray['assoc_uid'] 	= "a.".$personscolumn['uid']." = ".$assoc_uid;
+		$whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = 0";
+		if (isset($uid) && ($uid > 0)) $whereArray['uid'] = "tbl.".$picturescolumn['uid']." = ".$uid;
 	}
 	
-	// get pictures of a given user
-	if ($uid > 1) {
-		$where = $picturescolumn['uid']." = ".$uid;
-		if (is_numeric($template_id)) $where.=" AND ".$picturescolumn['template_id']." = ".$template_id;
-		$objArray = DBUtil::selectObjectArray('userpictures',$where,'position, date');
+	// now select priority for order statement
+	// if there is a global category we have to select as added date, NOT position.
+	// same for pictures associated to a user
+	// otherwise we have to check position first, then date, then id
+	if (($globalcat_id > 0) || ($assoc_uid > 0)) $order = "tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
+	else $order = "tbl.".$picturescolumn['position']." asc, tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
+
+	// now we can grab the data from the database.	
+	if ($countonly) {
+	  	$res = DBUtil::selectExpandedObjectCount('userpictures',$joinInfo,up_constructWhere($whereArray));
+	  	if (!$res) return 0;
+	  	else return $res;
 	}
-	
+	else $objArray = DBUtil::selectExpandedObjectArray('userpictures',$joinInfo,up_constructWhere($whereArray),$order,$startwith,$showmax);
+
 	// get additional information 
     $datadir = pnModGetVar('UserPictures','datadir');
 
+	// build result array
 	$res = array();
 	foreach ($objArray as $obj) {
-	  	// add datadir information to filename
-	  	$obj['filename']=$datadir.$obj['filename'];
+	  	// add absolute filename to object
+	  	$obj['filename_absolute']=$datadir.$obj['filename'];
 		// create thumbnails if they do not exist!
-		if (!UserPictures_userapi_createThumbnail(array('filename'=>$obj['filename']))) LogUtil::registerError(_USERPICTURESTHUMBNAILCREATIONERROR);
+		if (!UserPictures_userapi_createThumbnail(array('filename'=>$obj['filename_absolute']))) LogUtil::registerError(_USERPICTURESTHUMBNAILCREATIONERROR);
+
+		// is additional information needed to enrich the result array?
+		if ($expand) {	
+			// private category
+		  	$category = $obj['category'];
+		  	if ($category > 0) $obj['category'] = $categoryArray[$category];
+		  	else unset($obj['category']);
+
+			// global category
+		  	$global_category = $obj['global_category'];
+		  	if ($global_category > 0) $obj['global_category'] = $globalCategoryArray[$global_category];
+		  	else unset($obj['global_category']);
+
+		  	// associated persons
+		  	$persons = UserPictures_userapi_getPersons(array('picture_id' => $obj['id']));
+		  	if (count($persons) > 0) $obj['assoc_persons'] = $persons;
+
+			// prepare thumbnail information as string
+			$info = _USERPICTURESOWNER.": ".$obj['uname']."<br />";
+			if ($obj['comment'] != '') $info.=_USERPICTURESCOMMENT.": ".$obj['comment']."<br />";
+			if ($obj['date'] != '0000-00-00 00:00:00') $info.=_USERPICTURESUPLOADDATE.": ".$obj['date']."<br />";
+			if ($obj['category']['title'] != '') $info.=_USERPICTURESPRIVATECATEGORY.": ".$obj['category']['title']."<br />";
+			if ($obj['global_category']['title'] != '') $info.=_USERPICTURESGLOBALCATEGORY.": ".$obj['global_category']['title']."<br />";
+			unset($assoc_string);
+			if (count($obj['assoc_persons']) > 0) {
+			  	$assoc_string=_USERPICTURESPERSONSLINKEDHERE.": ";
+				$c=1;
+			  	foreach ($obj['assoc_persons'] as $p) {
+				    $assoc_string.=$p['uname'];
+				  	if ($c!=count($obj['assoc_persons'])) $assoc_string.=", ";
+				  	else $assoc_string.=".";
+				  	$c++;
+				}
+			}
+			$info = '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
+	  	}
+
 		// add code part
-		$obj['code_thumbnail'] 	= '<img src="'.$obj['filename'].'.thumb.jpg" />';
-		$obj['code'] 			= '<img src="'.$obj['filename'].'" />';
-		// private category
-	  	$category = $obj['category'];
-	  	if ($category > 0) $obj['category'] = $categoryArray[$category];
-	  	else unset($obj['category']);
-		// global category
-	  	$global_category = $obj['global_category'];
-	  	if ($global_category > 0) $obj['global_category'] = $globalCategoryArray[$global_category];
-	  	else unset($obj['global_category']);
-	  	// associated persons
-	  	$persons = UserPictures_userapi_getPersons(array('picture_id' => $obj['id']));
-	  	if (count($persons) > 0) $obj['assoc_persons'] = $persons;
-	  	$res[] = $obj;
+		// construct view array for thumbnail to normal image link
+		$viewarray['singlemode']	= 1;
+		if ($template_id >= 0) 	$viewarray['template_id'] 	= $template_id;
+		if ($uid >= 0) 			$viewarray['uid'] 			= $uid;
+		if ($assoc_uid >= 0) 	$viewarray['assoc_uid'] 	= $assoc_uid;
+		if ($cat_id >= 0) 		$viewarray['cat_id']		= $cat_id;
+		if ($globalcat_id >= 0) $viewarray['globalcat_id']	= $globalcat_id;
+		
+		$obj['code_thumbnail'] 	= '<a id="p'.$obj['id'].'" javascript:void(0);" onmouseover="return overlib(\''.htmlentities($info).'\')" onmouseout="return nd();" href="'.pnModURL('UserPictures','user','view',$viewarray).'" title="'.$obj['comment'].' <br />'.$assoc_string.'" rel="lightbox[set]"><img class="userpictures_photo" title="'.$obj['comment'].' " src="'.$obj['filename_absolute'].'.thumb.jpg" /></a>';
+		$obj['code'] 			= '<img title="'.$obj['comment'].' " class="userpictures_photo" src="'.$obj['filename_absolute'].'" />';
+
+		$res[] = $obj;
 	}
 	$objArray = $res;
 
+	// return result array
 	return $objArray;
-		
-	die(prayer($objArray));
-	
-    
-    // example code
-    /*
-    $joinInfo[] = array (
-    		'join_table'			=> 'users',	// table to join with
-    		'join_field'			=> 'uname',	// field that should be in the result
-    		'object_field_name'		=> 'uname',	// how the field should be named in the array
-    		'compare_field_table'	=> 'uid',	// connection to join
-    		'compare_field_join'	=> 'uid'	// field that should be equal in the join
-		);
-    $where = $userpictures_personscolumn['picture_id']." = ". (int)$args['picture_id'];
-    return DBUtil::selectExpandedObjectArray('userpictures_persons',$joinInfo,$where);
-	*/
-
-    $prefix=pnModGetVar('UserPictures','datadir');    
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-    // Get tables
-    $userpicturestable = $pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-
-    $userpictures_templatestable = $pntable['userpictures_templates'];
-    $userpictures_templatescolumn = &$pntable['userpictures_templates_column'];
-
-    $userpictures_personstable = $pntable['userpictures_persons'];
-    $userpictures_personscolumn = &$pntable['userpictures_persons_column'];
-
-
-    // Get Arguments
-    $uid =			$args['uid'];
-    $cat_id =		$args['cat_id'];
-    $template_id =	$args['template_id'];
-    $picture_id =	$args['picture_id'];
-    $verified =		$args[verified];
-    if (!isset($template_id) || !($template_id>=0)) return false;
-
-    if ($verified=='0') 	$and = " AND $userpicturestable.".$userpicturescolumn['verified']." = '0' ";
-    if ($uid>0) 			$and.=" AND $userpicturestable.".$userpicturescolumn['uid']." = '". (int)$uid."' ";
-    if ($picture_id>0) 		$and.= " AND $userpicturestable.".$userpicturescolumn['picture_id']." = '". (int)pnVarPrepForStore($picture_id) ."'";
-    if ($cat_id > 0 ) {
-			$cat_assoc_and = " 
-				AND $userpicturestable.".$userpicturescolumn['id']." = $userpictures_catassoctable.".$userpictures_catassoccolumn['picture_id']."
-				AND $userpictures_catassoctable.".$userpictures_catassoccolumn['cat_id']." = '".pnVarPrepForStore($cat_id)  ."'";
-			$cat_assoc_from = ", ".$userpictures_catassoctable;
-    }
-    $startnum=$args[startnum];
-    if (isset($startnum) && ($startnum >= 0)) $limit = "  LIMIT ".($startnum-1)." ,1 ";
-    
-    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['position'].", $userpicturestable.".$userpicturescolumn['filename']." DESC";
-
-    // do we need the data for the "latest pictures" thumbnail gallery?
-    $startnumthumb=$args[startnumthumb];
-    if (isset($startnumthumb) && ($startnumthumb >= 0)) {
-	if (isset($args['amount']) && ($args['amount']>0)) $amount = $args['amount'];
-	else $amount=50;
-	if (isset($args['index']) && ($args['index']==1)) {
-	    $limit = "LIMIT 0, $amount";
-	    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['id']." DESC";	
-	}
-	else $limit = "  LIMIT ".($startnumthumb-1)." ,25 ";
-    }
-    
-    // we need to check if we only should load pictures associated with a specified user id
-    $assoc_uid=(int)$args['assoc_uid'];
-    if (isset($assoc_uid) && ($assoc_uid>0)) {
-	$assoc_from = ", ".$userpictures_personstable;
-	$assoc_and = " 	AND $userpictures_personstable.".$userpictures_personscolumn['picture_id']." = $userpicturestable.".$userpicturescolumn['id']."
-			AND $userpictures_personstable.".$userpictures_personscolumn['uid']." = '". $assoc_uid ."'  ";
-	// should we hide the user's own pictures to which he mostly is associated?
-	$hideown = $args['hideown'];
-	if (isset($hideown) && ($hideown==1)) $assoc_and.=" AND $userpictures_personstable." . $userpictures_personscolumn['uid'] . " != ".$userpicturestable.".".$userpicturescolumn['uid'];
-    }
-    
-    // Get picture
-    $sql = "SELECT $userpicturestable.".$userpicturescolumn['filename'].",
-		   $userpicturestable.".$userpicturescolumn['uid'].",
-		   $userpicturestable.".$userpicturescolumn['id'].",
-                   $userpicturestable.".$userpicturescolumn['comment'].",
-                   $userpicturestable.".$userpicturescolumn['template_id'].",
-                   $userpicturestable.".$userpicturescolumn['verified']."
-            FROM $userpicturestable
-	    $assoc_from
-	    $cat_assoc_from
-	    WHERE $userpicturestable.".$userpicturescolumn['template_id']." = '". (int)pnVarPrepForStore($template_id) ."'
-	    $thumbnailwhere
-	    $and
-	    $assoc_and
-	    $cat_assoc_and
-	    $order
-	    $limit
-	    ";
-    $result =& $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list(	$item['filename'],
-		$item['uid'],
-		$item['id'],
-		$item['comment'],
-		$item['template_id'],
-		$item['verified']) = $result->fields;
-	$filename = $prefix.$item['filename'];
-	$item['filename']=$filename;
-
-	// create thumbnails if they do not exist!
-	if (!UserPictures_userapi_createThumbnail(array('filename'=>$filename))) pnSessionSetVar('errormsg',_USERPICTURESTHUMBNAILCREATIONERROR);
-	
-	$items[]=$item;
-	$lastfilename=$filename;
-    }
-
-    // Return the item array
-    $result->close();
-    return $items;
-	
-}
-
-/**
- * Show Picture function
- *
- * this function should be used from your templates to include pnUserPictures!
- *
- * @param $args['uid']		int
- * @param $args['template_id']	int
- * @return	array
- */
-function UserPictures_userapi_showPicture($args)
-{
-    $arr=UserPictures_userapi_getPicture(array('uid'=>$args['uid'],'template_id'=>$args['template_id'],'code'=>1));
-    return $arr[0];
-}
-
-/**
- * get not displayed pictures of a page for slideshow
- *
- * This function is essential if the embedded lightbox is used to
- * get all and not only the pictures of one page into the slideshow
- *
- * @param	$args['allPics']	array
- * @param	$args['shownPics']	array
- * @return	array
- */
-function UserPictures_userapi_picturesDiff($args)
-{
-  	$a = $args['allPics'];
-  	$s = $args['shownPics'];
-  	// reorder allPics array with id as key value;
-  	foreach ($a as $x) $allPics[$x['id']] = $x;
-  	// delete key and value if double
-  	foreach ($s as $x) if ($allPics[$x['id']]['id'] > 0) unset($allPics[$x['id']]);
-  	return $allPics;
 }
 
 /**
@@ -406,14 +281,15 @@ function UserPictures_userapi_addPerson($args)
     
     // we need to check if we are allowed to link the picture with the given username.
     $uid = 			pnUserGetIDFromName($uname);
-    $picture = 		UserPictures_userapi_getPicture(array(	'picture_id'	=> $picture_id,
-															'uid'			=> $uid));
+    $picture = 		UserPictures_userapi_get(array(	'picture_id'	=> $picture_id,
+													'uid'			=> $uid));
     $picture_uid =	$picture[0]['uid'];
     $settings = 	pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
     if (($settings['nolinking'] ==1 ) && ($settings['uid'] != $picture_uid)) return false;
     
     // first delete association to avoid doubles
-    UserPictures_userapi_delPerson(array('uname'=>$uname,'picture_id'=>$picture_id));
+    UserPictures_userapi_delPerson(array(	'uname'			=> $uname,
+											'picture_id'	=>$picture_id));
     
     $obj = array (
     		'picture_id'	=> $picture_id,
@@ -620,7 +496,8 @@ function UserPictures_userapi_getCategory($args)
 {
     $uid	= (int) $args['uid'];
   	$id 	= (int) $args['cat_id'];
-  	if ($id > 0) return DBUtil::selectObjectByID('userpictures_categories',$id);
+  	$res	= null;
+  	if ($id > 0) $res[] = DBUtil::selectObjectByID('userpictures_categories',$id);
   	else if ($uid > 1) {
 	    $pntable =& pnDBGetTables();
 	    $userpictures_categoriescolumn = &$pntable['userpictures_categories_column'];
@@ -628,7 +505,7 @@ function UserPictures_userapi_getCategory($args)
 	    $orderby 	= $userpictures_categoriescolumn['title'];
 	    return DBUtil::selectObjectArray('userpictures_categories',$where,$orderby);
 	}
-	else return null;
+	return $res;
 }
 
 /**
@@ -664,7 +541,8 @@ function UserPictures_userapi_getPersons($args)
   	// get db table array
     $tables =& pnDBGetTables();
     $userpictures_personscolumn = &$tables['userpictures_persons_column'];
-    
+
+	// construct join    
     $joinInfo[] = array (
     		'join_table'			=> 'users',	// table to join with
     		'join_field'			=> 'uname',	// field that should be in the result
@@ -677,122 +555,39 @@ function UserPictures_userapi_getPersons($args)
 }
 
 /**
- * clean the filename to the sql filename without path
- *
- * @param	$args['filename']	string
- * @param	$args['template_id']	int
- * @param	$args['uid']		int
- * @return	string
- */
-function UserPictures_userapi_cleanFilename($args)
-{
-    $lastfilename=$args['filename'];
-    $uid=$args['uid'];
-    $template_id=$args['template_id'];
-    $dummy = explode("_".$uid.".",$lastfilename);
-    $lastfilename_end=$dummy[(count($dummy)-1)];
-    $lastfilename_withoutend=$dummy[(count($dummy)-2)];
-    // the timestamp:
-    $dummy = explode($template_id."-",$lastfilename_withoutend);
-    $ts = (int)$dummy[(count($dummy)-1)];
-    $lastfilename = $template_id."-".$ts."_".$uid.".".$lastfilename_end;
-    return $lastfilename;
-}
-
-/**
- * increase the timestamp that is inside the filename
- *
- * @param	$args['filename']	string
- * @param	$args['value']		string
- * @return	string
- */
-function UserPictures_userapi_increaseFilename($args)
-{
-    $prefix = pnModGetVar('UserPictures','datadir');    
-    $value=$args['value'];
-    $filename=$args['filename'];
-    // first part
-    $dummy     = explode ("-",$filename);
-    $firstpart = $dummy[0];
-    // extract timestamp
-    $ts_str    = $dummy[1];
-    $ts_dummy  = explode ("_",$ts_str);
-    $ts        = $ts_dummy[0];
-    // now the end of the file and the user id
-    $dummy     = explode ("_",$filename);
-    $lastpart  =$dummy[1];
-    $result    = $firstpart."-".($ts+$value)."_".$lastpart;
-    return $result;    
-}
-
-/**
  * rotate a picture
  *
- * @param	$args['uid']		int
- * @param	$args['picture_id']	int
- * @param	$args['template_id']	int
+ * @param	$args['uid']			int
+ * @param	$args['angle']			int
+ * @param	$args['picture_id']		int
  * @return	bool
  */
 function UserPictures_userapi_rotatePicture($args)
 {
-    $prefix = pnModGetVar('UserPictures','datadir');
-    $uid=$args['uid'];
-    $template_id=$args['template_id'];
-    $picture=UserPictures_userapi_getPicture(array('uid'=>$args['uid'],'picture_id'=>$args['picture_id'],'template_id'=>$args['template_id']));
-    $p=$picture[0];
-    $filename=$p['filename'];
-    if (!strlen($filename)>0) return false;
-    $e=explode(".",$filename);
-    $ext=$e[(count($e)-1)];
-    $tmpfile=$filename."_____tempresize.".$ext;
-    $angle=$args['angle'];
-    if (!($angle>=0) &&  !($angle<360)) return false;
-    $convert=pnModGetVar('UserPictures','convert');
-    $cmd="$convert -rotate $angle $filename $tmpfile";
-    if (!file_exists($filename)) return false;
-    else {
-	if ($angle>0) {
-	    shell_exec($cmd);
-	    unlink($filename);
-	    if (file_exists($filename.'.thumb.jpg')) unlink($filename.'.thumb.jpg');
-	    rename($tmpfile,$filename);
+  	// get parameters
+  	$uid			= (int) $args['uid'];
+  	$angle			= (int) $args['angle'];
+  	$picture_id		= (int) $args['picture_id'];
+  	
+  	// get picture and check the owner first
+  	$obj = DBUtil::selectObjectByID('userpictures',$picture_id);
+	if ($obj['uid'] != $uid) return false;
+	
+	// delete old thumbnail; new is generated on demand later
+	$datadir		= pnModGetVar('UserPictures','datadir');
+	$image			= $datadir.$obj['filename'];
+	$filename_new	= $obj['template_id'].'-'.time().'_'.$uid.'.jpg';
+	$image_new		= $datadir.$filename_new;
+	$thumbnail		= $image.'.thumb.jpg';
+	if (file_exists($thumbnail)) unlink($thumbnail);
+
+	// read source image, rotate it and store result
+	if (imagejpeg(imagerotate(imagecreatefromjpeg($image), $angle, 0),$image_new,100)) {
+	  	$obj['filename'] = $filename_new;
+	  	return DBUtil::updateObject($obj,'userpictures');
 	}
-	
-	// the filename is [template_id]-[unix-timestamp]_[uid].jpg
-	// we now need to increase the timestamp plus one to avoid
-	// caching problems.
-	
-	// the end of the file:
-	$filename = UserPictures_userapi_cleanFilename(array('filename'=>$filename,'uid'=>$uid,'template_id'=>$template_id));
-	$new_filename = UserPictures_userapi_increaseFilename(array('filename'=>$filename,'value'=>1));
-
-	// Get datbase setup 
-	$dbconn =& pnDBGetConn(true);
-	$pntable =& pnDBGetTables();
-
-	// get Tables
-	$userpicturestable = $pntable['userpictures'];
-	$userpicturescolumn = &$pntable['userpictures_column'];
-
-	// SQL statement 
-	$sql = "UPDATE $userpicturestable 
-	    SET ".$userpicturescolumn['filename']." = '".pnVarPrepForStore($new_filename)."'
-	    WHERE ".$userpicturescolumn['filename']." = '". pnVarPrepForStore($filename) ."'
-	    LIMIT 1 ";
-	$result = $dbconn->Execute($sql);
-	// Check for an error with the database code, and if so set an appropriate
-	// error message and return
-	if ($dbconn->ErrorNo() != 0) return false;
-
-	// set should be closed when it has been finished with
-	$result->Close();
-	
-	// now we need to rename the file - otherwise the image will be broken
-	if (!rename($prefix.$filename,$prefix.$new_filename)) return false;
-	else return true;
-    }
+	else return false;
 }
-
 
 /**
  * change the comment of a picture
@@ -824,24 +619,27 @@ function UserPictures_userapi_copyPictureAsAvatar($args)
 {
 
     // get data and verify data
-    $uid = $args['uid'];
-    $template_id = $args['template_id'];
-    $picture_id = $args['picture_id'];
+    $uid 			= $args['uid'];
+    $template_id 	= $args['template_id'];
+    $picture_id 	= $args['picture_id'];
     if (!($uid>0)  || !($template_id>(-1) || !($picture_id>0))) return false;
     
     // We will now resize the image and copy it into the postnuke avatar folder (images/avatar as standard!)
-    $picture=UserPictures_userapi_getPicture(array('picture_id'=>$picture_id));
-    $picture=$picture[0];
-    $filename=$picture['filename'];
-    $avatardir=pnModGetVar('UserPictures','avatardir');
-    $targetfilename=$avatardir."/pers_".$uid.".jpeg";
-    $avatarsize=pnModGetVar('UserPictures','avatarsize');
+    $picture		= UserPictures_userapi_get(array('id' => $picture_id));
+    $picture		= $picture[0];
+    $filename		= $picture['filename'];
+    $avatardir		= pnModGetVar('UserPictures','avatardir');
+    $targetfilename	= $avatardir."/pers_".$uid.".jpeg";
+    $avatarsize		= pnModGetVar('UserPictures','avatarsize');
     
     // if a avatar with this name exists we have to delete it!
     if (file_exists($targetfilename)) unlink($targetfilename);
     
     // create the image
-    UserPictures_userapi_resizePicture(array('filename'=>$filename,'size'=>$avatarsize,'targetfilename'=>$targetfilename));
+    UserPictures_userapi_resizePicture(array(
+			'filename'			=> $filename,
+			'size'				=> $avatarsize,
+			'targetfilename'	=> $targetfilename));
     
     // Set the user's variable
     if (pnUserSetVar('user_avatar','pers_'.$uid.'.jpeg')) return true;
@@ -851,33 +649,34 @@ function UserPictures_userapi_copyPictureAsAvatar($args)
 /**
  * create a resized picture
  *
- * @param	$args['filename']	string
- * @param	$args['size']		string
+ * @param	$args['filename']		string
+ * @param	$args['size']			string
  * @param	$args['targetfilename']	string
  */
 function UserPictures_userapi_resizePicture($args)
 {
-    $convert = pnModGetVar('UserPictures','convert');
-    $thumbnailcreation = pnModGetVar('UserPictures','thumbnailcreation');
-    $size=$args['size'];
-    $filename=$args['filename'];
-    $targetfilename=$args['targetfilename'];
-    if ($args['hint']) $hint=1;
-    else $hint=0;
+    $convert 			= pnModGetVar('UserPictures','convert');
+    $thumbnailcreation 	= pnModGetVar('UserPictures','thumbnailcreation');
+    $size				= $args['size'];
+    $filename			= $args['filename'];
+    $targetfilename		= $args['targetfilename'];
+    if (!isset($targetfilename) || ($targetfilename == '')) $targetfilename = $filename;
+    if ($args['hint']) 	$hint=1;
+    else 				$hint=0;
     
     if ($thumbnailcreation == 'gdlib') {
-	$s = explode('x',$size);
-	$w1 = (int)$s[0];
-	$w2 = (int)$s[1];
-	if ($w1>$w2) $longside=$w1;
-	else $longside=$w2;
-	include_once ('modules/UserPictures/pnincludes/function.thumb.php');
-	return XXXsmarty_function_thumb(array('file'=>$filename,'hint'=>$hint,'targetfilename'=>$targetfilename,'longside'=>$longside));
+		$s 		= explode('x',$size);
+		$w1 	= (int)$s[0];
+		$w2 	= (int)$s[1];
+		if ($w1 > $w2) $longside = $w1;
+		else $longside=$w2;
+		include_once ('modules/UserPictures/pnincludes/function.thumb.php');
+		return XXXsmarty_function_thumb(array('file'=>$filename,'hint'=>$hint,'targetfilename'=>$targetfilename,'longside'=>$longside));
     }
     else { // convert	
-	$cmd = "$convert $filename -resize $size $targetfilename";
-	shell_exec($cmd);
-	return true;
+		$cmd = "$convert $filename -resize $size $targetfilename";
+		shell_exec($cmd);
+		return true;
     }
 }
 
@@ -891,38 +690,29 @@ function UserPictures_userapi_resizePicture($args)
  */
 function UserPictures_userapi_deletePicture($args)
 {
-
     // get data and verify data
-    $uid = $args['uid'];
-    $template_id = $args['template_id'];
-    $picture_id = $args['picture_id'];
+    $uid 			= $args['uid'];
+    $template_id 	= $args['template_id'];
+    $picture_id 	= $args['picture_id'];
     if (!($uid>0)  || !($template_id>(-1) || !($picture_id>0))) return false;
+
+    // Get picture object 
+    $picObj = DBUtil::selectObjectByID('userpictures',$picture_id);
+    if ($picObj['uid'] != $uid) {
+	  	LogUtil::registerError(_USERPICTURESDELETEONLYOWNPICTURES);
+	  	return false;
+	}
 
     // delete all associated persons
     $dummy = UserPictures_userapi_getPersons(array('picture_id'=>$picture_id));
     foreach ($dummy as $assoc) if (!UserPictures_userapi_delPerson(array('picture_id'=>$picture_id,'uname'=>$assoc['uname']))) return false;
     
     // get the picture's filename to delete it
-    $picArray=UserPictures_userapi_getPicture(array('uid'=>$uid,'template_id'=>$template_id,'picture_id'=>$picture_id));
-    $picture=$picArray[0];
-    $filename=$picture['filename'];
-    
-    // now unlink the file...
-    $res=unlink($filename);
-    if (!$res) return false;
+    if (!unlink(pnModGetVar('UserPictures','datadir').$picObj['filename'])) return false;
+    unlink(pnModGetVar('UserPictures','datadir').$picObj['filename'].'.thumb.jpg');
 
-    // Get db table array
-    $tables =& pnDBGetTables();
-    $userpicturescolumn = &$tables['userpictures_column'];
-	$where = 	$userpicturescolumn['uid']." = '". (int)$uid ."'
-			    AND   ".$userpicturescolumn['template_id']." = '". (int)$template_id ."'
-			    AND   ".$userpicturescolumn['id']." = '". (int)$picture_id ."'";
-	if (!DBUtil::deleteWhere('userpictures',$where)) return false;
-
-    // delete the thumbnail too
-    $res=unlink($filename.'.thumb.jpg');
-    if (!$res) return false;
-    return true;
+	// and delete the picture object
+	return DBUtil::deleteObject($picObj,'userpictures');
 }
 
 /**
@@ -932,9 +722,6 @@ function UserPictures_userapi_deletePicture($args)
  */
 function UserPictures_userapi_storePictureDB($args)
 {
-    // Get datbase setup 
-    $pntable =& pnDBGetTables();
-
     //get args
     $filename	= $args['filename'];
     $comment	= $args['comment'];
@@ -951,137 +738,19 @@ function UserPictures_userapi_storePictureDB($args)
 			'uid'			=> pnUserGetVar('uid'),
 			'template_id'	=> $template_id,
 			'comment'		=> $comment,
-			'filename'		=> $filename
+			'filename'		=> $filename,
+			'date'			=> date("Y-m-d H:i:s",time()),
+			'position'		=> ((int)UserPictures_userapi_get(array(
+					'uid'		=> pnUserGetVar('uid'),
+					'countonly'	=> true
+					))*(-1))
 		);
 	DBUtil::insertObject($obj,'userpictures');
     // now we can associate the picture with its owner's user id
-    return UserPictures_userapi_addPerson(array(	'uname'			=> pnUserGetVar('uname'),
-													'picture_id'	=> $obj['id']));
-}
-
-/**
- * get pictures from database
- *
- * @param	$args['template_id']	int
- * @param	$args['verified']	int
- * @param	$args['picture_id']	int
- * @param	$args['cat_id']		int
- */
-function UserPictures_userapi_getPictures($args)
-{
-
-    $prefix=pnModGetVar('UserPictures','datadir');    
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-    // Get tables
-    $userpicturestable = $pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-
-    $userpictures_templatestable = $pntable['userpictures_templates'];
-    $userpictures_templatescolumn = &$pntable['userpictures_templates_column'];
-
-    $userpictures_personstable = $pntable['userpictures_persons'];
-    $userpictures_personscolumn = &$pntable['userpictures_persons_column'];
-
-    $userpictures_catassoctable = $pntable['userpictures_catassoc'];
-    $userpictures_catassoccolumn = &$pntable['userpictures_catassoc_column'];
-
-    // Get Arguments
-    $uid =			$args['uid'];
-    $cat_id =		$args['cat_id'];
-    $template_id =	$args['template_id'];
-    $picture_id =	$args['picture_id'];
-    $verified =		$args[verified];
-    if (!isset($template_id) || !($template_id>=0)) return false;
-
-    if ($verified=='0') 	$and = " AND $userpicturestable.".$userpicturescolumn['verified']." = '0' ";
-    if ($uid>0) 			$and.=" AND $userpicturestable.".$userpicturescolumn['uid']." = '". (int)$uid."' ";
-    if ($picture_id>0) 		$and.= " AND $userpicturestable.".$userpicturescolumn['picture_id']." = '". (int)pnVarPrepForStore($picture_id) ."'";
-    if ($cat_id > 0 ) {
-			$cat_assoc_and = " 
-				AND $userpicturestable.".$userpicturescolumn['id']." = $userpictures_catassoctable.".$userpictures_catassoccolumn['picture_id']."
-				AND $userpictures_catassoctable.".$userpictures_catassoccolumn['cat_id']." = '".pnVarPrepForStore($cat_id)  ."'";
-			$cat_assoc_from = ", ".$userpictures_catassoctable;
-    }
-    $startnum=$args[startnum];
-    if (isset($startnum) && ($startnum >= 0)) $limit = "  LIMIT ".($startnum-1)." ,1 ";
-    
-    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['position'].", $userpicturestable.".$userpicturescolumn['filename']." DESC";
-
-    // do we need the data for the "latest pictures" thumbnail gallery?
-    $startnumthumb=$args[startnumthumb];
-    if (isset($startnumthumb) && ($startnumthumb >= 0)) {
-	if (isset($args['amount']) && ($args['amount']>0)) $amount = $args['amount'];
-	else $amount=50;
-	if (isset($args['index']) && ($args['index']==1)) {
-	    $limit = "LIMIT 0, $amount";
-	    $order = "ORDER BY $userpicturestable.".$userpicturescolumn['id']." DESC";	
-	}
-	else $limit = "  LIMIT ".($startnumthumb-1)." ,25 ";
-    }
-    
-    // we need to check if we only should load pictures associated with a specified user id
-    $assoc_uid=(int)$args['assoc_uid'];
-    if (isset($assoc_uid) && ($assoc_uid>0)) {
-	$assoc_from = ", ".$userpictures_personstable;
-	$assoc_and = " 	AND $userpictures_personstable.".$userpictures_personscolumn['picture_id']." = $userpicturestable.".$userpicturescolumn['id']."
-			AND $userpictures_personstable.".$userpictures_personscolumn['uid']." = '". $assoc_uid ."'  ";
-	// should we hide the user's own pictures to which he mostly is associated?
-	$hideown = $args['hideown'];
-	if (isset($hideown) && ($hideown==1)) $assoc_and.=" AND $userpictures_personstable." . $userpictures_personscolumn['uid'] . " != ".$userpicturestable.".".$userpicturescolumn['uid'];
-    }
-    
-    // Get picture
-    $sql = "SELECT $userpicturestable.".$userpicturescolumn['filename'].",
-		   $userpicturestable.".$userpicturescolumn['uid'].",
-		   $userpicturestable.".$userpicturescolumn['id'].",
-                   $userpicturestable.".$userpicturescolumn['comment'].",
-                   $userpicturestable.".$userpicturescolumn['template_id'].",
-                   $userpicturestable.".$userpicturescolumn['verified'].",
-                   $userpicturestable.".$userpicturescolumn['global_category'].",
-                   $userpicturestable.".$userpicturescolumn['category']."
-            FROM $userpicturestable
-	    $assoc_from
-	    $cat_assoc_from
-	    WHERE $userpicturestable.".$userpicturescolumn['template_id']." = '". (int)pnVarPrepForStore($template_id) ."'
-	    $thumbnailwhere
-	    $and
-	    $assoc_and
-	    $cat_assoc_and
-	    $order
-	    $limit
-	    ";
-    $result =& $dbconn->Execute($sql);
-    if ($dbconn->ErrorNo() != 0) {
-         pnSessionSetVar('errormsg', 'Failed to get items!'.$sql);
-         return false;
-    }
-    $items=array();
-    for (; !$result->EOF; $result->MoveNext()) {
-        unset($item);
-        list(	$item['filename'],
-		$item['uid'],
-		$item['id'],
-		$item['comment'],
-		$item['template_id'],
-		$item['verified'],
-		$item['global_category'],
-		$item['category']) = $result->fields;
-	$filename = $prefix.$item['filename'];
-	$item['filename']=$filename;
-
-	// create thumbnails if they do not exist!
-	if (!UserPictures_userapi_createThumbnail(array('filename'=>$filename))) pnSessionSetVar('errormsg',_USERPICTURESTHUMBNAILCREATIONERROR);
-	
-	$items[]=$item;
-	$lastfilename=$filename;
-    }
-
-    // Return the item array
-    $result->close();
-    return $items;
+    if ($template_id > 0) return UserPictures_userapi_addPerson(array(	
+			'uname'			=> pnUserGetVar('uname'),
+			'picture_id'	=> $obj['id']));
+	else return true;
 }
 
 /**
@@ -1093,126 +762,14 @@ function UserPictures_userapi_getPictures($args)
  */
 function UserPictures_userapi_createThumbnail($args)
 {
-	$filename =			$args['filename'];
-	$thumbnail = 		$filename.".thumb.jpg";
-    $convert =			pnModGetVar('UserPictures','convert');
-    $thumbnailsize =	pnModGetVar('UserPictures','thumbnailsize');
-	if (!(file_exists($thumbnail))) return UserPictures_userapi_resizePicture(array(	'filename'			=> $filename,
-																						'size'				=> $thumbnailsize,
-																						'targetfilename'	=> $thumbnail,
-																						'hint'				=> pnModGetVar('UserPictures','hint')));
+	if (!(file_exists($args[filename].'.thumb.jpg'))) return UserPictures_userapi_resizePicture(
+		array(	
+			'filename'			=> $args['filename'],
+			'size'				=> pnModGetVar('UserPictures','thumbnailsize'),
+			'targetfilename'	=> $args['filename'].'.thumb.jpg',
+			'hint'				=> pnModGetVar('UserPictures','hint')
+			));
 	else return true;
-}
-
-/**
- * get a picture from the database
- *
- * @param	$args['uid]		int
- * @param	$args['template_id]	int
- * @param	$args['picture_id]	int
- * @return	array
- */
-function UserPictures_userapi_getPicture($args)
-{
-    // we need this variable for the thumbnail creation
-    $convert=pnModGetVar('UserPictures','convert');
-    $thumbnailsize=pnModGetVar('UserPictures','thumbnailsize');
-    $prefix = pnModGetVar('UserPictures','datadir');
-
-    // Get datbase setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-
-    // Get tables
-    $userpicturestable = $pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-
-    // Get Arguments and ch[21~eck them
-    $uid=(int)$args['uid'];
-    $picture_id=$args['picture_id'];
-    if (!isset($picture_id)) {
-	if (!isset($uid) || !($uid>0)) return false;
-	$template_id=$args['template_id'];
-	if (!isset($template_id) || !($template_id>=0)) return false;
-        $where=" WHERE ".$userpicturescolumn['uid']." = '" . (int)pnVarPrepForStore($uid) ."'
-	    AND ".$userpicturescolumn['template_id']." = '". (int)pnVarPrepForStore($template_id) ."' ";
-    }
-    else $where=" WHERE ".$userpicturescolumn['id']." = '".(int)$picture_id."' ";
-
-    // Get picture
-    $sql = "SELECT ".$userpicturescolumn['filename'].",
-                   ".$userpicturescolumn['comment'].",
-                   ".$userpicturescolumn['id'].",
-                   ".$userpicturescolumn['uid'].",
-                   ".$userpicturescolumn['template_id'].",
-                   ".$userpicturescolumn['verified'].",
-                   ".$userpicturescolumn['global_category'].",
-                   ".$userpicturescolumn['category']."
-            FROM $userpicturestable
-	    $where
-	    ORDER BY ".$userpicturescolumn['position'].", ".$userpicturescolumn['filename']." DESC
-	    ";
-    $result =& $dbconn->Execute($sql);
-    // Check for an error with the database code, and if so set an appropriate
-    // error message and return
-    if ($dbconn->ErrorNo() != 0) {
-        return false;
-    }
-    
-    // if there is no picture uploaded take the default pic if there is one...
-    $counter=$result->RowCount();
-    if  ($counter==0) {
-	    if ($args['code']==1) {
-		    $tpl=pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$args['template_id']));
-		    if ($tpl['defaultimage']!='') {
-		        $item['code']='<img src="'.$tpl['defaultimage'].'" />';
-		        $items[]=$item;
-			    return $items;
-		    }
-		}
-    }
-    for (; !$result->EOF; $result->MoveNext()) {
-        list($item['filename'], $item['comment'], $item['id'], $item['uid'], $item['template_id'], $item['verified'],$item['global_category'],$item['category']) = $result->fields;
-
-	$filename = $prefix.$item['filename'];
-	$item['filename']=$filename;
-	$item['lastfilename']=$lastfilename;
-
-	// if pictures have to be activated?
-	unset($tpl);
-	$show=true;
-	$tpl =	pnModAPIFunc('UserPictures','admin','getTemplates',array(	'template_id'	=> $item['template_id']));
-	if (($tpl['to_verify']==1) && ($item['verified']==0)) $show=false;
-	if (pnUserGetVar('uid')==$item[uid]) $show=true;
-	// now show if there's sth. to show
-	if ($show) {
-	    $code='<img alt="'.$item['comment'].'" title="'.$item['comment'].'" src="'.$item['filename'].'" />';
-	    $code_thumbnail='<img alt="'.$item['comment'].'" title="'.$item['comment'].'" src="'.$item['filename'].'.thumb.jpg" />';
-	}
-	else if ($tpl['defaultimage'] != "") $code='<img src="'.$tpl['defaultimage'].'" />';
-	else $code='';
-	$item['code']=$code;
-	$item['lastfilename']=$lastfilename;;
-	$item['code_thumbnail']=$code_thumbnail;
-	$item['tpl']=$tpl;
-
-	// create thumbnails if they do not exist!
-	UserPictures_userapi_createThumbnail(array('filename'=>$filename));
-    
-	// now we need to add the actual picture_id to the last array 
-	// entry as next_id (this is for the position management important)
-	$picture_id=$item['id'];
-	$amount=count($items);
-	if ($amount>0) {
-	    $items[($amount-1)]['next_id']=$picture_id;
-	}
-	$items[]=$item;
-	$lastfilename=$item['filename'];
-    }
-
-    $result->Close();
-    // Return the number of items
-    return $items;
 }
 
 /**
@@ -1232,87 +789,64 @@ function UserPictures_userapi_getPicture($args)
 function UserPictures_userapi_handleUploadedPicture($args)
 {
     // some variables
-    $template_id = 	$args['template_id'];
-    $uid = 			$args['uid'];
-    $prefix = 		pnModGetVar('UserPictures','datadir');
+    $template_id 	= $args['template_id'];
+    $uid 			= pnUserGetVar('uid');
+    $prefix 		= pnModGetVar('UserPictures','datadir');
 
-    // Here the function starts...
-    $file =			FormUtil::getPassedValue('file');
-    $filename =		$_FILES['file']['name'];
-    $tempfile =		$_FILES['file']['tmp_name'];
-    $filesize =		$_FILES['file']['size']/1024;
-    $filetype =		$_FILES['file']['type'];
+    // Get file and file information
+    $file 			= FormUtil::getPassedValue('file');
+    $filename 		= $_FILES['file']['name'];
+    $tempfile 		= $_FILES['file']['tmp_name'];
+    $filesize 		= $_FILES['file']['size']/1024;
+    $filetype 		= $_FILES['file']['type'];
 
     // now check the extension
-    $arr = 			explode(".",$filename);
-    $ext =			strtolower($arr[count($arr)-1]);
+    $arr 			= explode(".",$filename);
+    $ext 			= strtolower($arr[count($arr)-1]);
+    
+	// is the type of the file correct?
     if (!preg_match('(gif|jpg|jpeg|png)',$ext)) return 2;
-    $max_filesize =	pnModGetVar('UserPictures','maxfilesize');
-    if ($filesize>$max_filesize) return 3;
-    // the filename is <template_id>_<user_id>.<ext> timestamp included in filename for not having caching problems :)
-    $addon='-'.time();
+    
+    // is the file too big?
+    $max_filesize 	= pnModGetVar('UserPictures','maxfilesize');
+    if ($filesize > $max_filesize) return 3;
 
-    $filename_noext = $prefix.$template_id.$addon.'_'.pnUserGetVar('uid');
-    $filename =		$filename_noext.".".$ext;
+    // the filename is <datadir>/<template_id>_<user_id>.<ext> timestamp included in filename for not having caching problems :)
+	$filename_noext = $prefix.$template_id.'-'.time().'_'.$uid;
+    $filename 		= $filename_noext.".".$ext;
 
+	// did an upload error occur?
     if ($_FILES['file']['error']!=0) return 4;
 
-    // Move the uploaded file that is now stored in the temp folder to the right folder...
-    $success =		move_uploaded_file($tempfile,$filename) or die(_USERPICTURESCOPYFAILURE.' tempfile '.$tempfile.' filename '.$filename);
+    // Move upload from temp to target folder
+    $success 		= move_uploaded_file($tempfile,$filename) or die("FATAL ERROR! "._USERPICTURESCOPYFAILURE.' tempfile '.$tempfile.' filename '.$filename);
 
-    // convert jsut handles png and jpg-files. so gif hast to be converted to jpg before it can be resized
+    // convert just handles png and jpg-files. so gif hast to be converted to jpg before it can be resized
     if ($ext == "gif") {
-		// source file
-		$srcFile = $filename;
-		// this comes out after converting
-		$destFile = $filename_noext.'.jpg';
-		// now let us convert the file using "convert" via shell execution
-		$convert=pnModGetVar('UserPictures','convert');
-		// the flatten option is to avoid problems with animated gif files
-		$cmd="$convert $srcFile -flatten $destFile";
-		shell_exec($cmd);
-		// delete the gif source file
-		unlink($srcFile);
-		// set the new filename with jpg at the end because file is jpg now!
-		$ext="jpg";
-		$filename=$filename_noext.'.'.$ext;
+		$srcFile 	= $filename;								// source file
+		$destFile 	= $filename_noext.'.jpg';					// this comes out after converting
+		$convert	= pnModGetVar('UserPictures','convert');	// get convert path
+		$cmd		= "$convert $srcFile -flatten $destFile";	// add flatten option to avoid animated gifs
+		shell_exec($cmd);										// execute command via shell_exec
+		unlink($srcFile);										// old gif file
+		$ext		= "jpg";									// update extension
+		$filename	= $filename_noext.'.'.$ext;					// update filename
     }
-    // we now have a jpg or a png file... $filename and $filename_noext have a correct value now!
-    $template =		pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
-    $max_height = 	$template['max_height'];
-    $max_width = 	$template['max_width'];
+    
+    // we now have a jpg or a png file...
+    $template 		= pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
+    $max_height 	= $template['max_height'];
+    $max_width 		= $template['max_width'];
     
     // resize the image
-    if (!UserPictures_userapi_resizeImage(array(	'filename' 		=> $filename,
-													'max_width'		=> $max_width,
-													'max_height'	=> $max_height))) return 5;
+    if (!UserPictures_userapi_resizePicture(array(	'filename' 	=> $filename,
+													'size'		=> $max_width."x".$max_height))) return 5;
     
     // let the API write it into the database that we now have a picture stored...
     if (!pnModAPIFunc('UserPictures','user','storePictureDB',array(	'template_id'		=> $template_id,
 																	'filename'			=> $filename,
 																	'comment' 			=> FormUtil::getPassedValue('comment')))) return 6;
-    
-    return false;
     // upload successfull...
     return 1;
-}
-
-/**
- * resize an image
- *
- * @param	$args['filename']	string
- * @param	$args['max_height']	int
- * @param	$args['max_width']	int
- * @return	bool
- */
-function UserPictures_userapi_resizeImage($args) 
-{
-    $filename =		$args['filename'];
-    $max_width =	$args['max_width'];
-    $max_height =	$args['max_height'];
-    $size =			$max_width."x".$max_height;
-    return UserPictures_userapi_resizePicture(array(	'filename'			=> $filename,
-														'size'				=> $size,
-														'targetfilename'	=> $filename));
 }
 ?>

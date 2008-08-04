@@ -9,6 +9,17 @@
  */
 
 // main
+// new
+define('_USERPICTURESYOURPICTURES',				'Your picture gallery');
+define('_USERPICTURESASSOCEDWITHYOU',			'Pictures associated with your username');
+define('_USERPICTURESVIEWLATEST',				'Latest uploads of pictures');
+define('_USERPICTURESUSERGALLERYVIEWOPTIONS',	'View options for user galleries');
+define('_USERPICTURESTEMPLATEGALLERY',			'Show gallery with all pictures of template');
+define('_USERPICTURESTEMPLATEGALLERIES',		'Template gallery');
+define('_USERPICTURESVIEWOPTIONS',				'View uploaded pictures');
+define('_USERPICTURESPICTURESTODISPLAY',		'pictures to display');
+define('_USERPICTURESUPLOADDATE',				'Upload date');
+// old
 define('_USERPICTURESMANAGEYOURPICTURES',		'Manage my pictures');
 define('_USERPICTURESMANAGEYOURPICSHERE',		'The admin of this site has created possibillities for picture uploads. For each possibillity you can upload one picture');
 define('_USERPICTURESMANAGE',					'manage');
@@ -16,15 +27,26 @@ define('_USERPICTURESOWNUPLOADSPOSSIBLE',		'It is possible to upload some pictur
 define('_USERPICTURESCANBEUPLOADED',			'pictures can be uploaded for the own gallery for each user');
 define('_USERPICTURESUPLOADPICTURES',			'Manage my own gallery');
 define('_USERPICTURESMANAGECATEGORIES',			'Manage categories for the own gallery');
+// view
+define('_USERPICTURESASSOCEDPERSONS',			'Associated persons');
+define('_USERPICTURESPUBLICCOMMENTS',			'Public comments');
+define('_USERPICTURESPICTUREINFORMATIONS',		'Additional information');
 // managepicture
 // new
+define('_USERPICTURESDRAGANDDROP',				'The position of a picture can easily be changed via drag and drop');
 define('_USERPICTURESASSOCIATEPERSONDESC',		'Link each person that is shown at the picture and make you pictures "social"');
 define('_USERPICTURESASSOCIATEPERSONSNOW',		'Associate persons');
 define('_USERPICTURESPRIVATECATEGORIES',		'Private categories');
+define('_USERPICTURESPRIVATECATEGORY',			'Private category');
 define('_USERPICTURESASSOCIATEDWITHPRIVATE',	'You can manage some private categories and associate your pictures and create private "albums" this way');
 define('_USERPICTURESGLOBALCATEGORIES',			'Global community categories');
 define('_USERPICTURESADDEDTOGLOBALCAT',			'Added to global category');
 define('_USERPICTURESADDTOGLOBALCAT',			'If you associate this picture with a global category it will be added to the community album');
+define('_USERPICTURESASSOCIATEDWITHGLOBALCAT',	'This picture is part of a global community album and associated with the category');
+define('_USERPICTURESPERSONSLINKEDHERE',		'Linked users');
+define('_USERPICTURESPRIVATECATEGORY',			'Private category');
+define('_USERPICTURESGLOBALCATEGORY',			'Global community category');
+define('_USERPICTURESOWNER',					'Owner');
 // old
 define('_USERPICTURESMOVEDOWN',					'down');
 define('_USERPICTURESMOVEUP',					'up');
@@ -78,33 +100,10 @@ define('_USERPICTURESBACKTOMANAGE',				'Go back to the management for the own pi
 define('_USERPICTURESPERSONSASSOCIATED',		'person(s) associated');
 define('_USERPICTURESGOONTOP',					'go on top');
 
-// showgallery
-define('_USERPICTURESSHOWGALLERY',				'This picture gallery belongs to the user');
-define('_USERPICTURESPROFILELINK',				'Show the profile page for this user');
-define('_USERPICTURESHASNOGALLERY',				'There are no pictures uploaded (yet)');
-define('_USERPICTURESMANAGEYOURGALLERY',		'manage my pictures');
-define('_USERPICTURESTHUMBNAILGALLERY',			'Show thumbnail gallery');
-define('_USERPICTURESTHEFOLLOWINGPERSONSARESHOWN',	'Persons that are on this foto');
-define('_USERPICTURESASSOCPICTURES',			'Show the pictures associated with a member of this community');
-define('_USERPICTURESTHOSEPICTURESAREASSOCWITH','These pictures are associated with');
-define('_USERPICTUREHIDEOWNPICTURES',			'Do not show pictures the user has uploaded hisself');
-define('_USERPICTURESSHOWALLPICS',				'Show all pictures associated with the user');
-define('_USERPICTURESASSOCPICS',				'Show all pictures that show the actual user - also pictures that have been uploaded by other users');
-
-
 // user's settings
 define('_USERPICTURESOWNPICTURES',				'my pictures');
 
-// thumbnail gallery: latest pictures
-define('_USERPICTURESLATESTIMAGESGALLERY',		'Latest pictures');
-define('_USERPICTURESLATESTIMAGESGALLERYTEXT',	'You can see the latest pictures from the galleries. Click the picture to get into the gallery of the user.');
-define('_USERPICTURESMORELATESTIMAGES',			'Show all new uploaded pictures');
-define('_USERPICTURESPICTURECOUNTER',			'There are');
-define('_USERPICTURESPICTURES',					'pictures available');
-define('_USERPICTURESPICTURECOUNTERFORTHISUSER','Number of pictures of this member');
-define('_USERPICTURESFILTERCAT',				'filter');
-
-// categorie management
+// category management
 define('_USERPICTURESMANAGECATTEXT',			'Create and manage categories here. Every picture can be associated to one or more category');
 define('_USERPICTURESNAMEOFNEWCAT',				'Name');
 define('_USERPICTURESTEXTOFNEWCAT',				'Description');
@@ -120,12 +119,14 @@ define('_USERPICTURESCATCREATED',				'Category was created');
 define('_USERPICTURESADDCATFAILED',				'An error occured while trying to create a new category. Please try again and check if there is some data missing');
 define('_USERPICTURESADDTOCATFAILURE',			'An error occured while trying to associate a picture with a category. Please try again!');
 define('_USERPICTURESADDEDTOCATEGORY',			'Data stored');
-define('_USERPICTURESASSOCIATEDWITH',			'Associated categories:');
+define('_USERPICTURESASSOCIATEDWITH',			'This:');
 define('_USERPICTURESDELETEDFROMCATEGORY',		'The picture was removed from the category');
 define('_USERPICTURESNOFILTER',					'No filter - show all pictures');
 
 // menu
-define('_USERPICTURESGENERALSETTINGS',			'General settings');
+// new
+define('_USERPICTURESMENU',						'Menu');
+// old
 define('_USERPICTURESMANAGESETTINGS',			'manage my settings');
 
 // mange general settings

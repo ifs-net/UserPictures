@@ -55,7 +55,7 @@ function UserPictures_pntables()
         		'comment'				=> "XL	NOTNULL DEFAULT ''",
         		'filename'				=> "XL	NOTNULL DEFAULT ''",
         		'verified'				=> "C(1)	NOTNULL DEFAULT '0'",
-        		'date'					=> "D	NOTNULL DEFAULT '0000-00-00'",
+        		'date'					=> "T	NOTNULL DEFAULT '0000-00-00 00:00:00'",
         		'global_category'		=> "I	NOTNULL DEFAULT 0",
         		'category'				=> "I	NOTNULL DEFAULT 0",
         		'coord_lat'				=> "F	NOTNULL DEFAULT 0",
