@@ -10,4 +10,5 @@
 
 // myprofile plugin
 define('_USERPICTURESTABTITLE',				'User\'s gallery');
+define('_USERPICTURESHASNOGALLERY',			'There are no pictures uploaded yet');
 ?>

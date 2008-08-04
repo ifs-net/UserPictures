@@ -33,6 +33,14 @@ function UserPictures_admin_categories()
  */
 function UserPictures_admin_main()
 {
+    // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return LogUtil::registerPermissionError();
+
+    // Create output object
+	$render = FormUtil::newpnForm('UserPictures');
+    return $render->pnFormExecute('userpictures_admin_main.htm', new userpictures_admin_mainhandler());
+
+
     // Security check
     if (!pnSecAuthAction(0, 'UserPictures::', '::', ACCESS_ADMIN)) {
         return pnVarPrepHTMLDisplay(_MODULENOAUTH);
@@ -268,6 +276,42 @@ function UserPictures_admin_templates()
 }
 
 /* ****************************** handler for FormUtil ********************************* */
+class userpictures_admin_mainHandler
+{
+    function initialize(&$render)
+    {
+      	// assign existing categories
+		$render->assign('activated',			pnModGetVar('UserPictures','activated'));
+		$render->assign('avatarmanagement',		pnModGetVar('UserPictures','avatarmanagement'));
+		$render->assign('convert',				pnModGetVar('UserPictures','convert'));
+		$render->assign('avatarsize',			pnModGetVar('UserPictures','avatarsize'));
+		$render->assign('ownuploads',			pnModGetVar('UserPictures','ownuploads'));
+		$render->assign('maxfilesize',			pnModGetVar('UserPictures','maxfilesize'));
+		$render->assign('disabledtext',			pnModGetVar('UserPictures','disabledtext'));
+		$render->assign('maxwidth',				pnModGetVar('UserPictures','maxwidth'));
+		$render->assign('maxheight',			pnModGetVar('UserPictures','maxheight'));
+		$render->assign('thumbnailsize',		pnModGetVar('UserPictures','thumbnailsize'));
+		$render->assign('thumbnailcreation',	pnModGetVar('UserPictures','thumbnailcreation'));
+		$render->assign('datadir',				pnModGetVar('UserPictures','datadir'));
+		$render->assign('hint',					pnModGetVar('UserPictures','hint'));
+		$render->assign('verifytext',			pnModGetVar('UserPictures','verifytext'));
+		$items_thumbnailcreation = array (	
+								array('text' => _USERPICTURESTCCONVERT, 'value' => 'convert'),
+								array('text' => _USERPICTURESTCGDLIB, 	'value' => 'openlayers')
+								);
+		$render->assign('items_thumbnailcreation',$items_thumbnailcreation);
+		return true;
+    }
+    function handleCommand(&$render, &$args)
+    {
+		if ($args['commandName']=='update') {
+		    if (!$render->pnFormIsValid()) return false;
+		    $obj = $render->pnFormGetValues();
+		  	foreach ($obj as $key=>$val) pnModSetVar('UserPictures',$key,$val);
+		}
+		return true;
+    }
+}
 class userpictures_admin_categoriesHandler
 {
     function initialize(&$render)
