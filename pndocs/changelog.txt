@@ -24,7 +24,7 @@ new features:
 - introduced global categories
 - drag-and-drop sorting for pictures
 - lightbox.js added for slideshows and some optical effects
-- privacy status for pictures (all, registered, "friends")
+- every user can now link users on all pictures
 
 plugins:
 --------
@@ -39,6 +39,7 @@ database design:
   o userpictures: date (timestamp): date of picture upload
   o userpictures: privacy_status (int): privacy status of a picture
   o userpictures_category: title_image (int): "album cover" image
+  o userpictures_persons: uid renamed to assoc_uid, uid introduced new
 - dropped tables:
   o cuserpictures_catassoc: 1:1 replaces not really used 1:n association
 
@@ -53,6 +54,7 @@ todo:
 - MyMap integration
 - Transform hook / Multihook needle
 - expand preparation for album cover image in db
+- privacy status for pictures (all, registered, "friends")
 
 0.93:
 =====

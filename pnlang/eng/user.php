@@ -21,7 +21,10 @@ define('_USERPICTURESPICTURESTODISPLAY',		'pictures to display');
 define('_USERPICTURESUPLOADDATE',				'Upload date');
 define('_USERPICTURESGCOMMUNITYGALLERIES',		'Community galleries');
 define('_USERPICTURESGCOMMUNITYGALLERY',		'Global category');
+define('_USERPICTURESAVATAREXPLTEXT',			'You can use all the pictures you have uploaded to create an avatar image. An avatar image will be displayed often on this site when a link to you is set, next to your forum postings etc.');
+define('_USERPICTURESMANAGEAVATAR',				'Manage your global avatar image');
 define('_USERPICTURESHASNOGALLERY',				'No pictures found');
+define('_USERPICTURESUPLOADPICFIRST',			'You have to upload at least one picture to manage your avatar');
 // old
 define('_USERPICTURESMANAGEYOURPICTURES',		'Manage my pictures');
 define('_USERPICTURESMANAGEYOURPICSHERE',		'The admin of this site has created possibillities for picture uploads. For each possibillity you can upload one picture');
@@ -30,26 +33,51 @@ define('_USERPICTURESOWNUPLOADSPOSSIBLE',		'It is possible to upload some pictur
 define('_USERPICTURESCANBEUPLOADED',			'pictures can be uploaded for the own gallery for each user');
 define('_USERPICTURESUPLOADPICTURES',			'Manage my own gallery');
 define('_USERPICTURESMANAGECATEGORIES',			'Manage categories for the own gallery');
+// avatar
+define('_USERPICTURESAVATARMANAGEMENT',			'Avatar managment');
+define('_USERPICTURESACTUALAVATAR',				'Your avatar');
+define('_USERPICTURESSELECTNEWAVATAR',			'Select new avatar');
+define('_USERPICTURESDELETEAVATAR',				'Delete existing avatar');
+define('_USERPICTURESSETASAVATARNOW',			'Set selected image as avatar');
+define('_USERPICTURESSETASAVATARERROR',			'An error occured while trying to set the selected image as new avatar');
+define('_USERPICTURESAVATARREMOVED',			'Your avatar was deleted');
 // view
 define('_USERPICTURESASSOCEDPERSONS',			'Associated persons');
 define('_USERPICTURESPUBLICCOMMENTS',			'Public comments');
 define('_USERPICTURESPICTUREINFORMATIONS',		'Additional information');
+define('_USERPICTURESBACKTOMYMANAGEMENTPAGE',	'Back to my picture management page');
+define('_USERPICTURESASSOCIATEPERSONSDESC',		'You know some persons that are shown at this picture?');
+define('_USERPICTURESADDSHOWNPERSONS',			'Associate this picture with their user profile. You just have to enter the username and click the add button!');
+define('_USERPICTURESADDUNAME',					'Associate username');
+define('_USERPICTUREUNAMENOTFOUND',				'Username not found');
+define('_USERPICTURESUSERALREADYADDED',			'The user is already associated with this picture and cannot be added twice');
+define('_USERPICTURESPERSONADDED',				'The user is now associated with the picture');
+define('_USERPICTURESNOLINKINGFORUSER',			'No linking allowed for selected user');
+define('_USERPICTURESLINKEDBY',					'linked by');
+define('_USERPICTURESASSOCDELETED',				'Association deleted');
+define('_USERPICTURESERRORDELETINGASSOC',		'Error deleting association');
 // managepicture
 // new
 define('_USERPICTURESDRAGANDDROP',				'The position of a picture can easily be changed via drag and drop');
 define('_USERPICTURESASSOCIATEPERSONDESC',		'Link each person that is shown at the picture and make you pictures "social"');
-define('_USERPICTURESASSOCIATEPERSONSNOW',		'Associate persons');
+define('_USERPICTURESASSOCIATEPERSONS',			'Associate persons');
 define('_USERPICTURESPRIVATECATEGORIES',		'Private categories');
 define('_USERPICTURESPRIVATECATEGORY',			'Private category');
 define('_USERPICTURESASSOCIATEDWITHPRIVATE',	'You can manage some private categories and associate your pictures and create private "albums" this way');
 define('_USERPICTURESGLOBALCATEGORIES',			'Global community categories');
 define('_USERPICTURESADDEDTOGLOBALCAT',			'Added to global category');
-define('_USERPICTURESADDTOGLOBALCAT',			'If you associate this picture with a global category it will be added to the community album');
-define('_USERPICTURESASSOCIATEDWITHGLOBALCAT',	'This picture is part of a global community album and associated with the category');
+define('_USERPICTURESADDTOGLOBALCAT',			'If you associate a picture with a global category it will be added to the community album');
+define('_USERPICTURESASSOCIATEDWITHGLOBALCAT',	'Added to community album');
 define('_USERPICTURESPERSONSLINKEDHERE',		'Linked users');
 define('_USERPICTURESPRIVATECATEGORY',			'Private category');
 define('_USERPICTURESGLOBALCATEGORY',			'Global community category');
+define('_USERPICTURESPOSITIONMOVEMENT',			'Change position of uploaded pictures');
 define('_USERPICTURESOWNER',					'Owner');
+define('_USERPICTURESCATEGORIES',				'Private & global albums');
+define('_USERPICTURESASSOCPRIVATEALBUM',		'Added to private album');
+define('_USERPICTURESASSOCTOPRIVATEALBUM',		'Add to private album');
+define('_USERPICTURESASSOCIATEWITHGLOBALCAT',	'Add to global album');
+define('_USERPICTURESOPENPICFORASSOC',			'Associate persons with this picture');
 // old
 define('_USERPICTURESMOVEDOWN',					'down');
 define('_USERPICTURESMOVEUP',					'up');
@@ -100,7 +128,6 @@ define('_USERPICTURESASSOCIATEDPERSONS',		'existing associations');
 define('_USERPICTURESDELETE',					'remove');
 define('_USERPICTURESCONTACTDELETED',			'Association deleted');
 define('_USERPICTURESBACKTOMANAGE',				'Go back to the management for the own pictures');
-define('_USERPICTURESPERSONSASSOCIATED',		'person(s) associated');
 define('_USERPICTURESGOONTOP',					'go on top');
 
 // user's settings
