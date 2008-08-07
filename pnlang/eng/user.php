@@ -57,6 +57,7 @@ define('_USERPICTURESNOLINKINGFORUSER',			'No linking allowed for selected user'
 define('_USERPICTURESLINKEDBY',					'linked by');
 define('_USERPICTURESASSOCDELETED',				'Association deleted');
 define('_USERPICTURESERRORDELETINGASSOC',		'Error deleting association');
+define('_USERPICTURESVIEWTHUMBNAILS',			'View thumbnail overview');
 // managepicture
 // new
 define('_USERPICTURESDRAGANDDROP',				'The position of a picture can easily be changed via drag and drop');
