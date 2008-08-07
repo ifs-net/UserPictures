@@ -88,6 +88,7 @@ function UserPictures_admin_main()
 		    pnModSetVar('UserPictures','maxwidth',$maxwidth);
 		    pnModSetVar('UserPictures','maxheight',$maxheight);
 		    pnModSetVar('UserPictures','datadir',$datadir);
+		    pnModSetVar('UserPictures','avatardir',$avatardir);
 		    pnModSetVar('UserPictures','thumbnailcreation',$tc);
 		    pnModSetVar('UserPictures','hint',$hint);
 		}

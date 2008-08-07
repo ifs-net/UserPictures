@@ -32,9 +32,39 @@ function UserPictures_user_main()
     $render->assign('globalcategories',	pnModAPIFunc('UserPictures','admin','getGlobalCategory'));
     $render->assign('ownuploads',		pnModGetVar('UserPictures','ownuploads'));
     $render->assign('viewer_uid',		pnUserGetVar('uid'));
+    $render->assign('avatarmanagement',	pnModGetVar('UserPictures','avatarmanagement'));
     
     // return output
     return $render->fetch('userpictures_user_main.htm');
+}
+
+/**
+ * manage avatar picture
+ *
+ * this function povides the functionallity to the user to 
+ * manage the global avatar image
+ *
+ * @return	output
+ */
+function UserPictures_user_avatar()
+{
+    // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
+
+	// check for action
+	$action = FormUtil::getPassedValue('action');
+	if (isset($action) && ($action == "del")) {
+		if (SecurityUtil::confirmAuthKey()) {
+		  	pnUserSetVar('_YOURAVATAR','blank.gif');
+		  	LogUtil::registerStatus(_USERPICTURESAVATARREMOVED);
+		}
+		else LogUtil::registerAuthIDError();
+	  	return pnRedirect(pnModURL('UserPictures','user','avatar'));
+	}
+
+	// create output
+	$render = FormUtil::newpnForm('UserPictures');
+    return $render->pnFormExecute('userpictures_user_avatar.htm', new UserPictures_user_AvatarHandler());
 }
 
 /**
@@ -50,66 +80,19 @@ function UserPictures_user_view()
 {
     // Security check 
     if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
-    
-    // get parameters
-    $uid			= (int)	FormUtil::getPassedValue('uid');
-    $assoc_uid		= (int)	FormUtil::getPassedValue('assoc_uid');
-    $template_id	= 		FormUtil::getPassedValue('template_id');
-    $cat_id			= (int)	FormUtil::getPassedValue('cat_id');
-    $globalcat_id	= (int)	FormUtil::getPassedValue('globalcat_id');
-    $startwith		= (int)	FormUtil::getPassedValue('upstartwith');
-    $singlemode		= 		FormUtil::getPassedValue('singlemode');
-    if (!($startwith > 0)) 	$startwith = 0;
-    if ($singlemode > 0)	$showmax = 1;
-    else					$showmax = 20;
-    // get pictures
-    $pictures = pnModAPIFunc('UserPictures','user','get',array (
-    		'uid'			=> $uid,
-    		'assoc_uid'		=> $assoc_uid,
-    		'template_id'	=> $template_id,
-    		'cat_id'		=> $cat_id,
-    		'globalcat_id'	=> $globalcat_id,
-    		'startwith'		=> $startwith,
-    		'showmax'		=> $showmax,
-    		'expand'		=> true
-		));
-	// get number of pictures for counter
-    $pictures_count = pnModAPIFunc('UserPictures','user','get',array (
-    		'uid'			=> $uid,
-    		'assoc_uid'		=> $assoc_uid,
-    		'template_id'	=> $template_id,
-    		'cat_id'		=> $cat_id,
-    		'globalcat_id'	=> $globalcat_id,
-    		'countonly'		=> true
-		));
 
-    // Add some page vars
-	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
-	up_addPageVars();
-
+	// check action: delete association
+	$delassoc = FormUtil::getPassedValue('delassoc');
+	if (isset($delassoc) && ($delassoc > 0)) {
+	 	if (!SecurityUtil::confirmAuthKey()) LogUtil::registerAuthIDError();
+	 	else {
+		   if (pnModAPIFunc('UserPictures','user','delPerson',array ('id' => $delassoc))) LogUtil::registerStatus(_USERPICTURESASSOCDELETED);
+		   else LogUtil::registerError(_USERPICTURESERRORDELETINGASSOC);
+		}
+	}
 	// create output object
 	$render = FormUtil::newpnForm('UserPictures');
-	// assign data
-	$render->assign('pictures_count',		$pictures_count);
-	$render->assign('pictures',				$pictures);
-	$render->assign('thumbnailheight',		up_getThumbnailHeight());
-	$render->assign('no_uname',				(($uid > 1) || ($assoc_uic > 1)));
-	$render->assign('showmax',				$showmax);
-	$render->assign('ezcommentsavailable',	(pnModAvailable('EZComments') && pnModIsHooked('EZComments','UserPictures')));
-	if ($singlemode > 0) {
-	  	// assign viewurl for EZComments integration
-	  	$render->assign('viewurl',		pnModURL('UserPictures','user','view',array(
-    		'uid'			=> $uid,
-    		'assoc_uid'		=> $assoc_uid,
-    		'template_id'	=> $template_id,
-    		'cat_id'		=> $cat_id,
-    		'globalcat_id'	=> $globalcat_id,
-    		'startwith'		=> $startwith,
-    		'showmax'		=> $showmax,
-    		'singlemode'	=> 1
-		  	)));
-	}
-    return $render->pnFormExecute('userpictures_user_view.htm', new UserPictures_user_SettingsHandler());
+    return $render->pnFormExecute('userpictures_user_view.htm', new UserPictures_user_ViewHandler());
 }
 
 /**
@@ -275,19 +258,11 @@ function UserPictures_user_managePicture()
 			if (pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESDELETED);
 			else LogUtil::registerError(_USERPICTURESDELETEERROR);
 			break;
-		case "addperson": // ToDo
-			break;
-		case "delperson": // ToDo
-			break;
-		case "avatar":
-			if (pnModAPIFunc('UserPictures','user','copyPictureAsAvatar',array('picture_id'=>$picture_id,'uid'=>$uid,'template_id'=>$template_id))) LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
-			else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
-			break;
 		case "addtocat":
 			if (pnModAPIFunc('UserPictures','user','setCategory',array('picture_id'=>$picture_id,'cat_id' => $cat_id, 'uid' => $uid))) LogUtil::registerStatus(_USERPICTURESADDEDTOCAT);
 			else LogUtil::registerError(_USERPICTURESERRORADDINGTOCAT);
 			break;
-		case "delassoc":
+		case "delfromcat":
 			if (pnModAPIFunc('UserPictures','user','setCategory',array('picture_id'=>$picture_id,'uid' => $uid,'cat_id' => 0))) LogUtil::registerStatus(_USERPICTURESCATASSOCDELETED);
 			else LogUtil::registerError(_USERPICTURESERRORDELETINGCATASSOC);
 			break;
@@ -295,11 +270,11 @@ function UserPictures_user_managePicture()
 			if (pnModAPIFunc('UserPictures','user','setGlobalCategory',array('picture_id'=>$picture_id,'cat_id' => $cat_id, 'uid' => $uid))) LogUtil::registerStatus(_USERPICTURESADDEDTOGLOBALCAT);
 			else LogUtil::registerError(_USERPICTURESERRORADDINGTOGLOBALCAT);
 			break;
-		case "delglobalassoc":
+		case "delfromglobalassoc":
 			if (pnModAPIFunc('UserPictures','user','setGlobalCategory',array('picture_id'=>$picture_id,'uid' => $uid,'cat_id' => 0))) LogUtil::registerStatus(_USERPICTURESGLOBALCATASSOCDELETED);
 			else LogUtil::registerError(_USERPICTURESERRORDELETINGGLOBALCATASSOC);
 			break;
-		case "comment":
+		case "setcomment":
 			$comment = pnVarCleanFromInput('comment');
 			if (pnModAPIFunc('UserPictures','user','setComment',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
 			else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);

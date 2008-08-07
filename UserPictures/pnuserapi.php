@@ -99,12 +99,11 @@ function UserPictures_userapi_get($args)
 	}
 
 	// construct where part for sql statement
+	if (strlen($template_id) == 0) $template_id = -99;
 	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = ".$template_id;
 	if (isset($uid) 		&& ($uid > 0))	 		$whereArray['uid'] 			= "tbl.".$picturescolumn['uid']." = ".$uid;
-	if (isset($picture_id)	&& ($picture_id > 0))	$whereArray['id'] 			= "tbl.".$picturescolumn['id']." = ".$picture_id;
 	if (isset($cat_id) 		&& ($cat_id > 0)) 		$whereArray['cat_id']		= "tbl.".$picturescolumn['category']." = ".$cat_id;
 	if (isset($globalcat_id)&& ($globalcat_id > 0))	$whereArray['globalcat_id'] = "tbl.".$picturescolumn['global_category']." = ".$globalcat_id;
-	// ToDo: assoced persons
 
 	// Load common lib
 	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
@@ -124,8 +123,8 @@ function UserPictures_userapi_get($args)
                              	'object_field_name'   =>  'assoc_uid',				// ...this name for the new column
                              	'compare_field_table' =>  'id',						// regular table column that should be equal to
                              	'compare_field_join'  =>  'picture_id');			// ...the table in join_table
-        $whereArray['assoc_uid'] 	= "a.".$personscolumn['uid']." = ".$assoc_uid;
-		$whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = 0";
+        $whereArray['assoc_uid'] 	= "a.".$personscolumn['assoc_uid']." = ".$assoc_uid;
+		if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = 0";
 		if (isset($uid) && ($uid > 0)) $whereArray['uid'] = "tbl.".$picturescolumn['uid']." = ".$uid;
 	}
 	
@@ -135,14 +134,21 @@ function UserPictures_userapi_get($args)
 	// otherwise we have to check position first, then date, then id
 	if (($globalcat_id > 0) || ($assoc_uid > 0)) $order = "tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
 	else $order = "tbl.".$picturescolumn['position']." asc, tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
+	
+	$where = up_constructWhere($whereArray);
 
 	// now we can grab the data from the database.	
 	if ($countonly) {
-	  	$res = DBUtil::selectExpandedObjectCount('userpictures',$joinInfo,up_constructWhere($whereArray));
+	  	$res = DBUtil::selectExpandedObjectCount('userpictures',$joinInfo,$where);
+	  	if (($picture_id > 0) && (count($res)>0)) return 1;
 	  	if (!$res) return 0;
 	  	else return $res;
 	}
-	else $objArray = DBUtil::selectExpandedObjectArray('userpictures',$joinInfo,up_constructWhere($whereArray),$order,$startwith,$showmax);
+	else if ($picture_id > 0) {
+	  	$obj = DBUtil::selectExpandedObjectByID('userpictures',$joinInfo,$picture_id);
+	  	$objArray[] = $obj;
+	}
+	else $objArray = DBUtil::selectExpandedObjectArray('userpictures',$joinInfo,$where,$order,$startwith,$showmax);
 
 	// get additional information 
     $datadir = pnModGetVar('UserPictures','datadir');
@@ -275,42 +281,6 @@ function UserPictures_userapi_ajaxSaveList($args)
 	}
 	return true;
 }
-
-/**
- * add an associaiton to a picture
- *
- * @param	$args['picture_id']	int
- * @param	$args['uname']		int
- * @return	bool
- */
-function UserPictures_userapi_addPerson($args)
-{
- 
- 	// ToDo
- 	die("addperson");
- 
-    $picture_id 	= (int)$args['picture_id'];
-    $uname 			= $args['uname'];
-    $uid 			= pnUserGetIDFromName($uname);
-    if (!isset($uid) || (!($uid>1))) return false;
-    
-    // we need to check if we are allowed to link the picture with the given username.
-    $uid 			= pnUserGetIDFromName($uname);
-    $picture 		= UserPictures_userapi_get(array(	'picture_id'	=> $picture_id,
-													'uid'			=> $uid));
-    $picture_uid 	= $picture[0]['uid'];
-    $settings 		= pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
-    if (($settings['nolinking'] ==1 ) && ($settings['uid'] != $picture_uid)) return false;
-    
-    // first delete association to avoid doubles
-    UserPictures_userapi_delPerson(array(	'uname'			=> $uname,
-											'picture_id'	=>$picture_id));
-    $obj = array (
-    		'picture_id'	=> $picture_id,
-    		'uid'			=> $uid
-		);
-    return DBUtil::insertObject($obj,'userpictures_persons');
-} 
 
 /**
  * associate a picture with a global category
@@ -525,23 +495,18 @@ function UserPictures_userapi_getCategory($args)
 /**
  * delete an associaiton to a picture
  *
- * @param	$args['picture_id']	int
- * @param	$args['uid']		int
+ * @param	$args['id']		int
  * @return	bool
  */
 function UserPictures_userapi_delPerson($args)
 {
-    $picture_id	= (int)$args['picture_id'];
-    $uname 		= $args['uname'];
-    $uid 		= pnUserGetIDFromName($uname);
-    if (!isset($uid) || (!($uid>0))) return false;
+    $id	= (int)$args['id'];
+    if (!isset($id) || (!($id>0))) return false;
     
     // Get db table array
-    $tables =& pnDBGetTables();
-    $userpictures_personscolumn = &$tables['userpictures_persons_column'];
-	$where = $userpictures_personscolumn['uid']." = '". $uid  ."'";
-    if ($picture_id>0) $where.="    AND 	".$userpictures_personscolumn['picture_id']." = '". $picture_id ."'";
-    return DBUtil::deleteWhere('userpictures_persons',$where);
+	$obj = DBUtil::selectObjectByID('userpictures_persons',$id);
+	if (($obj['uid'] == pnUserGetVar('uid')) || ($obj['assoc_uid'] == pnUserGetVar('uid'))) return DBUtil::deleteObject($obj,'userpictures_persons');
+	return false;	// otherwise
 } 
 
 /**
@@ -562,6 +527,13 @@ function UserPictures_userapi_getPersons($args)
     		'join_field'			=> 'uname',	// field that should be in the result
     		'object_field_name'		=> 'uname',	// how the field should be named in the array
     		'compare_field_table'	=> 'uid',	// connection to join
+    		'compare_field_join'	=> 'uid'	// field that should be equal in the join
+		);
+    $joinInfo[] = array (
+    		'join_table'			=> 'users',	// table to join with
+    		'join_field'			=> 'uname',	// field that should be in the result
+    		'object_field_name'		=> 'assoc_uname',	// how the field should be named in the array
+    		'compare_field_table'	=> 'assoc_uid',	// connection to join
     		'compare_field_join'	=> 'uid'	// field that should be equal in the join
 		);
     $where = $userpictures_personscolumn['picture_id']." = ". (int)$args['picture_id'];
@@ -624,39 +596,40 @@ function UserPictures_userapi_setComment($args)
 /**
  * copyPictureAsAvatar
  *
- * @param	$args['uid']		int
- * @param	$args['picture_id']	int
- * @param	$args['template_id']	int
+ * This function is neccesary for the avatar management and 
+ * copies an existing picture into zikula's avatar directory 
+ * and activates it as actual avatar
+ *
+ * @param	$args['uid']			int
+ * @param	$args['picture_id']		int
  * @return	bool
  */
-function UserPictures_userapi_copyPictureAsAvatar($args)
+function UserPictures_userapi_setAvatar($args)
 {
-
-    // get data and verify data
+   // get data and verify data
     $uid 			= $args['uid'];
-    $template_id 	= $args['template_id'];
     $picture_id 	= $args['picture_id'];
-    if (!($uid>0)  || !($template_id>(-1) || !($picture_id>0))) return false;
     
     // We will now resize the image and copy it into the postnuke avatar folder (images/avatar as standard!)
     $picture		= UserPictures_userapi_get(array('id' => $picture_id));
     $picture		= $picture[0];
-    $filename		= $picture['filename'];
-    $avatardir		= pnModGetVar('UserPictures','avatardir');
-    $targetfilename	= $avatardir."/pers_".$uid.".jpeg";
-    $avatarsize		= pnModGetVar('UserPictures','avatarsize');
+    
+    // security check
+    if ($picture['uid'] != $uid) return false;
+    
+    $targetfilename	= pnModGetVar('UserPictures','avatardir')."/pers_".$uid.".jpeg";
     
     // if a avatar with this name exists we have to delete it!
     if (file_exists($targetfilename)) unlink($targetfilename);
-    
+
     // create the image
-    UserPictures_userapi_resizePicture(array(
-			'filename'			=> $filename,
-			'size'				=> $avatarsize,
-			'targetfilename'	=> $targetfilename));
-    
+    if (!UserPictures_userapi_resizePicture(array(
+			'filename'			=> $picture['filename_absolute'],
+			'size'				=> pnModGetVar('UserPictures','avatarsize'),
+			'targetfilename'	=> $targetfilename))) return false;
+
     // Set the user's variable
-    if (pnUserSetVar('user_avatar','pers_'.$uid.'.jpeg')) return true;
+    if (pnUserSetVar('_YOURAVATAR','pers_'.$uid.'.jpeg')) return true;
     else return false;
 }
 

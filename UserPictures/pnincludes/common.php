@@ -41,12 +41,12 @@ function up_prepDisplay($s)
  * @param	array
  * @result	string
  */
-function up_constructWhere($whereArray)
+function up_constructWhere($w)
 {
   	// construct where statement for sql	
   	$first = true;
   	unset($where);
-	foreach ($whereArray as $a)	{
+	foreach ($w as $a)	{
 	  	if (!($first)) $where.=" AND ";
 	  	$where.= $a;
 	  	$first = false;		  

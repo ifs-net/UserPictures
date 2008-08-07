@@ -81,12 +81,14 @@ function UserPictures_pntables()
 	$pntable['userpictures_persons_column'] = array(
 				'id'					=> 'pn_id',
 				'picture_id'			=> 'pn_picture_id',
-				'uid'					=> 'pn_uid'
+				'uid'					=> 'pn_uid',
+				'assoc_uid'				=> 'assoc_uid'
 				);
     $pntable['userpictures_persons_column_def'] = array(
         		'id'					=> "I	AUTOINCREMENT PRIMARY",
     			'picture_id'			=> "I	NOTNULL DEFAULT 0",
-        		'uid'					=> "I	NOTNULL DEFAULT 0"
+        		'uid'					=> "I	NOTNULL DEFAULT 0",
+        		'assoc_uid'				=> "I	NOTNULL DEFAULT 0"
     			);
     $pntable['userpictures_settings_column'] = array(
 				'uid'					=> 'pn_uid',

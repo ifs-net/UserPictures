@@ -233,7 +233,13 @@ function UserPictures_upgrade($oldversion)
 			if (!DBUtil::changeTable('userpictures')) return false;
 			if (!DBUtil::changeTable('userpictures_globalcategories')) return false;
 			if (!DBUtil::changeTable('userpictures_categories')) return false;
+			if (!DBUtil::changeTable('userpictures_persons')) return false;
 			// todo: alte kategorien in neue tabelle reinschreiben!
+			$objArray = DBUtil::selectObjectArray('userpictures_persons');
+			foreach ($objArray as $obj) {
+				$obj['assoc_uid'] = $obj['uid'];
+				DBUtil::updateObject($obj,'userpictures_persons');
+			}
 		  	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
 		default:
 		    return true;
