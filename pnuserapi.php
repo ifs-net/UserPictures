@@ -123,7 +123,7 @@ function UserPictures_userapi_get($args)
                              	'object_field_name'   =>  'assoc_uid',				// ...this name for the new column
                              	'compare_field_table' =>  'id',						// regular table column that should be equal to
                              	'compare_field_join'  =>  'picture_id');			// ...the table in join_table
-        $whereArray['assoc_uid'] 	= "a.".$personscolumn['assoc_uid']." = ".$assoc_uid;
+        $whereArray['assoc_uid'] 	= "b.".$personscolumn['assoc_uid']." = ".$assoc_uid;
 		if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = 0";
 		if (isset($uid) && ($uid > 0)) $whereArray['uid'] = "tbl.".$picturescolumn['uid']." = ".$uid;
 	}
@@ -133,8 +133,10 @@ function UserPictures_userapi_get($args)
 	// same for pictures associated to a user
 	// otherwise we have to check position first, then date, then id
 	if (($globalcat_id > 0) || ($assoc_uid > 0)) $order = "tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
-	else $order = "tbl.".$picturescolumn['position']." asc, tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
+	else if ($uid > 1) $order = "tbl.".$picturescolumn['position']." asc, tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
+	else $order = "tbl.".$picturescolumn['id']." desc";
 	
+	// construct where statement
 	$where = up_constructWhere($whereArray);
 
 	// now we can grab the data from the database.	
@@ -154,8 +156,11 @@ function UserPictures_userapi_get($args)
     $datadir = pnModGetVar('UserPictures','datadir');
 
 	// build result array
-	$res = array();
+	$counter 	= $startwith-2;	// we need this counter to get the right links from lightbox to add comments etc.
+	if ($counter < 0) $counter = 0;
+	$res 		= array();
 	foreach ($objArray as $obj) {
+	  	$counter++;
 	  	// add absolute filename to object
 	  	$obj['filename_absolute']=$datadir.$obj['filename'];
 		// create thumbnails if they do not exist!
@@ -188,14 +193,24 @@ function UserPictures_userapi_get($args)
 			  	$assoc_string=_USERPICTURESPERSONSLINKEDHERE.": ";
 				$c=1;
 			  	foreach ($obj['assoc_persons'] as $p) {
-				    $assoc_string.=$p['uname'];
+				    $assoc_string.=$p['assoc_uname'];
 				  	if ($c!=count($obj['assoc_persons'])) $assoc_string.=", ";
 				  	else $assoc_string.=".";
 				  	$c++;
 				}
 			}
-			$title 	= $info.$assoc_string;
-			$info 	= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
+			$infobox 	= pnRender::getInstance('UserPictures');
+			$title 		= $info.$assoc_string.'<br /><a href="'.pnModUrl('UserPictures','user','view',array(
+					'singlemode'	=> 1,
+					'template_id'	=> $template_id,
+					'uid'			=> $uid,
+					'assoc_uid'		=> $assoc_uid,
+					'cat_id'		=> $cat_id,
+					'globalcat_id'	=> $globalcat_id,
+					'showmax'		=> 1,
+					'upstartwith'	=> $counter
+				)).'">'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
+			$info 		= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
 	  	}
 
 		// add code part

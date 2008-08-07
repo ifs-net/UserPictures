@@ -50,6 +50,7 @@ define('_USERPICTURESASSOCIATEPERSONSDESC',		'You know some persons that are sho
 define('_USERPICTURESADDSHOWNPERSONS',			'Associate this picture with their user profile. You just have to enter the username and click the add button!');
 define('_USERPICTURESADDUNAME',					'Associate username');
 define('_USERPICTUREUNAMENOTFOUND',				'Username not found');
+define('_USERPICTURESVIEWCOMMENTSANDASSOCS',	'View comments and / or associate usernames with picture');
 define('_USERPICTURESUSERALREADYADDED',			'The user is already associated with this picture and cannot be added twice');
 define('_USERPICTURESPERSONADDED',				'The user is now associated with the picture');
 define('_USERPICTURESNOLINKINGFORUSER',			'No linking allowed for selected user');
