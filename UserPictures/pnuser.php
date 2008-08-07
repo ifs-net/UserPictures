@@ -88,6 +88,31 @@ function UserPictures_user_view()
 	 	else {
 		   if (pnModAPIFunc('UserPictures','user','delPerson',array ('id' => $delassoc))) LogUtil::registerStatus(_USERPICTURESASSOCDELETED);
 		   else LogUtil::registerError(_USERPICTURESERRORDELETINGASSOC);
+	    	// get parameters
+		    $uid				= (int)	FormUtil::getPassedValue('uid');
+		    $assoc_uid			= (int)	FormUtil::getPassedValue('assoc_uid');
+		    $template_id		= 		FormUtil::getPassedValue('template_id');
+		    $picture_id			= 		FormUtil::getPassedValue('id');
+		    $cat_id				= (int)	FormUtil::getPassedValue('cat_id');
+		    $globalcat_id		= (int)	FormUtil::getPassedValue('globalcat_id');
+		    $startwith			= (int)	FormUtil::getPassedValue('upstartwith');
+		    $managepicturelink	= (int)	FormUtil::getPassedValue('managepicturelink');
+		    $singlemode			= 		FormUtil::getPassedValue('singlemode');
+		    if (!($startwith > 0)) 	$startwith = 0;
+		    if ($singlemode > 0)	$showmax = 1;
+		    else					$showmax = 20;
+		  	$viewurl = pnModURL('UserPictures','user','view',array(
+	    		'uid'			=> $uid,
+	    		'assoc_uid'		=> $assoc_uid,
+	    		'template_id'	=> $template_id,
+	    		'cat_id'		=> $cat_id,
+	    		'globalcat_id'	=> $globalcat_id,
+	    		'startwith'		=> $startwith,
+	    		'showmax'		=> $showmax,
+	    		'singlemode'	=> 1
+			  	));			
+			pnRedirect(pnGetBaseURL().$viewurl);
+
 		}
 	}
 	// create output object

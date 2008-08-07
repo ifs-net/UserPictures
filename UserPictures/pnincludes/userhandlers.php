@@ -82,6 +82,7 @@ class UserPictures_user_SettingsHandler
 class UserPictures_user_ViewHandler
 {
   	var $id;
+  	var $viewurl;
 	function initialize(&$render)
 	{	    
 	    // get parameters
@@ -148,10 +149,20 @@ class UserPictures_user_ViewHandler
 	    		'showmax'		=> $showmax,
 	    		'singlemode'	=> 1
 			  	));
+		  	if (!($picture_id > 0))$viewthumbs = pnModURL('UserPictures','user','view',array(
+	    		'uid'			=> $uid,
+	    		'assoc_uid'		=> $assoc_uid,
+	    		'template_id'	=> $template_id,
+	    		'cat_id'		=> $cat_id,
+	    		'globalcat_id'	=> $globalcat_id,
+	    		'startwith'		=> 1
+			  	));
 		  	$render->assign('authid',		SecurityUtil::generateAuthKey());
 		  	$render->assign('viewurl',		$viewurl);
-			$p = $pictures[0];
-			$this->id = $p['id'];
+		  	$render->assign('viewthumbs',	$viewthumbs);
+			$p 				= $pictures[0];
+			$this->viewurl 	= $viewurl;
+			$this->id 		= $p['id'];
 		}
 		return true;
     }
@@ -176,19 +187,13 @@ class UserPictures_user_ViewHandler
 			
 			// is there a veto of the user that should be linked?
 			$settings 	= pnModAPIFunc('UserPictures','user','getSettings',array('uid' => $assoc_uid));
-			if ($settings['nolinking'] == 1) {
+			if (($settings['nolinking'] == 1) || (pnModAvailable('ContactList') && pnModAPIFunc('ContactList','user','isIgnored',array (
+				'uid' 	=> $assoc_uid,
+				'iuid' 	=> pnUserGetVar('uid'))))) {
 			  	LogUtil::registerError(_USERPICTURESNOLINKINGFORUSER);
 			  	return false;
 			}
-			
-			// is the linking user at the ignore list of the linked user?
-			if (pnModAvailable('ContactList') && pnModAPIFunc('ContactList','user','isIgnored',array (
-				'uid' 	=> $assoc_uid,
-				'iuid' 	=> pnUserGetVar('uid')))) {
-				  LogUtil::registerError(_USERPICTURESNOLINKINGFORUSER);
-				  return false;
-			}
-			
+						
 			// get some db information
 		    $tables =& pnDBGetTables();
 		    $personscolumn 				= &$tables['userpictures_persons_column'];
@@ -200,12 +205,11 @@ class UserPictures_user_ViewHandler
 			// get existing association
 			$where 		= $personscolumn['assoc_uid']." = ".$assoc_uid." AND ".$personscolumn['picture_id']." = ".$id;
 			$assocs 	= DBUtil::selectObjectArray('userpictures_persons',$where);
-			
 			if (count($assocs) != 0) {
 			  	LogUtil::registerError(_USERPICTURESUSERALREADYADDED);
 			  	return false;
 			}
-			
+
 			// add user
 			$obj = array (
 					'uid'			=> pnUserGetVar('uid'),
@@ -215,9 +219,9 @@ class UserPictures_user_ViewHandler
 			
 			if (DBUtil::insertObject($obj,'userpictures_persons')) {
 			  	LogUtil::registerStatus(_USERPICTURESPERSONADDED);
-			  	return true;
 			}
-			return false;
+			// ToDo: redirect problems when user name is added successfully!!!!!!
+			return pnRedirect(pnGetBaseURL().$this->viewurl);
 		}
 		return true;
     }
