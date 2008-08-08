@@ -26,6 +26,12 @@ new features:
 - lightbox.js added for slideshows and some optical effects
 - every user can now link users on all pictures
 
+removed features:
+-----------------
+- picture templates that have to be activated by the site
+  administrator are no longer possible. From now on every uploaded
+  picture is activated and shown immediately after the upload
+
 plugins:
 --------
 - added plugin for myprofile

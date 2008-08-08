@@ -28,6 +28,14 @@
 				</div>
 				<div>
 					<i><!--[$p.comment]--></i>&nbsp;<br />
+					<!--[if $ezcommentsavailable eq 1]-->
+						<!--[pnmodapifunc modname="EZComments" type="user" func="countitems" mod="UserPictures" objectid=$p.id assign=ezcomments]-->
+						<!--[if $ezcomments gt 0]-->
+							<!--[$ezcomments]--> <!--[pnml name="_USERPICTURECOMMENTS"]-->
+						<!--[else]-->
+							&nbsp;
+						<!--[/if]-->
+					<!--[/if]-->
 				</div>
 			</div>
 			<!--[cycle values=",,,,<br class=\"userpictures_clearboth\" />"]-->
