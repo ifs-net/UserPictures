@@ -128,6 +128,8 @@ class UserPictures_user_ViewHandler
 		up_addPageVars();
 
 		// assign data
+		if ($uid > 1) 				$render->assign('uid',	$uid);
+		else if ($assoc_uid > 1) 	$render->assign('uid',	$assoc_uid);
 		$render->assign('pictures_count',		$pictures_count);
 		$render->assign('pictures',				$pictures);
 		$render->assign('picture_id',			$picture_id);	// we need this for a managepicture backlink!

@@ -1,10 +1,14 @@
 <!--[include file="userpictures_user_menu.htm"]-->
 
+<div>
 <!--[if $managepicturelink eq "1"]-->
-	<div>
 	<a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id="0"]-->#<!--[$picture_id]-->"><!--[pnml name="_USERPICTURESBACKTOMYMANAGEMENTPAGE"]--></a>
-	</div>
 <!--[/if]-->
+<!--[if $uid gt 1]-->
+	<!--[pnml name="_USERPICTURESVISITPROFILEOF"]--> <!--[pnusergetvar name="uname" uid=$uid assign="uname"]-->
+	<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$uname|userprofilelink]-->
+<!--[/if]-->
+</div>
 
 <!--[if $pictures|@count eq 0]-->
 	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
