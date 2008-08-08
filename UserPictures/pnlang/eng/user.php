@@ -44,6 +44,7 @@ define('_USERPICTURESAVATARREMOVED',			'Your avatar was deleted');
 // view
 define('_USERPICTURESASSOCEDPERSONS',			'Associated persons');
 define('_USERPICTURESPUBLICCOMMENTS',			'Public comments');
+define('_USERPICTURECOMMENTS',					'Comment(s)');
 define('_USERPICTURESPICTUREINFORMATIONS',		'Additional information');
 define('_USERPICTURESBACKTOMYMANAGEMENTPAGE',	'Back to my picture management page');
 define('_USERPICTURESASSOCIATEPERSONSDESC',		'You know some persons that are shown at this picture?');

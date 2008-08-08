@@ -145,7 +145,7 @@ class UserPictures_user_ViewHandler
 	    		'template_id'	=> $template_id,
 	    		'cat_id'		=> $cat_id,
 	    		'globalcat_id'	=> $globalcat_id,
-	    		'startwith'		=> $startwith,
+	    		'upstartwith'	=> $startwith,
 	    		'showmax'		=> $showmax,
 	    		'singlemode'	=> 1
 			  	));
@@ -155,7 +155,7 @@ class UserPictures_user_ViewHandler
 	    		'template_id'	=> $template_id,
 	    		'cat_id'		=> $cat_id,
 	    		'globalcat_id'	=> $globalcat_id,
-	    		'startwith'		=> 1
+	    		'upstartwith'	=> 1
 			  	));
 		  	$render->assign('authid',		SecurityUtil::generateAuthKey());
 		  	$render->assign('viewurl',		$viewurl);
@@ -185,7 +185,7 @@ class UserPictures_user_ViewHandler
 			}
 			$uname 		= pnUserGetVar('uname',$assoc_uid);
 			
-			// is there a veto of the user that should be linked?
+			// no linkine allowed because of user settings or contactlist's ignore list?
 			$settings 	= pnModAPIFunc('UserPictures','user','getSettings',array('uid' => $assoc_uid));
 			if (($settings['nolinking'] == 1) || (pnModAvailable('ContactList') && pnModAPIFunc('ContactList','user','isIgnored',array (
 				'uid' 	=> $assoc_uid,
@@ -200,8 +200,9 @@ class UserPictures_user_ViewHandler
 
 			// Get picture object
 			$pic = DBUtil::selectObjectByID('userpictures',$id);
-			if (!($pic['id'] > 0 )) return false;	// something went wrong with fetching the picture
+			if (!($pic['id'] > 0 )) return false;	// something went wrong fetching the picture
 
+			print "id ist $id";
 			// get existing association
 			$where 		= $personscolumn['assoc_uid']." = ".$assoc_uid." AND ".$personscolumn['picture_id']." = ".$id;
 			$assocs 	= DBUtil::selectObjectArray('userpictures_persons',$where);
@@ -210,17 +211,13 @@ class UserPictures_user_ViewHandler
 			  	return false;
 			}
 
-			// add user
-			$obj = array (
-					'uid'			=> pnUserGetVar('uid'),
-					'picture_id'	=> $id,
-					'assoc_uid'		=> $assoc_uid
-				);
-			
+			// add user to database and process result
+			$obj = array (	'uid'			=> pnUserGetVar('uid'),
+							'picture_id'	=> $id,
+							'assoc_uid'		=> $assoc_uid		);
 			if (DBUtil::insertObject($obj,'userpictures_persons')) {
 			  	LogUtil::registerStatus(_USERPICTURESPERSONADDED);
 			}
-			// ToDo: redirect problems when user name is added successfully!!!!!!
 			return pnRedirect(pnGetBaseURL().$this->viewurl);
 		}
 		return true;
