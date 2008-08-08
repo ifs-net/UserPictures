@@ -47,6 +47,7 @@ define('_USERPICTURESPUBLICCOMMENTS',			'Public comments');
 define('_USERPICTURECOMMENTS',					'Comment(s)');
 define('_USERPICTURESPICTUREINFORMATIONS',		'Additional information');
 define('_USERPICTURESBACKTOMYMANAGEMENTPAGE',	'Back to my picture management page');
+define('_USERPICTURESVISITPROFILEOF',			'View profile of user');
 define('_USERPICTURESASSOCIATEPERSONSDESC',		'You know some persons that are shown at this picture?');
 define('_USERPICTURESADDSHOWNPERSONS',			'Associate this picture with their user profile. You just have to enter the username and click the add button!');
 define('_USERPICTURESADDUNAME',					'Associate username');
