@@ -285,6 +285,7 @@ function UserPictures_userapi_latest($args)
   	$numrows 	= (int) $args['numrows'];
   	$numcols 	= (int) $args['numcols'];
   	$nopager 	= (int) $args['nopager'];
+  	$uid 		= (int) $args['uid'];
   	$startwith	= (int) $args['startwith'];
   	$showmax 	= $numcols * $numrows;
   	if (!($showmax > 0)) return _USERPICTURESWRONGPARAMETERS;
@@ -293,10 +294,12 @@ function UserPictures_userapi_latest($args)
 	$pictures 	= UserPictures_userapi_get(array(
 			'template_id' 	=> $args['template_id'],
 			'showmax'		=> $showmax,
+			'uid'			=> $uid,
 			'startwith'		=> $startwith
 		));
 	$pictures_count 	= UserPictures_userapi_get(array(
 			'template_id' 	=> $args['template_id'],
+			'uid'			=> $uid,
 			'countonly'		=> 1
 		));
 
@@ -309,6 +312,7 @@ function UserPictures_userapi_latest($args)
 	if ($nopager > 0) $render->assign('nopager',	$nopager);
 	$render->assign('cycle',				up_getCycle($numcols));
 	$render->assign('pictures',				$pictures);
+	$render->assign('showmax',				$showmax);
 	$render->assign('pictures_count',		$pictures_count);
 	$render->assign('ezcommentsavailable',	pnModAvailable('EZComments'));
     return $render->fetch('userpictures_user_viewsimpleinclude.htm');

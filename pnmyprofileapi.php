@@ -63,17 +63,11 @@ function UserPictures_myprofileapi_tab($args)
     // Security check 
     if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
 
-    // check if list should be shown
+	// Get parameter
     $uid = FormUtil::getPassedValue('uid');
     if (!isset($uid) || (!($uid>0))) {
 		logUtil::registerError(_USERPICTURESNOUSERSPECIFIED);
 		return pnRedirect(pnModURL('UserPictures','user','main'));
-    }
-
-    // Security check removed - we will use our own security check ;-)
-    $settings=pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
-    if (($settings['picspublic']!=1) && (!pnUserLoggedIn())) {
-        return LogUtil::registerPermissionError();
     }
 
 	$startwith = (int) FormUtil::getPassedValue('upstartwith');
@@ -81,33 +75,10 @@ function UserPictures_myprofileapi_tab($args)
 		'template_id'	=> 0,
 		'numcols'		=> 4,
 		'numrows'		=> 3,
-		'nopager'		=> 0,
+		'uid'			=> $uid,
 		'startwith'		=> $startwith
 		));
 
-	return;
-    // get pictures
-    $pictures = pnModAPIFunc('UserPictures','user','get',array (
-    		'uid'			=> $uid,
-    		'template_id'	=> 0,
-    		'startwith'		=> $startwith,
-    		'showmax'		=> 20,
-    		'expand'		=> true
-		));
-	// get number of pictures for counter
-    $pictures_count = pnModAPIFunc('UserPictures','user','get',array (
-    		'uid'			=> $uid,
-    		'template_id'	=> 0,
-    		'countonly'		=> true
-		));
-
-	// create output
-	$render = pnRender::getInstance('UserPictures');
-
-	$render->assign('pictures_count',		$pictures_count);
-	$render->assign('pictures',				$pictures);
-
-	$render->display('userpictures_myprofile_tab.htm');
 	return;
 }
 
