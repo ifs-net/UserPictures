@@ -1,0 +1,24 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+<h1><!--[pnml name="_USERPICTURESMANAGEYOURPICTURES"]--></h1>
+<!--[pnml name="_USERPICTURESMANAGEYOURPICSHERE"]-->
+<!--[if $templates|@count gt 0]-->
+	<ul>
+	<!--[foreach from=$templates item=template]-->
+	    <li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[$template.title]--></a></li>
+	<!--[/foreach]-->
+	</ul>
+<!--[/if]-->
+<!--[if $ownuploads gt 0]-->
+    <!--[pnml name="_USERPICTURESOWNUPLOADSPOSSIBLE"]-->. <!--[$ownuploads]--> <!--[pnml name="_USERPICTURESCANBEUPLOADED"]-->.
+    <ul>
+	<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=0|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESUPLOADPICTURES"]--></a></li>
+    </ul>
+<!--[/if]-->
+<!--[if $avatarmanagement]-->
+<!--[pnml name="_USERPICTURESAVATAREXPLTEXT"]-->
+	<ul>
+	    <li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="avatar"]-->"><!--[pnml name="_USERPICTURESMANAGEAVATAR"]--></a></li>
+	</ul>
+<!--[/if]-->
+<!--[include file="userpictures_user_footer.htm"]-->
+

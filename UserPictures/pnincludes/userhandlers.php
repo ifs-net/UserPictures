@@ -98,7 +98,7 @@ class UserPictures_user_ViewHandler
 	    if ($picture_id > 0) 	$singlemode 	= 1;
 	    if (!($startwith > 0)) 	$startwith 		= 0;
 	    if ($singlemode > 0)	$showmax 		= 1;
-	    else					$showmax 		= 20;
+	    else					$showmax 		= 20;	// Todo: replace with module variable
 	
 	    // get pictures
 	    $pictures = pnModAPIFunc('UserPictures','user','get',array (
@@ -124,8 +124,8 @@ class UserPictures_user_ViewHandler
 	    		'countonly'		=> true
 			));
 
-	    // Add some page vars
-		Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
+		// Add overlib
+	    PageUtil::addVar('javascript','javascript/overlib/overlib.js');
 
 		// assign data
 		if ($uid > 1) 				$render->assign('uid',	$uid);

@@ -9,7 +9,11 @@
  */
 
 // main
-// new
+define('_USERPICTURESWELCOME',					'Welcome to the user pictures');
+define('_USERPICTURESDESC',						'Here you can manage your pictures and your picture settings. You can upload pictures in using templates the site admin offer you or in using your own gallery. You can manage your own gallery in creating private categories / albums. You also can associate your picture with gloabl categories that will result in community albums. But this is not enough - to make this community and your pictures "social", you are able to associate your pictures with other user profiles. Have a lot of fun...');
+define('_USERPICTURESLASTUPLOADS',				'Latest picture uploads');
+define('_USERPICTURESUSAGEDESC',				'To manage you pictures  please use the "manage my pictures"-link in the menu line above.');
+// manage
 define('_USERPICTURESYOURPICTURES',				'Your picture gallery');
 define('_USERPICTURESASSOCEDWITHYOU',			'Pictures associated with your username');
 define('_USERPICTURESVIEWLATEST',				'Latest uploads of pictures');
@@ -25,7 +29,6 @@ define('_USERPICTURESAVATAREXPLTEXT',			'You can use all the pictures you have u
 define('_USERPICTURESMANAGEAVATAR',				'Manage your global avatar image');
 define('_USERPICTURESHASNOGALLERY',				'No pictures found');
 define('_USERPICTURESUPLOADPICFIRST',			'You have to upload at least one picture to manage your avatar');
-// old
 define('_USERPICTURESMANAGEYOURPICTURES',		'Manage my pictures');
 define('_USERPICTURESMANAGEYOURPICSHERE',		'The admin of this site has created possibillities for picture uploads. For each possibillity you can upload one picture');
 define('_USERPICTURESMANAGE',					'manage');
@@ -173,8 +176,13 @@ define('_USERPICTURESNOFILTER',					'No filter - show all pictures');
 // menu
 // new
 define('_USERPICTURESMENU',						'Menu');
+define('_USERPICTURESMAIN',						'main');
+define('_USERPICTURESBROWSEPICTURES',			'browse pictures');
 // old
 define('_USERPICTURESMANAGESETTINGS',			'manage my settings');
+
+// latest
+define('_USERPICTURESWRONGPARAMETERS',			'missing or wrong parameter for userpictures api call');
 
 // mange general settings
 define('_USERPICTURESMANAGEYOURSETTINGS',		'My general settings');
