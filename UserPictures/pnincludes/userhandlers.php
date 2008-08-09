@@ -63,6 +63,7 @@ class UserPictures_user_SettingsHandler
 	  	$this->uid = pnUserGetVar('uid');
 		$render->assign('ezcomments', pnModAvailable('EZComments'));
 		$render->assign(pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$this->uid)));
+		$render->assign(pnModAPIFunc('UserPictures','user','getSettings'));
 		return true;
     }
 	function handleCommand(&$render, &$args)

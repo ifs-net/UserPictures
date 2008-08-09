@@ -157,13 +157,23 @@ function UserPictures_user_settings()
 
 	// is there any action to do?
     $action=FormUtil::getPassedValue('action','');
-	if ($action=="deleteMyLinks") {
-		if (!SecurityUtil::confirmAuthKey()) LogUtil::registerAuthIDError();	// auth-key check
+    if ($action != '' && (!SecurityUtil::confirmAuthKey())) LogUtil::registerAuthIDError();	// auth-key check
+	else if ($action == "delassocs") {		// delete all existing associations
+		$assocs = pnModAPIFunc('UserPictures','user','getPersons',array('assoc_uid' => pnUsergetVar('uid')));
+		foreach ($assocs as $assoc) pnModAPIFunc('UserPictures','user','delPerson',array('id' => $assoc['id']));
+		LogUtil::registerStatus(_USERPICTURESASSOCSDELETED);
+		}
+	else if ($action == "privacy") {		// change privacy settings for existing images
+		$new = (int)FormUtil::getPassedValue('new');
+		if (($new < 0) || ($new > 1)) LogUtil::registerError(_USERPICTURESWRONGPARAMETERS);
 		else {
-		    // Now we should delete all links from all images to a given person
-		    if (pnModAPIFunc('UserPictures','user','delPerson',array('uname'=>pnUserGetVar('uname')))) LogUtil::registerStatus(_USERPICTURESASSOCSDELETED);
+		  	pnModAPIFunc('UserPictures','user','updatePrivacy',array('privacy_status'	=> $new));
+		  	LogUtil::registerStatus(_USERPICTUREPRIVACYUPDATED);
 		}
     }
+    
+    // clean url
+    if ($action != '') return pnRedirect(pnModURL('UserPictures','user','settings'));
 
 	// Create output and assign data
 	$render = FormUtil::newpnForm('UserPictures');
