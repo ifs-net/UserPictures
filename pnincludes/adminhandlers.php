@@ -34,6 +34,7 @@ class userpictures_admin_mainHandler
 		    if (!$render->pnFormIsValid()) return false;
 		    $obj = $render->pnFormGetValues();
 		  	foreach ($obj as $key=>$val) pnModSetVar('UserPictures',$key,$val);
+		  	LogUtil::registerStatus(_USERPICTURESSTORED);
 		}
 		return true;
     }
