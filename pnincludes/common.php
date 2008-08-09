@@ -9,15 +9,20 @@
  */
 
 /**
- * add some page vars for up output
+ * get the cylce value for pnRender template engine
+ * to specify how many pictures should be shown in one
+ * row
  *
- * @return	void
+ * @param	int
+ * @return	string
  */
-function up_addPageVars()
+function up_getCycle($cols)
 {
-    // Add some page vars
-    PageUtil::addVar('javascript','javascript/overlib/overlib.js');
-	return true;
+  	for ($i=1;$i<$cols;$i++) {
+	    $c.=",";
+	}
+	$c.="<br class=\"userpictures_clearboth\" />";
+	return $c;
 }
 
 /**

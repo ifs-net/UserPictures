@@ -1,0 +1,45 @@
+<!--[pnajaxheader scriptaculus="1" prototype="1" lightbox="1" overlib="1"]-->
+
+<!--[if $pictures|@count eq 0]-->
+	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
+<!--[else]-->
+	<!--[if $nopager != "1"]-->
+		<div class="userpictures_pager">
+		<!--[pager show="page" rowcount=$pictures_count limit=$showmax posvar=upstartwith shift=1]-->
+		</div>
+	<!--[/if]-->
+	<div class="pn-floatbox userpictures_thumbnails">
+	<!--[foreach from=$pictures item="p"]-->
+		<div class="userpictures_thumbnail">
+		<!--[if not $no_uname]-->
+			<div>
+				<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$p.uname|userprofilelink]-->
+			</div>
+		<!--[/if]-->
+			<div style="min-height:<!--[$thumbnailheight]-->px;">	
+				<!--[$p.code_thumbnail]--><br />
+			</div>
+			<div>
+				<!--[if $p.comment ne ""]-->
+					<i><!--[$p.comment|truncate:24:'...']--></i><br />
+				<!--[else]-->
+					&nbsp;<br />
+				<!--[/if]-->
+				<!--[if $ezcommentsavailable eq 1]-->
+					<!--[pnmodapifunc modname="EZComments" type="user" func="countitems" mod="UserPictures" objectid=$p.id assign=ezcomments]-->
+					<!--[if $ezcomments gt 0]-->
+						<a href="<!--[$p.url]-->"><!--[$ezcomments]--> <!--[pnml name="_USERPICTURECOMMENTS"]--></a>
+					<!--[else]-->
+						&nbsp;
+					<!--[/if]-->
+				<!--[/if]-->
+			</div>
+		</div>
+		<!--[if $cycle ne ""]-->
+			<!--[cycle values=$cycle]-->
+		<!--[else]-->
+			<!--[cycle values=",,,,<br class=\"userpictures_clearboth\" />"]-->
+		<!--[/if]-->
+	<!--[/foreach]-->
+	</div>
+<!--[/if]-->

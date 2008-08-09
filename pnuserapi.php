@@ -58,6 +58,8 @@ function UserPictures_userapi_showPicture($args)
  * @param	$args['assoc_uid']		int		filter: show pictures associated to a given user
  * @param	$args['expand']			bool	additional information
  * @param	$args['countonly']		bool	only return number of pictures not an array
+ * @param	$args['showmax']		int		number of images that should be shown on one page
+ * @param	$args['startwith']		int		number of the image that should be the first on the page
  * @return 	array (pictures) or integer (with countonly parameter)
  */
 function UserPictures_userapi_get($args)
@@ -227,11 +229,12 @@ function UserPictures_userapi_get($args)
 										onmouseover="return overlib(\''.up_prepDisplay($info).'\')" 
 										onmouseout="return nd();" 
 										href="'.pnModURL('UserPictures','user','view',$viewarray).'" 
-										rel="lightbox[set]"><img class="userpictures_photo" 
+										rel="lightbox[set]"><img id="pt'.$obj['id'].'" class="userpictures_photo" 
 										src="'.$obj['filename_absolute'].'.thumb.jpg" /></a>
 									<script type="text/javascript">
 										$(\'p'.$obj['id'].'\').href="'.$obj['filename_absolute'].'";
 										$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
+										$(\'pt'.$obj['id'].'\').title=" ";
 									</script>';
 
 		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.$obj['filename_absolute'].'" />';
@@ -244,6 +247,42 @@ function UserPictures_userapi_get($args)
 
 	// Return result array
 	return $res;
+}
+
+/**
+ * get latest images
+ *
+ * This function returns the latest picture uploads
+ *
+ * @param	$args['template_id']	(opt)	int		template id
+ * @param	$args['numrows']				int		pics per row
+ * @param	$args['numcols']				int		pics per columns
+ * @return	output
+ */
+function UserPictures_userapi_latest($args)
+{
+  	$numrows = (int) $args['numrows'];
+  	$numcols = (int) $args['numcols'];
+  	$showmax = $numcols * $numrows;
+  	if (!($showmax > 0)) return _USERPICTURESWRONGPARAMETERS;
+	// load handler class
+	Loader::includeOnce('modules/UserPictures/pninclides/common.php');
+	$pictures 	= UserPictures_userapi_get(array(
+			'template_id' 	=> $args['template_id'],
+			'showmax'		=> $showmax
+		));
+
+	// Add overlib
+    PageUtil::addVar('javascript','javascript/overlib/overlib.js');
+
+	// get render instance and create output
+	$render = pnRender::getInstance('UserPictures');
+	$render->assign('thumbnailheight',		up_getThumbnailHeight());
+	$render->assign('nopager',				1);
+	$render->assign('cycle',				up_getCycle($numcols));
+	$render->assign('pictures',				$pictures);
+	$render->assign('ezcommentsavailable',	pnModAvailable('EZComments'));
+    return $render->fetch('userpictures_user_viewsimpleinclude.htm');
 }
 
 /**

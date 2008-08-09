@@ -1,0 +1,106 @@
+<!--[pnajaxheader scriptaculus="1" prototype="1" lightbox="1" overlib="1"]-->
+
+<!--[if $pictures|@count eq 0]-->
+	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
+<!--[else]-->
+	<!--[$pictures|@count]--> <!--[pnml name="_USERPICTURESPICTURESTODISPLAY"]-->
+	<!--[if $nopager != "1"]-->
+		<div class="userpictures_pager">
+		<!--[pager show="page" rowcount=$pictures_count limit=$showmax posvar=upstartwith shift=1]-->
+		</div>
+	<!--[/if]-->
+	<div class="pn-floatbox userpictures_thumbnails">
+	<!--[foreach from=$pictures item="p"]-->
+		<!--[if $showmax ne 1]-->	<!--[* show thumbnails *]-->
+			<div class="userpictures_thumbnail">
+			<!--[if not $no_uname]-->
+				<div>
+					<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$p.uname|userprofilelink]-->
+				</div>
+			<!--[/if]-->
+				<div style="min-height:<!--[$thumbnailheight]-->px;">	
+					<!--[$p.code_thumbnail]--><br />
+				</div>
+				<div>
+					<!--[if $p.comment ne ""]-->
+						<i><!--[$p.comment|truncate:24:'...']--></i><br />
+					<!--[else]-->
+						&nbsp;<br />
+					<!--[/if]-->
+					<!--[if $ezcommentsavailable eq 1]-->
+						<!--[pnmodapifunc modname="EZComments" type="user" func="countitems" mod="UserPictures" objectid=$p.id assign=ezcomments]-->
+						<!--[if $ezcomments gt 0]-->
+							<a href="<!--[$p.url]-->"><!--[$ezcomments]--> <!--[pnml name="_USERPICTURECOMMENTS"]--></a>
+						<!--[else]-->
+							&nbsp;
+						<!--[/if]-->
+					<!--[/if]-->
+				</div>
+			</div>
+			<!--[cycle values=",,,,<br class=\"userpictures_clearboth\" />"]-->
+		<!--[else]-->			<!--[* show only one picture not using lightbox js plugin *]-->
+		<!--[if $viewthumbs ne ""]--><a href="<!--[$viewthumbs]-->"><!--[pnml name="_USERPICTURESVIEWTHUMBNAILS"]--></a><br /><!--[/if]-->
+			<center>
+			<!--[$p.code]--><br />
+			<div class="userpictures_infobox">
+				<span class="userpictures_bold"><!--[pnml name="_USERPICTURESPICTUREINFORMATIONS"]-->:</span>
+				<ul>
+					<!--[if $p.comment ne ""]--><li><!--[pnml name="_USERPICTURESCOMMENT"]-->: <i>"<!--[$p.comment]-->"</i></li><!--[/if]-->
+					<li><!--[pnml name="_USERPICTURESOWNER"]-->: <img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$p.uname|userprofilelink]--></li>
+					<!--[if $p.date ne "0000-00-00 00:00:00"]--><li><!--[pnml name="_USERPICTURESUPLOADDATE"]-->: <!--[$p.date]--></li><!--[/if]-->
+					<!--[if $p.category.title ne ""]--><li><!--[pnml name="_USERPICTURESPRIVATECATEGORY"]-->: <!--[$p.category.title]--></li><!--[/if]-->
+					<!--[if $o.global_category.title ne ""]--><li><!--[pnml name="_USERPICTURESGLOBALCATEGORY"]-->: <!--[$p.global_category.title]--></li><!--[/if]-->
+					<h3><!--[pnml name="_USERPICTURESASSOCIATEPERSONSDESC"]--></h3>
+					<!--[pnml name="_USERPICTURESADDSHOWNPERSONS"]-->
+
+					<!--[pnform]-->
+					<!--[pnformvalidationsummary]-->
+					
+					<!--[pnformlabel for="uname" text=_USERPICTURESADDUNAME]-->
+					<!--[pnformtextinput mandatory="1" id="uname" maxLength="30"]-->
+					
+					<!--[pnformbutton commandName="add" text=_USERPICTURESADD]-->
+					<!--[/pnform]-->
+
+					<!--[if $p.assoc_persons|@count gt 0]-->
+						<li><!--[pnml name="_USERPICTURESASSOCEDPERSONS"]-->: <!--[$p.assoc_persons|@count]-->
+							<ul>
+							<!--[foreach from=$p.assoc_persons item="person"]-->
+								<li>
+									<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$person.assoc_uname|userprofilelink]-->
+									(<!--[pnml name="_USERPICTURESLINKEDBY"]-->
+									<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$person.uname|userprofilelink]-->
+								<!--[if $person.uid eq $viewer_uid or $person.assoc_uid eq $viewer_uid]-->,
+									<a href="<!--[$p.url]-->&delassoc=<!--[$person.id]-->&id=<!--[$p.id]-->&managepicturelink=<!--[$managepicturelink]-->&authid=<!--[$authid]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>
+								<!--[/if]-->
+									)
+								</li>
+							<!--[/foreach]-->
+							</ul>
+						</li>
+					<!--[/if]-->
+				</ul>
+			</div>
+			<div>
+				<!--[pnml name="_USERPICTURESWANTTOLINKPIC"]-->? <!--[pnml name="_USERPICTURESUSEURL"]-->: <br />
+				<input onfocus="this.select()" name="linkurl" size="55" id="linkurl" type="text" value="<!--[pngetbaseurl]--><!--[pnmodurl modname="UserPictures" type="user" func="view" id=$p.id]-->" />
+			</div>
+			</center>
+		<!--[/if]-->
+	<!--[/foreach]-->
+	</div>
+	<br class="userpictures_clearboth" />
+	<!--[if $ezcommentsavailable eq 1 and $showmax eq 1]-->
+		<!--[pnml name="_USERPICTURESPUBLICCOMMENTS"]-->:
+		<!--[* 			integrate EZComments 					
+						====================
+						+ get user settings to check if picture should be commentable
+						+ integrate EZComments if picture is commentable
+																								*]-->
+		<!--[pnmodapifunc modname="UserPictures" type="user" func="getSettings" uid=$p.uid assign="settings"]-->
+		<!--[if $settings.nocomments ne 1]-->
+			<!--[pnmodcallhooks hookobject=item hookaction=display hookid=$p.id module="UserPictures" returnurl=$viewUrl owneruid=$p.uid implode=false]-->
+			<!--[$hooks.EZComments]-->
+		<!--[/if]-->
+	<!--[/if]-->
+<!--[/if]-->

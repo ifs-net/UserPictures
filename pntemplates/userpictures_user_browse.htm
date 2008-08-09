@@ -1,0 +1,28 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+<h1><!--[pnml name="_USERPICTURESVIEWOPTIONS"]--></h1>
+	<!--[if $templates|@count gt 0]-->
+		<ul>
+		<h3><!--[pnml name="_USERPICTURESTEMPLATEGALLERIES"]--></h3>
+		<!--[foreach from=$templates item=template]-->
+			<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id=$template.id]-->"><!--[pnml name="_USERPICTURESTEMPLATEGALLERY"]-->: <!--[$template.title]--></a></li>
+		<!--[/foreach]-->
+		</ul>
+	<!--[/if]-->
+	<!--[if $ownuploads gt 0]-->
+		<ul>
+		<h3><!--[pnml name="_USERPICTURESUSERGALLERYVIEWOPTIONS"]--></h3>
+		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0"]-->"><!--[pnml name="_USERPICTURESVIEWLATEST"]--></a></li>
+		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" assoc_uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESASSOCEDWITHYOU"]--></a></li>
+		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESYOURPICTURES"]--></a></li>
+		</ul>
+	<!--[/if]-->
+	<!--[if $globalcategories|@count gt 0]-->
+		<ul>
+		<h3><!--[pnml name="_USERPICTURESGCOMMUNITYGALLERIES"]--></h3>
+		<!--[foreach from=$globalcategories item="globalcategory"]-->
+			<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" globalcat_id=$globalcategory.id]-->"><!--[pnml name="_USERPICTURESGCOMMUNITYGALLERY"]-->: <!--[$globalcategory.title]--></a></li>
+		<!--[/foreach]-->
+		</ul>
+	<!--[/if]-->
+<!--[include file="userpictures_user_footer.htm"]-->
+
