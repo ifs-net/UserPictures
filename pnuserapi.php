@@ -194,7 +194,6 @@ function UserPictures_userapi_get($args)
 		if (!UserPictures_userapi_createThumbnail(array('filename'=>$obj['filename_absolute']))) LogUtil::registerError(_USERPICTURESTHUMBNAILCREATIONERROR);
 
 		// Construct view array for thumbnail to create the regular non JS link
-		$viewarray['singlemode']	= 1;
 		if ($template_id >= 0) 	$viewarray['template_id'] 	= $template_id;
 		if ($uid >= 0) 			$viewarray['uid'] 			= $uid;
 		if ($assoc_uid >= 0) 	$viewarray['assoc_uid'] 	= $assoc_uid;
