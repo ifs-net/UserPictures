@@ -9,6 +9,7 @@
  */
 
 // main
+define('_USERPICTURESSTORED',					'Settings stored');
 define('_USERPICTURESMAINADMINPANEL',			'Administration of UserPictures');
 define('_USERPICTURESALLOWUPLOADS',				'Allow picture uploads');
 define('_USERPICTURESVERIFYTEXT',				'Some text that is shown in the upload form (criteria for the pictures etc.');
