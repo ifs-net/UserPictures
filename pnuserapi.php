@@ -346,6 +346,32 @@ function UserPictures_userapi_addOrderLinkToPictures($args)
 }
 
 /**
+ * update privacy status
+ * 
+ * this function is part of the user settings function and updates
+ * the privacy settings for all pictures of the ACTUAL user
+ *
+ * @param	$args['new']	int	
+ * @return 	bool
+ */
+function UserPictures_userapi_updatePrivacy($args) 
+{
+    // Get datbase setup and tables array
+    $tables =& pnDBGetTables();
+    $column	= &$tables['userpictures_column'];
+    $new	= (int)$args['privacy_status'];
+    
+    $where = $column['uid']." = ".pnUserGetVar('uid');
+    
+	$objArray = DBUtil::selectObjectArray('userpictures',$where);
+	foreach ($objArray as $obj) {
+	  	$obj['privacy_status'] = $new;
+	  	DBUtil::updateObject($obj,'userpictures');
+	}
+	return true;
+}
+
+/**
  * store the new order of the fields
  *
  * @param	$args['list']	array
@@ -523,7 +549,16 @@ function UserPictures_userapi_editCategory($args)
  */
 function UserPictures_userapi_getSettings($args)
 {
-	return DBUtil::selectObjectByID('userpictures_settings',(int)$args['uid'],'uid');
+  	$uid = (int)$args['uid'];
+  	if (!($uid > 1)) $uid = pnUserGetvar('uid');
+  	// get settings
+	$settings = DBUtil::selectObjectByID('userpictures_settings',$uid,'uid');
+	// if there are no settings we'll create default settings
+	if (!is_array($settings)) {
+	  	$obj = array('uid' => (int)$args['uid']);
+		if (DBUtil::insertObject($obj,'userpictures_settings')) return UserPictures_userapi_getSettings($args);
+	}
+	else return $settings;
 }
 
 /**
@@ -547,9 +582,8 @@ function UserPictures_userapi_setSettings($args)
     		'picspublic' 	=> (int)$args['picspublic']
 		);
 	// get old settings
-	$settings = UserPictures_userapi_getSettings(array('uid' => $uid));
-	if (is_array($settings)) return DBUtil::updateObject($obj,'userpictures_settings','','uid');
-	else return DBUtil::insertObject($obj,'userpictures_settings');
+	UserPictures_userapi_getSettings(array('uid' => $uid)); // if there are no settings yet we'll create them in the get function
+	return DBUtil::updateObject($obj,'userpictures_settings','','uid');
 }
  
 /**
@@ -577,7 +611,7 @@ function UserPictures_userapi_getCategory($args)
 /**
  * delete an associaiton to a picture
  *
- * @param	$args['id']		int
+ * @param	$args['id']		int	id of the association
  * @return	bool
  */
 function UserPictures_userapi_delPerson($args)
@@ -594,7 +628,8 @@ function UserPictures_userapi_delPerson($args)
 /**
  * get persons associated with an image
  *
- * @param	$args['picture_id']	int
+ * @param	$args['picture_id']		int		picture id or
+ * @param	$args['assoc_uid']		int		associated user id
  * @return	array
  */
 function UserPictures_userapi_getPersons($args)
@@ -602,6 +637,10 @@ function UserPictures_userapi_getPersons($args)
   	// get db table array
     $tables =& pnDBGetTables();
     $userpictures_personscolumn = &$tables['userpictures_persons_column'];
+
+	// get parameters    
+    $picture_id = (int)$args['picture_id'];
+    $assoc_uid	= (int)$args['assoc_uid'];
 
 	// construct join    
     $joinInfo[] = array (
@@ -618,7 +657,8 @@ function UserPictures_userapi_getPersons($args)
     		'compare_field_table'	=> 'assoc_uid',	// connection to join
     		'compare_field_join'	=> 'uid'	// field that should be equal in the join
 		);
-    $where = $userpictures_personscolumn['picture_id']." = ". (int)$args['picture_id'];
+    if ($picture_id > 0) $where = $userpictures_personscolumn['picture_id']." = ". $picture_id;
+    else $where = $userpictures_personscolumn['assoc_uid']." = ".$assoc_uid;
     return DBUtil::selectExpandedObjectArray('userpictures_persons',$joinInfo,$where);
 }
 
@@ -792,27 +832,33 @@ function UserPictures_userapi_deletePicture($args)
 function UserPictures_userapi_storePictureDB($args)
 {
     //get args
-    $filename	= $args['filename'];
-    $comment	= $args['comment'];
-    $template_id= $args['template_id'];
+    $filename		= $args['filename'];
+    $comment		= $args['comment'];
+    $template_id 	= $args['template_id'];
+    $uid			= pnUserGetVar('uid');
 
     if (!isset($filename) || (!(strlen($filename)>0))) return false;
     if (!isset($template_id)) return false;
-    $dummy = explode('/',$filename);
+    $dummy 			= explode('/',$filename);
     // we want to store it without that long path....
-    $filename=$dummy[(count($dummy)-1)];
+    $filename		= $dummy[(count($dummy)-1)];
 
+	$settings 		= UserPictures_userapi_getSettings(array('uid' => $uid));
+	switch ($settings['picspublic']) {
+		case 0: $privacy_status = 1; break;	// not public, visible for all registered users
+		case 1: $privacy_status = 0; break; // public, visible for all users and guests
+		case 2: $privacy_status = 2; break; // hidden, only visible for buddies (contactlist) !! Not yet implemented!
+	}
+	
 	// store in DB
 	$obj = array (
-			'uid'			=> pnUserGetVar('uid'),
-			'template_id'	=> $template_id,
-			'comment'		=> $comment,
-			'filename'		=> $filename,
-			'date'			=> date("Y-m-d H:i:s",time()),
-			'position'		=> ((int)UserPictures_userapi_get(array(
-					'uid'		=> pnUserGetVar('uid'),
-					'countonly'	=> true
-					))*(-1))
+			'uid'				=> pnUserGetVar('uid'),
+			'template_id'		=> $template_id,
+			'comment'			=> $comment,
+			'filename'			=> $filename,
+			'date'				=> date("Y-m-d H:i:s",time()),
+			'privacy_status'	=> $privacy_status,
+			'position'			=> ((int)UserPictures_userapi_get(array('uid' => $uid,'countonly' => true))*(-1))
 		);
 	DBUtil::insertObject($obj,'userpictures');
 	return true;

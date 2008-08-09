@@ -152,7 +152,14 @@ define('_USERPICTURESGOONTOP',					'go on top');
 
 // user's settings
 define('_USERPICTURESOWNPICTURES',				'my pictures');
-
+define('_USERPICTURESSETTINGSUTILS',			'Utilities');
+define('_USERPICTURESAFFECTSWHENCHANGING',		'If you change your privacy settings who should have access to your pictures this will only affect new uploaded pictures. You can handle the access to a picture in the picture management area different for each picture. If you want to change the settings also for all uploaded images, use the following links instead');
+define('_USERPICTURESPRIVACYFOR',				'All my uploaded pictures should be visible for');
+define('_USERPICTURESPRIVACYFORBUDDIES',		'buddies');
+define('_USERPICTURESCOMMUNITY',				'community members');
+define('_USERPICTURESALL',						'everybody');
+define('_USERPICTURESOR',						'or');
+define('_USERPICTURESHANDLEEXISTINGASSOCS',		'If you decide now that you do not want to be associated with other images existing associations will not be deleted automatically - if you also want existing associations to be deleted, choose the following link');
 // category management
 define('_USERPICTURESMANAGECATTEXT',			'Create and manage categories here. Every picture can be associated to one or more category');
 define('_USERPICTURESNAMEOFNEWCAT',				'Name');
@@ -194,5 +201,7 @@ define('_USERPICTURESSETTINGSSTORED',			'Setings stored');
 define('_USERPICTURESDELETEMYLINKS',			'Delete all links to my account from other pictures');
 define('_USERPICTURESASSOCSDELETED',			'All links from other pictures to your account have been removed');
 define('_USERPICTURESMANAGEMYPICTURES',			'manage my pictures');
-define('_USERPICTURESPICTURESNOTCOMMENTABLE',	'Other Users should not be able to comment my pictures');
+define('_USERPICTURESPICTURESNOTCOMMENTABLE',	'Other Users should not be able to comment my pictures - existing comments will be hidden');
+define('_USERPICTURESWRONGPARAMETERS',			'Wrong parameters submitted');
+define('_USERPICTUREPRIVACYUPDATED',			'Picure\'s privacy settings updated');	
 ?>

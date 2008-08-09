@@ -11,21 +11,6 @@
 Loader::includeOnce('modules/UserPictures/pnincludes/adminhandlers.php');
 
 /**
- * pictures category management
- * 
- * @return       output
- */
-function UserPictures_admin_categories()
-{
-    // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return LogUtil::registerPermissionError();
-
-    // Create output object
-	$render = FormUtil::newpnForm('UserPictures');
-    return $render->pnFormExecute('userpictures_admin_categories.htm', new userpictures_admin_categorieshandler());
-}
-
-/**
  * main
  *
  * This function shows the main administration page
@@ -41,6 +26,21 @@ function UserPictures_admin_main()
 	$render = FormUtil::newpnForm('UserPictures');
     return $render->pnFormExecute('userpictures_admin_main.htm', new userpictures_admin_mainhandler());
 
+}
+
+/**
+ * pictures category management
+ * 
+ * @return       output
+ */
+function UserPictures_admin_categories()
+{
+    // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return LogUtil::registerPermissionError();
+
+    // Create output object
+	$render = FormUtil::newpnForm('UserPictures');
+    return $render->pnFormExecute('userpictures_admin_categories.htm', new userpictures_admin_categorieshandler());
 }
 
 /**

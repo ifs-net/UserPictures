@@ -1,18 +1,30 @@
 <!--[include file="userpictures_user_menu.htm"]-->
 
 <h1><!--[pnml name="_USERPICTURESMANAGEYOURSETTINGS"]--></h1>
-<br /><!--[pnml name="_USERPICTURESMANAGEYOURSETTINGSTEXT"]-->
+<h3><!--[pnml name="_USERPICTURESMANAGEYOURSETTINGSTEXT"]--></h3>
 <br /><br />
 <!--[pnform]-->
 <!--[pnformvalidationsummary]-->
 <!--[pnsecgenauthkey assign="authid"]-->
-<!--[pnformcheckbox id="nolinking"  checked="0"]--><!--[pnformlabel for="nolinking"  text="_USERPICTURESFORBIDOTHERSTOLINKME"]--> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="settings" action="deleteMyLinks" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETEMYLINKS"]--></a><br />
-<!--[pnformcheckbox id="picspublic" checked="0"]--><!--[pnformlabel for="picspublic" text="_USERPICTUREALLOWGUESTSTOSEEMYPICTURES"]--><br />
-<!--[if $ezcomments]--><!--[pnformcheckbox id="nocomments" checked="0"]--><!--[pnformlabel for="nocomments" text="_USERPICTURESPICTURESNOTCOMMENTABLE"]--><br /><!--[/if]-->
+<!--[pnformcheckbox id="nolinking"  checked="0"]--> <!--[pnformlabel for="nolinking"  text="_USERPICTURESFORBIDOTHERSTOLINKME"]--><br />
+<!--[pnformcheckbox id="picspublic" checked="0"]--> <!--[pnformlabel for="picspublic" text="_USERPICTUREALLOWGUESTSTOSEEMYPICTURES"]--><br />
+<!--[if $ezcomments]--><!--[pnformcheckbox id="nocomments" checked="0"]--> <!--[pnformlabel for="nocomments" text="_USERPICTURESPICTURESNOTCOMMENTABLE"]--><br /><!--[/if]-->
+<br />
+
+
 <!--[pnformbutton commandName="update" text="_USERPICTURESSUBMITSETTINGS"]-->
-
 <!--[/pnform]-->
-
+<br /><br />
+<h3><!--[pnml name="_USERPICTURESSETTINGSUTILS"]--></h3>
+<!--[pnml name="_USERPICTURESAFFECTSWHENCHANGING"]-->.<br />
+<ul>
+<li><a href="<!--[pnmodurl modname="UserPictures"  type="user" func="settings" authid=$authid action="privacy" new="0"]-->"><!--[pnml name="_USERPICTURESPRIVACYFOR"]--> <!--[pnml name="_USERPICTURESALL"]--></a> <!--[pnml name="_USERPICTURESOR"]--></li>
+<li><a href="<!--[pnmodurl modname="UserPictures"  type="user" func="settings" authid=$authid action="privacy" new="1"]-->"><!--[pnml name="_USERPICTURESPRIVACYFOR"]--> <!--[pnml name="_USERPICTURESCOMMUNITY"]--></a></li>
+<!--[* not implemented yet <li><a href="<!--[pnmodurl modname="UserPictures"  type="user" func="settings" authid=$authid action="privacy" new="0"]-->"><!--[pnml name="_USERPICTURESPRIVACYFORBUDDIES"]--> <!--[pnml name="_USERPICTURESALL"]--></a></li> *]-->
+</ul>
+<!--[pnml name="_USERPICTURESHANDLEEXISTINGASSOCS"]-->.
+<ul>
+<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="settings" action="delassocs" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETEMYLINKS"]--></a></li>
+</ul>
 
 <!--[include file="userpictures_user_footer.htm"]-->
-

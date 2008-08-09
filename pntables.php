@@ -60,7 +60,7 @@ function UserPictures_pntables()
         		'category'				=> "I	NOTNULL DEFAULT 0",
         		'coord_lat'				=> "F	NOTNULL DEFAULT 0",
         		'coord_lng'				=> "F	NOTNULL DEFAULT 0",
-        		'privacy_status'		=> "I	NOTNULL DEFAULT 0"
+        		'privacy_status'		=> "I	NOTNULL DEFAULT 0"	// 0 = all users, 1 = registered users, 2 = only my buddies (not yet implemented!)
     			);
     $pntable['userpictures_templates_column'] = array (
 				'id'					=> 'pn_id',
