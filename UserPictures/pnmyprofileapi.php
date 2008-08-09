@@ -14,9 +14,22 @@
  * @return void
  */
 function UserPictures_myprofileapi_onLoad() {
-	// Load common lib
-	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
-	up_addPageVars();
+  	PageUtil::AddVar('javascript','javascript/ajax/prototype.js');
+  	PageUtil::AddVar('javascript','javascript/ajax/lightbox.js');
+  	PageUtil::AddVar('stylesheet','javascript/ajax/lightbox/lightbox.css');
+  	PageUtil::AddVar('javascript','javascript/overlib/overlib.js');
+  	PageUtil::AddVar('javascript','javascript/ajax/scriptaculous.js');
+}
+
+/**
+ * This function returns 1 if Ajax should not be used loading the plugin
+ *
+ * @return string
+ */
+
+function UserPictures_myprofileapi_noAjax($args)
+{
+  	return true;
 }
 
 /**
@@ -60,9 +73,19 @@ function UserPictures_myprofileapi_tab($args)
     // Security check removed - we will use our own security check ;-)
     $settings=pnModAPIFunc('UserPictures','user','getSettings',array('uid'=>$uid));
     if (($settings['picspublic']!=1) && (!pnUserLoggedIn())) {
-        return pnVarPrepHTMLDisplay(_MODULENOAUTH);
+        return LogUtil::registerPermissionError();
     }
 
+	$startwith = (int) FormUtil::getPassedValue('upstartwith');
+	print pnModAPIFunc('UserPictures','user','latest',array(
+		'template_id'	=> 0,
+		'numcols'		=> 4,
+		'numrows'		=> 3,
+		'nopager'		=> 0,
+		'startwith'		=> $startwith
+		));
+
+	return;
     // get pictures
     $pictures = pnModAPIFunc('UserPictures','user','get',array (
     		'uid'			=> $uid,
