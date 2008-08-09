@@ -33,6 +33,17 @@ define('_USERPICTURESOWNUPLOADSPOSSIBLE',		'It is possible to upload some pictur
 define('_USERPICTURESCANBEUPLOADED',			'pictures can be uploaded for the own gallery for each user');
 define('_USERPICTURESUPLOADPICTURES',			'Manage my own gallery');
 define('_USERPICTURESMANAGECATEGORIES',			'Manage categories for the own gallery');
+// email "you were added"
+define('_USERPICTURESHELLO',					'Dear');
+define('_USERPICTURESTHEUSER',					'The user');
+define('_USERPICTURESNOTICEDYOURPERSONATPIC',	'noticed that you seem to be at a picture at');
+define('_USERPICTURESHEASSOCIATEDYOURUSERNAME',	'Your usename is now associated with this image');
+define('_USERPICTURESASSOCIATIONVISIBLEINYOURPROFILENOW',	'This association is visible for you and all other users');
+define('_USERPICTURESALSOLINKALLPERSONSYOUKNOW',	'You can also make this community more social in linking all persons you know to your or all other pictures');
+define('_USERPICTURESNOLINKINGDESC',			'If you do not want to be linked at any picture you can modify your user settings');
+define('_USERPICTURESWHOCANDELETE',				'Associations to pictures can be deleted by the person that created the association or by the associated person');
+define('_USERPICTURELINKTOPICTURE',				'The link to the picture is');
+define('_USERPICTURESYOUWEREFOUNDATPIC',		'Somebody found your person at a picture');
 // avatar
 define('_USERPICTURESAVATARMANAGEMENT',			'Avatar managment');
 define('_USERPICTURESACTUALAVATAR',				'Your avatar');
@@ -60,6 +71,8 @@ define('_USERPICTURESLINKEDBY',					'linked by');
 define('_USERPICTURESASSOCDELETED',				'Association deleted');
 define('_USERPICTURESERRORDELETINGASSOC',		'Error deleting association');
 define('_USERPICTURESVIEWTHUMBNAILS',			'View thumbnail overview');
+define('_USERPICTURESWANTTOLINKPIC',			'You want to show this picture to others');
+define('_USERPICTURESUSEURL',					'Give the following URL to your friends');
 // managepicture
 // new
 define('_USERPICTURESDRAGANDDROP',				'The position of a picture can easily be changed via drag and drop');

@@ -31,6 +31,8 @@ removed features:
 - picture templates that have to be activated by the site
   administrator are no longer possible. From now on every uploaded
   picture is activated and shown immediately after the upload
+- after picture upload uploader is no longer associate with the
+  own picture automatically
 
 plugins:
 --------

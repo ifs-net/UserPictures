@@ -1,4 +1,5 @@
 <!--[include file="userpictures_user_menu.htm"]-->
+<!--[pnajaxheader scriptaculus="1" prototype="1" lightbox="1" overlib="1"]-->
 
 <div>
 <!--[if $managepicturelink eq "1"]-->
@@ -31,11 +32,15 @@
 					<!--[$p.code_thumbnail]--><br />
 				</div>
 				<div>
-					<i><!--[$p.comment]--></i>&nbsp;<br />
+					<!--[if $p.comment ne ""]-->
+						<i><!--[$p.comment|truncate:24:'...']--></i><br />
+					<!--[else]-->
+						&nbsp;<br />
+					<!--[/if]-->
 					<!--[if $ezcommentsavailable eq 1]-->
 						<!--[pnmodapifunc modname="EZComments" type="user" func="countitems" mod="UserPictures" objectid=$p.id assign=ezcomments]-->
 						<!--[if $ezcomments gt 0]-->
-							<!--[$ezcomments]--> <!--[pnml name="_USERPICTURECOMMENTS"]-->
+							<a href="<!--[$p.url]-->"><!--[$ezcomments]--> <!--[pnml name="_USERPICTURECOMMENTS"]--></a>
 						<!--[else]-->
 							&nbsp;
 						<!--[/if]-->
@@ -76,7 +81,7 @@
 									(<!--[pnml name="_USERPICTURESLINKEDBY"]-->
 									<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$person.uname|userprofilelink]-->
 								<!--[if $person.uid eq $viewer_uid or $person.assoc_uid eq $viewer_uid]-->,
-									<a href="<!--[$viewurl]-->&delassoc=<!--[$person.id]-->&id=<!--[$p.id]-->&managepicturelink=<!--[$managepicturelink]-->&authid=<!--[$authid]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>
+									<a href="<!--[$p.url]-->&delassoc=<!--[$person.id]-->&id=<!--[$p.id]-->&managepicturelink=<!--[$managepicturelink]-->&authid=<!--[$authid]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>
 								<!--[/if]-->
 									)
 								</li>
@@ -85,6 +90,10 @@
 						</li>
 					<!--[/if]-->
 				</ul>
+			</div>
+			<div>
+				<!--[pnml name="_USERPICTURESWANTTOLINKPIC"]-->? <!--[pnml name="_USERPICTURESUSEURL"]-->: <br />
+				<input onfocus="this.select()" name="linkurl" size="55" id="linkurl" type="text" value="<!--[pngetbaseurl]--><!--[pnmodurl modname="UserPictures" type="user" func="view" id=$p.id]-->" />
 			</div>
 			</center>
 		<!--[/if]-->
