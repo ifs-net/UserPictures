@@ -25,6 +25,7 @@ new features:
 - drag-and-drop sorting for pictures
 - lightbox.js added for slideshows and some optical effects
 - every user can now link users on all pictures
+- different privacy settings for each picture that is uploaded
 
 removed features:
 -----------------
@@ -56,13 +57,14 @@ other technical changes:
 - resizing images now done with gd-lib
 - almost 80% lines of code rewritten and functions restructured 
   and renamed
+- attention. existing associations pictures - categories will 
+  be lost with the upgrade
 
 todo:
 -----
 - MyMap integration
 - Transform hook / Multihook needle
 - expand preparation for album cover image in db
-- privacy status for pictures (all, registered, "friends")
 
 0.93:
 =====
