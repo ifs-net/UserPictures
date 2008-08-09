@@ -109,7 +109,7 @@ class UserPictures_user_ViewHandler
 	    if (!($startwith > 0)) 	$startwith 		= 0;
 	    if ($singlemode > 0)	$showmax 		= 1;
 	    else					$showmax 		= 20;	// Todo: replace with module variable
-	
+
 	    // get pictures
 	    $pictures = pnModAPIFunc('UserPictures','user','get',array (
 	    		'uid'				=> $uid,
@@ -179,6 +179,12 @@ class UserPictures_user_ViewHandler
 			$this->viewurl	= $p['url'];
 			$this->id 		= $p['id'];
 		}
+		// if there is a user gallery to be displayed, we'll have to assign the user's private categories
+		if ($uid > 0) {
+		  	$render->assign('categories',pnModAPIFunc('UserPictures','user','getCategory',array('uid' => $uid)));
+		  	if ($cat_id > 0) $render->assign('category',pnModAPIFunc('UserPictures','user','getCategory',array('cat_id'=>$cat_id)));
+		}
+		
 		return true;
     }
 	function handleCommand(&$render, &$args)

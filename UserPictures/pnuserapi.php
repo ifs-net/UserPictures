@@ -615,7 +615,7 @@ function UserPictures_userapi_getCategory($args)
  * @param	$args['id']		int	id of the association
  * @return	bool
  */
-function UserPictures_userapi_delPerson($args)
+function UserPictures_userapi_delAssociation($args)
 {
     $id	= (int)$args['id'];
     if (!isset($id) || (!($id>0))) return false;
@@ -816,7 +816,7 @@ function UserPictures_userapi_deletePicture($args)
 
     // delete all associated persons
     $dummy = UserPictures_userapi_getPersons(array('picture_id'=>$picture_id));
-    foreach ($dummy as $assoc) if (!UserPictures_userapi_delPerson(array('picture_id'=>$picture_id,'uname'=>$assoc['uname']))) return false;
+    foreach ($dummy as $assoc) if (!UserPictures_userapi_delAssociation(array('id'=>$assoc['id']))) return false;
     
     // get the picture's filename to delete it
     if (!unlink(pnModGetVar('UserPictures','datadir').$picObj['filename'])) return false;
