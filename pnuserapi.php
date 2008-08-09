@@ -127,6 +127,7 @@ function UserPictures_userapi_get($args)
 	// We'll built an array with all sql where parts we need and transform this array to a string later
 	// The following where parts refer to the normal userpictures table. To make the columns unique we have to use the prefix tbl.
 	if (strlen($template_id) == 0) $template_id = -99;	// Little hack to avoid troubles with a not specified template id
+	if (!pnUserLoggedIn())							$whereArray['notloggedin']	= "tbl.".$picturescolumn['privacy_status']." = 0";
 	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = ".$template_id;
 	if (isset($uid) 		&& ($uid > 0))	 		$whereArray['uid'] 			= "tbl.".$picturescolumn['uid']." = ".$uid;
 	if (isset($cat_id) 		&& ($cat_id > 0)) 		$whereArray['cat_id']		= "tbl.".$picturescolumn['category']." = ".$cat_id;
@@ -705,12 +706,13 @@ function UserPictures_userapi_rotatePicture($args)
  * @param	$args['comment']		string
  * @return	bool
  */
-function UserPictures_userapi_setComment($args)
+function UserPictures_userapi_setcommentandprivacy($args)
 {
   	// get object
 	$obj = DBUtil::selectObjectByID('userpictures',(int)$args['picture_id']);
 	if ($obj['uid'] != (int)$args['uid']) return false;
 	$obj['comment'] = $args['comment'];
+	$obj['privacy_status'] = $args['privacy_status'];
 	// update object
 	return DBUtil::updateObject($obj,'userpictures');
 }

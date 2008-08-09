@@ -78,6 +78,7 @@ define('_USERPICTURESWANTTOLINKPIC',			'You want to show this picture to others'
 define('_USERPICTURESUSEURL',					'Give the following URL to your friends');
 // managepicture
 // new
+define('_USERPICTURESVIEWABLEBY',				'Viewable by');
 define('_USERPICTURESDRAGANDDROP',				'The position of a picture can easily be changed via drag and drop');
 define('_USERPICTURESASSOCIATEPERSONDESC',		'Link each person that is shown at the picture and make you pictures "social"');
 define('_USERPICTURESASSOCIATEPERSONS',			'Associate persons');
@@ -156,7 +157,7 @@ define('_USERPICTURESSETTINGSUTILS',			'Utilities');
 define('_USERPICTURESAFFECTSWHENCHANGING',		'If you change your privacy settings who should have access to your pictures this will only affect new uploaded pictures. You can handle the access to a picture in the picture management area different for each picture. If you want to change the settings also for all uploaded images, use the following links instead');
 define('_USERPICTURESPRIVACYFOR',				'All my uploaded pictures should be visible for');
 define('_USERPICTURESPRIVACYFORBUDDIES',		'buddies');
-define('_USERPICTURESCOMMUNITY',				'community members');
+define('_USERPICTURESCOMMUNITY',				'members');
 define('_USERPICTURESALL',						'everybody');
 define('_USERPICTURESOR',						'or');
 define('_USERPICTURESHANDLEEXISTINGASSOCS',		'If you decide now that you do not want to be associated with other images existing associations will not be deleted automatically - if you also want existing associations to be deleted, choose the following link');
