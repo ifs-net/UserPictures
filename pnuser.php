@@ -133,7 +133,7 @@ function UserPictures_user_view()
 	if (isset($delassoc) && ($delassoc > 0)) {
 	 	if (!SecurityUtil::confirmAuthKey()) LogUtil::registerAuthIDError();
 	 	else {
-		   	if (pnModAPIFunc('UserPictures','user','delPerson',array ('id' => $delassoc))) LogUtil::registerStatus(_USERPICTURESASSOCDELETED);
+		   	if (pnModAPIFunc('UserPictures','user','delAssociation',array ('id' => $delassoc))) LogUtil::registerStatus(_USERPICTURESASSOCDELETED);
 			else LogUtil::registerError(_USERPICTURESERRORDELETINGASSOC);
 			return pnRedirect(base64_decode($redirect));
 		}
@@ -160,7 +160,7 @@ function UserPictures_user_settings()
     if ($action != '' && (!SecurityUtil::confirmAuthKey())) LogUtil::registerAuthIDError();	// auth-key check
 	else if ($action == "delassocs") {		// delete all existing associations
 		$assocs = pnModAPIFunc('UserPictures','user','getPersons',array('assoc_uid' => pnUsergetVar('uid')));
-		foreach ($assocs as $assoc) pnModAPIFunc('UserPictures','user','delPerson',array('id' => $assoc['id']));
+		foreach ($assocs as $assoc) pnModAPIFunc('UserPictures','user','delAssociation',array('id' => $assoc['id']));
 		LogUtil::registerStatus(_USERPICTURESASSOCSDELETED);
 		}
 	else if ($action == "privacy") {		// change privacy settings for existing images
@@ -335,7 +335,7 @@ function UserPictures_user_managePicture()
 			break;
 		case "setcommentandprivacy":
 			$comment = pnVarCleanFromInput('comment');
-			if (pnModAPIFunc('UserPictures','user','setCommentAndPrivacy',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment,'privacy_status'=>$privacy_status))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
+			if (pnModAPIFunc('UserPictures','user','setCommentAndPrivacy',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment,'privacy_status'=>$privacy_status))) LogUtil::registerStatus(_USERPICTURESDATACHANGED);
 			else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
 			break;
 		case "rotate":

@@ -21,7 +21,7 @@ define('_USERPICTURESUSERGALLERYVIEWOPTIONS',	'View options for user galleries')
 define('_USERPICTURESTEMPLATEGALLERY',			'Show gallery with all pictures of template');
 define('_USERPICTURESTEMPLATEGALLERIES',		'Template gallery');
 define('_USERPICTURESVIEWOPTIONS',				'View uploaded pictures');
-define('_USERPICTURESPICTURESTODISPLAY',		'pictures to display');
+define('_USERPICTURESPICTURESTODISPLAY',		'pictures to display on this page');
 define('_USERPICTURESUPLOADDATE',				'Upload date');
 define('_USERPICTURESGCOMMUNITYGALLERIES',		'Community galleries');
 define('_USERPICTURESGCOMMUNITYGALLERY',		'Global category');
@@ -76,6 +76,7 @@ define('_USERPICTURESERRORDELETINGASSOC',		'Error deleting association');
 define('_USERPICTURESVIEWTHUMBNAILS',			'View thumbnail overview');
 define('_USERPICTURESWANTTOLINKPIC',			'You want to show this picture to others');
 define('_USERPICTURESUSEURL',					'Give the following URL to your friends');
+define('_USERPICTURESFILTER',					'filter');
 // managepicture
 // new
 define('_USERPICTURESVIEWABLEBY',				'Viewable by');
@@ -92,6 +93,7 @@ define('_USERPICTURESASSOCIATEDWITHGLOBALCAT',	'Added to community album');
 define('_USERPICTURESPERSONSLINKEDHERE',		'Linked users');
 define('_USERPICTURESPRIVATECATEGORY',			'Private category');
 define('_USERPICTURESGLOBALCATEGORY',			'Global community category');
+define('_USERPICTURESADDEDTOCAT',				'Picture was assigned to private category');
 define('_USERPICTURESPOSITIONMOVEMENT',			'Change position of uploaded pictures');
 define('_USERPICTURESOWNER',					'Owner');
 define('_USERPICTURESCATEGORIES',				'Private & global albums');
@@ -125,7 +127,7 @@ define('_USERPICTURESAGAINSTCLOCK',				'anti-clockwise');
 define('_USERPICTURESGALLERYVIEW',				'Go to my gallery');
 define('_USERPICTURESONTOP',					'move up');
 define('_USERPICTURESDOWN',						'move down');
-define('_USERPICTURECOMMENTCHANGED',			'comment updated');
+define('_USERPICTURESDATACHANGED',			'data updated');
 define('_USERPICTURESUPDATE',					'update');
 define('_USERPICTURESMODIFYCOMMENT',			'comment');
 define('_USERPICTURESAMOUNT',					'Number of pictures');
@@ -162,6 +164,7 @@ define('_USERPICTURESALL',						'everybody');
 define('_USERPICTURESOR',						'or');
 define('_USERPICTURESHANDLEEXISTINGASSOCS',		'If you decide now that you do not want to be associated with other images existing associations will not be deleted automatically - if you also want existing associations to be deleted, choose the following link');
 // category management
+define('_USERPICTURESMANAGEYOURGALLERY',		'Manage my own gallery');
 define('_USERPICTURESMANAGECATTEXT',			'Create and manage categories here. Every picture can be associated to one or more category');
 define('_USERPICTURESNAMEOFNEWCAT',				'Name');
 define('_USERPICTURESTEXTOFNEWCAT',				'Description');

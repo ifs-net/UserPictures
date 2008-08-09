@@ -9,5 +9,23 @@
 	<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$uname|userprofilelink]-->
 <!--[/if]-->
 </div>
+
+<!--[if $categories|@count gt 0]-->
+	<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="view" uid=$uid]-->">
+	<select name="cat_id">
+			<option value="0"><!--[pnml name="_USERPICTURESNOFILTER"]--></option>
+		<!--[foreach from=$categories item="c"]-->
+			<option value="<!--[$c.id]-->"><!--[$c.title]--></option>
+		<!--[/foreach]-->
+	</select>
+	<input type="submit" value="<!--[pnml name="_USERPICTURESFILTER"]-->" />
+	</form>
+	<!--[if $category.0.title != '']-->
+		<h3><!--[$category.0.title]--></h3>
+		<!--[$category.0.text]--><br /><br />
+	<!--[/if]-->
+<!--[/if]-->
+
 <!--[include file="userpictures_user_viewinclude.htm"]-->
+
 <!--[include file="userpictures_user_footer.htm"]-->
