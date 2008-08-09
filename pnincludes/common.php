@@ -16,12 +16,6 @@
 function up_addPageVars()
 {
     // Add some page vars
-    // Due to some conflicts with lightbox we cannot use the protoype and 
-	// scriptaculous versions that are distributed with zikula
-    PageUtil::addVar('stylesheet','modules/UserPictures/pnincludes/lightbox/css/lightbox.css');
-    PageUtil::addVar('javascript','modules/UserPictures/pnincludes/lightbox/js/prototype.js');
-    PageUtil::addVar('javascript','modules/UserPictures/pnincludes/scriptaculous/src/scriptaculous.js?load=effects,builder,dragdrop');
-    PageUtil::addVar('javascript','modules/UserPictures/pnincludes/lightbox/js/lightbox.js');
     PageUtil::addVar('javascript','javascript/overlib/overlib.js');
 	return true;
 }
@@ -67,4 +61,21 @@ function up_getThumbnailHeight()
   	$h = (int)$s[1];
   	return ($h + 23);
 }
+
+/**
+ * This function switches the value of two given positions
+ * in a given array
+ *
+ * @param 	$array	array
+ * @param	$pos1	int
+ * @param 	$pos2	int
+ * @return 	array
+ */
+function switchArrayElements($array,$pos1,$pos2) {
+    $cache = $array[$pos1];
+    $array[$pos1] = $array[$pos2];
+    $array[$pos2] = $cache;
+    return $array;
+}
+
 ?>

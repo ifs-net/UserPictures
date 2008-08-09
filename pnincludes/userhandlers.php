@@ -95,9 +95,10 @@ class UserPictures_user_ViewHandler
 	    $startwith			= (int)	FormUtil::getPassedValue('upstartwith');
 	    $managepicturelink	= (int)	FormUtil::getPassedValue('managepicturelink');
 	    $singlemode			= 		FormUtil::getPassedValue('singlemode');
-	    if (!($startwith > 0)) 	$startwith = 0;
-	    if ($singlemode > 0)	$showmax = 1;
-	    else					$showmax = 20;
+	    if ($picture_id > 0) 	$singlemode 	= 1;
+	    if (!($startwith > 0)) 	$startwith 		= 0;
+	    if ($singlemode > 0)	$showmax 		= 1;
+	    else					$showmax 		= 20;
 	
 	    // get pictures
 	    $pictures = pnModAPIFunc('UserPictures','user','get',array (
@@ -125,7 +126,6 @@ class UserPictures_user_ViewHandler
 
 	    // Add some page vars
 		Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
-		up_addPageVars();
 
 		// assign data
 		if ($uid > 1) 				$render->assign('uid',	$uid);
@@ -219,6 +219,19 @@ class UserPictures_user_ViewHandler
 							'assoc_uid'		=> $assoc_uid		);
 			if (DBUtil::insertObject($obj,'userpictures_persons')) {
 			  	LogUtil::registerStatus(_USERPICTURESPERSONADDED);
+			  	// send an email with "you were associated to a photo"-text
+			  	$uid 	= pnUserGetVar('uid');
+	            $render = pnRender::getInstance('UserPictures');
+	            $render->assign('sitename',		pnConfigGetVar('sitename'));
+	            $render->assign('uid',			$uid);
+	            $render->assign('assoc_uid',	$assoc_uid);
+	            $render->assign('uname',		pnUserGetVar('uname',$uid));
+	            $render->assign('assoc_uname',	pnUserGetVar('uname',$assoc_uid));
+	            $render->assign('viewurl',		pnGetBaseURL().pnModURL('UserPictures','user','view',array('id' => $id)));
+	            $body = $render->fetch('userpictures_email_youwereadded.htm');
+	            $subject = _USERPICTURESYOUWEREFOUNDATPIC;
+	            if ($assoc_uid != $uid) pnMail(pnUserGetVar('email',$assoc_uid), $subject, $body, array('header' => '\nMIME-Version: 1.0\nContent-type: text/plain'), false);
+			  	
 			}
 			return pnRedirect(pnGetBaseURL().$this->viewurl);
 		}

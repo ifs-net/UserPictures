@@ -11,7 +11,10 @@
 /**
  * show picture
  *
- * This function shows a picture of a given template
+ * This function shows a picture of a given template. If the user does not have a picture
+ * uploaded for the given template the default picture will be returned. Module developers
+ * who want to include UserPictures into their modules should use this function to include
+ * a template image.
  *
  * @param	$args['template_id']
  * @return	string
@@ -43,33 +46,38 @@ function UserPictures_userapi_showPicture($args)
  *
  * This function returns (all) pictures as an optional array with 
  * the following information:
+ *  + information about the picture
  * 	+ associated categories
  *  + associated global category
  *  + associated persons
- *  + comment
- * @param	$args['uid']			int		user id to get pictures of a given user
- * @param	$args['template_id']	int		id-number of a special template (0=own gallery)
+ *
+ * @param	$args['uid']			int		filter: show pictures of a specified user only
+ * @param	$args['template_id']	int		filter: show specific template
+ * @param	$args['cat_id']			int		filter: show specific private category
+ * @param	$args['globalcat_id']	int		filter: show specific global category
+ * @param	$args['assoc_uid']		int		filter: show pictures associated to a given user
  * @param	$args['expand']			bool	additional information
- * @param	$args['countonly']		bool	only return number of pictures
- * @return 	array; see inline code documentation for details
+ * @param	$args['countonly']		bool	only return number of pictures not an array
+ * @return 	array (pictures) or integer (with countonly parameter)
  */
 function UserPictures_userapi_get($args)
 {
-	// get parameters	
-	$assoc_uid		= (int)$args['assoc_uid'];
-	$cat_id			= (int)$args['cat_id'];
-	$uid			= (int)$args['uid'];
-	$picture_id		= (int)$args['id'];
-	$globalcat_id 	= (int)$args['globalcat_id'];
-	$template_id 	= $args['template_id'];
-	$startwith		= $args['startwith']-1;
-	$showmax		= $args['showmax'];
-	$expand			= $args['expand'];
+	// Get parameters
+	$assoc_uid		= (int)	$args['assoc_uid'];
+	$cat_id			= (int)	$args['cat_id'];
+	$uid			= (int)	$args['uid'];
+	$picture_id		= (int)	$args['id'];
+	$globalcat_id 	= (int)	$args['globalcat_id'];
+	$template_id 	= 		$args['template_id'];
+	$startwith		= 		$args['startwith'];
+	if (!($startwith > 0)) $startwith = 1;
+	$showmax		= 		$args['showmax'];
+	$expand			= 		$args['expand'];
 	if (!isset($expand) || !is_bool($expand)) $expand = true;
 	if (isset($args['countonly'])) 	$countonly = true;
 	else 							$countonly = false;
 	
-  	// get db table array
+  	// Get database information
     $tables =& pnDBGetTables();
     $picturescolumn 			= &$tables['userpictures_column'];
     $personscolumn 				= &$tables['userpictures_persons_column'];
@@ -78,7 +86,7 @@ function UserPictures_userapi_get($args)
     $userscolumn 				= &$tables['userpictures_persons_column'];
     $templatescolumn 			= &$tables['userpictures_templates_column'];
 
-	// always load global categories except when expand is false
+	// Load global categories except when expand is false
 	if ($expand) {
 		$res = pnModAPIFunc('UserPictures','admin','getGlobalCategory');
 		foreach ($res as $obj) {
@@ -86,7 +94,7 @@ function UserPictures_userapi_get($args)
 		  	$globalCategoryArray[$id] = $obj;
 		}
 	}
-	// we need private catories when we have a category or a user filter
+	// Load private category if the filter is user-specific
 	if ( ($expand) && (($uid > 0) || ($cat_id > 0))) {
 		// load private categories
 		$res = pnModAPIFunc('UserPictures','user','getCategory',array(
@@ -98,8 +106,9 @@ function UserPictures_userapi_get($args)
 		}
 	}
 
-	// construct where part for sql statement
-	if (strlen($template_id) == 0) $template_id = -99;
+	// We'll built an array with all sql where parts we need and transform this array to a string later
+	// The following where parts refer to the normal userpictures table. To make the columns unique we have to use the prefix tbl.
+	if (strlen($template_id) == 0) $template_id = -99;	// Little hack to avoid troubles with a not specified template id
 	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = ".$template_id;
 	if (isset($uid) 		&& ($uid > 0))	 		$whereArray['uid'] 			= "tbl.".$picturescolumn['uid']." = ".$uid;
 	if (isset($cat_id) 		&& ($cat_id > 0)) 		$whereArray['cat_id']		= "tbl.".$picturescolumn['category']." = ".$cat_id;
@@ -108,16 +117,18 @@ function UserPictures_userapi_get($args)
 	// Load common lib
 	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
 
-	// table join information
+	// Table join information to join userpictures table with users table to retrieve the usernames
+	// This join information is the second join information so we have to use the prefix a. in the following where parts
 	$joinInfo[] = array (	'join_table'          =>  'users',			// table for the join
 							'join_field'          =>  'uname',			// field in the join table that should be in the result with
                          	'object_field_name'   =>  'uname',			// ...this name for the new column
                          	'compare_field_table' =>  'uid',			// regular table column that should be equal to
                          	'compare_field_join'  =>  'uid');			// ...the table in join_table
 
-	// get pictures
-	if ($assoc_uid > 1) {	// associated with user id
-	  	// we have to make a join array now...
+	// Get the pictures now
+	if ($assoc_uid > 1) {	
+	  	// This part is an additional join information if the pictures associated with a specified user are requested
+	  	// This join information is the second join information so we have to use the prefix b. in the following where parts
 		$joinInfo[] = array (	'join_table'          =>  'userpictures_persons',	// table for the join
 								'join_field'          =>  'picture_id',				// field in the join table that should be in the result with
                              	'object_field_name'   =>  'assoc_uid',				// ...this name for the new column
@@ -128,66 +139,73 @@ function UserPictures_userapi_get($args)
 		if (isset($uid) && ($uid > 0)) $whereArray['uid'] = "tbl.".$picturescolumn['uid']." = ".$uid;
 	}
 	
-	// now select priority for order statement
-	// if there is a global category we have to select as added date, NOT position.
-	// same for pictures associated to a user
-	// otherwise we have to check position first, then date, then id
-	if (($globalcat_id > 0) || ($assoc_uid > 0)) $order = "tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
-	else if ($uid > 1) $order = "tbl.".$picturescolumn['position']." asc, tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
+	// Now select priority for order statement. If the pictures of only one user should be retrieved 
+	// we'll take position as sort order criteria. Otherwise use id (latest picture shown first)
+	if ($uid > 1) $order = "tbl.".$picturescolumn['position']." asc, tbl.".$picturescolumn['date']." desc, tbl.".$picturescolumn['id']." desc";
 	else $order = "tbl.".$picturescolumn['id']." desc";
 	
-	// construct where statement
+	// Construct where statement now
 	$where = up_constructWhere($whereArray);
 
-	// now we can grab the data from the database.	
+	// Return numer of pictures found if countonly is set
 	if ($countonly) {
 	  	$res = DBUtil::selectExpandedObjectCount('userpictures',$joinInfo,$where);
 	  	if (($picture_id > 0) && (count($res)>0)) return 1;
 	  	if (!$res) return 0;
 	  	else return $res;
 	}
+	// Otherwise get object array with one or more requested picture(s)
 	else if ($picture_id > 0) {
-	  	$obj = DBUtil::selectExpandedObjectByID('userpictures',$joinInfo,$picture_id);
+	  	$obj = DBUtil::selectExpandedObjectByID('userpictures',$joinInfo,"tbl.".$picture_id);
 	  	$objArray[] = $obj;
 	}
-	else $objArray = DBUtil::selectExpandedObjectArray('userpictures',$joinInfo,$where,$order,$startwith,$showmax);
+	else $objArray = DBUtil::selectExpandedObjectArray('userpictures',$joinInfo,$where,$order,($startwith-1),$showmax);
 
-	// get additional information 
+	// Get additional information 
     $datadir = pnModGetVar('UserPictures','datadir');
 
 	// build result array
-	$counter 	= $startwith-2;	// we need this counter to get the right links from lightbox to add comments etc.
+	$counter 	= $startwith;	// we need this counter to get the right links from lightbox to add comments etc.
 	if ($counter < 0) $counter = 0;
 	$res 		= array();
 	foreach ($objArray as $obj) {
-	  	$counter++;
-	  	// add absolute filename to object
+	  	// Add absolute filename to object
 	  	$obj['filename_absolute']=$datadir.$obj['filename'];
-		// create thumbnails if they do not exist!
+		// Create thumbnails if they do not exist!
 		if (!UserPictures_userapi_createThumbnail(array('filename'=>$obj['filename_absolute']))) LogUtil::registerError(_USERPICTURESTHUMBNAILCREATIONERROR);
 
-		// is additional information needed to enrich the result array?
+		// Construct view array for thumbnail to create the regular non JS link
+		$viewarray['singlemode']	= 1;
+		if ($template_id >= 0) 	$viewarray['template_id'] 	= $template_id;
+		if ($uid >= 0) 			$viewarray['uid'] 			= $uid;
+		if ($assoc_uid >= 0) 	$viewarray['assoc_uid'] 	= $assoc_uid;
+		if ($cat_id >= 0) 		$viewarray['cat_id']		= $cat_id;
+		if ($globalcat_id >= 0) $viewarray['globalcat_id']	= $globalcat_id;
+								$viewarray['singlemode']	= 1;
+								$viewarray['upstartwith']	= $counter;		
+		$obj['url']	= pnModURL('UserPictures','user','view',$viewarray);
+		// Add additional information if requested
 		if ($expand) {	
-			// private category
+			// Add private category
 		  	$category = $obj['category'];
 		  	if ($category > 0) $obj['category'] = $categoryArray[$category];
 		  	else unset($obj['category']);
 
-			// global category
+			// Add global category
 		  	$global_category = $obj['global_category'];
 		  	if ($global_category > 0) $obj['global_category'] = $globalCategoryArray[$global_category];
 		  	else unset($obj['global_category']);
 
-		  	// associated persons
+		  	// Add associated persons
 		  	$persons = UserPictures_userapi_getPersons(array('picture_id' => $obj['id']));
 		  	if (count($persons) > 0) $obj['assoc_persons'] = $persons;
 
-			// prepare thumbnail information as string
+			// Prepare thumbnail information as string
 			$info = _USERPICTURESOWNER.": ".$obj['uname']."<br />";
-			if ($obj['comment'] != '') $info.=_USERPICTURESCOMMENT.": ".$obj['comment']."<br />";
-			if ($obj['date'] != '0000-00-00 00:00:00') $info.=_USERPICTURESUPLOADDATE.": ".$obj['date']."<br />";
-			if ($obj['category']['title'] != '') $info.=_USERPICTURESPRIVATECATEGORY.": ".$obj['category']['title']."<br />";
-			if ($obj['global_category']['title'] != '') $info.=_USERPICTURESGLOBALCATEGORY.": ".$obj['global_category']['title']."<br />";
+			if ($obj['comment'] != '') 					$info.=_USERPICTURESCOMMENT.": ".$obj['comment']."<br />";
+			if ($obj['date'] != '0000-00-00 00:00:00') 	$info.=_USERPICTURESUPLOADDATE.": ".$obj['date']."<br />";
+			if ($obj['category']['title'] != '') 		$info.=_USERPICTURESPRIVATECATEGORY.": ".$obj['category']['title']."<br />";
+			if ($obj['global_category']['title'] != '')	$info.=_USERPICTURESGLOBALCATEGORY.": ".$obj['global_category']['title']."<br />";
 			unset($assoc_string);
 			if (count($obj['assoc_persons']) > 0) {
 			  	$assoc_string=_USERPICTURESPERSONSLINKEDHERE.": ";
@@ -200,28 +218,11 @@ function UserPictures_userapi_get($args)
 				}
 			}
 			$infobox 	= pnRender::getInstance('UserPictures');
-			$title 		= $info.$assoc_string.'<br /><a href="'.pnModUrl('UserPictures','user','view',array(
-					'singlemode'	=> 1,
-					'template_id'	=> $template_id,
-					'uid'			=> $uid,
-					'assoc_uid'		=> $assoc_uid,
-					'cat_id'		=> $cat_id,
-					'globalcat_id'	=> $globalcat_id,
-					'showmax'		=> 1,
-					'upstartwith'	=> $counter
-				)).'">'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
+			$title 		= $info.$assoc_string.'<br /><a href="'.$obj['url'].'">'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
 			$info 		= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
 	  	}
 
-		// add code part
-		// construct view array for thumbnail to normal image link
-		$viewarray['singlemode']	= 1;
-		if ($template_id >= 0) 	$viewarray['template_id'] 	= $template_id;
-		if ($uid >= 0) 			$viewarray['uid'] 			= $uid;
-		if ($assoc_uid >= 0) 	$viewarray['assoc_uid'] 	= $assoc_uid;
-		if ($cat_id >= 0) 		$viewarray['cat_id']		= $cat_id;
-		if ($globalcat_id >= 0) $viewarray['globalcat_id']	= $globalcat_id;
-		
+		// Add code part
 		$obj['code_thumbnail'] 	= '<a 	id="p'.$obj['id'].'" javascript:void(0);" 
 										onmouseover="return overlib(\''.up_prepDisplay($info).'\')" 
 										onmouseout="return nd();" 
@@ -235,24 +236,31 @@ function UserPictures_userapi_get($args)
 
 		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.$obj['filename_absolute'].'" />';
 
+		// Increase counter to have the upstartwith-variable with the right values
+	  	$counter++;
+	  	// Add picture array to result array
 		$res[] = $obj;
 	}
-	$objArray = $res;
 
-	// return result array
-	return $objArray;
+	// Return result array
+	return $res;
 }
 
 /**
- * get order array for noscript ajax fallback ordering the item list
+ * Add order link to pictures
  *
- * @param	$fields		array
+ * This function extends the picture array and includes the sort list if the user
+ * wants to change the posision of the pictures and has javascript disabled. The
+ * list has to be included into the "move up" and "move down" form at the picture
+ * management page.
+ *
+ * @param	$args['pictures']		array
  * @return	array
  */
 function UserPictures_userapi_addOrderLinkToPictures($args)
 {
-  	// include external functions
-	Loader::requireOnce('modules/UserPictures/pnincludes/functions.userpictures.php');
+  	// Include external functions
+	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');
 	
   	$fields = $args['pictures'];
   	if (!isset($fields)) return false;
@@ -748,11 +756,7 @@ function UserPictures_userapi_storePictureDB($args)
 					))*(-1))
 		);
 	DBUtil::insertObject($obj,'userpictures');
-    // now we can associate the picture with its owner's user id
-    if ($template_id > 0) return UserPictures_userapi_addPerson(array(	
-			'uname'			=> pnUserGetVar('uname'),
-			'picture_id'	=> $obj['id']));
-	else return true;
+	return true;
 }
 
 /**
