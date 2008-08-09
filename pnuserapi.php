@@ -51,36 +51,52 @@ function UserPictures_userapi_showPicture($args)
  *  + associated global category
  *  + associated persons
  *
- * @param	$args['uid']			int		filter: show pictures of a specified user only
- * @param	$args['template_id']	int		filter: show specific template
- * @param	$args['cat_id']			int		filter: show specific private category
- * @param	$args['globalcat_id']	int		filter: show specific global category
- * @param	$args['assoc_uid']		int		filter: show pictures associated to a given user
- * @param	$args['expand']			bool	additional information
- * @param	$args['countonly']		bool	only return number of pictures not an array
- * @param	$args['showmax']		int		number of images that should be shown on one page
- * @param	$args['startwith']		int		number of the image that should be the first on the page
+ * @param	$args['uid']				int		filter: show pictures of a specified user only
+ * @param	$args['template_id']		int		filter: show specific template
+ * @param	$args['cat_id']				int		filter: show specific private category
+ * @param	$args['globalcat_id']		int		filter: show specific global category
+ * @param	$args['assoc_uid']			int		filter: show pictures associated to a given user
+ * @param	$args['expand']				bool	additional information
+ * @param	$args['countonly']			bool	only return number of pictures not an array
+ * @param	$args['showmax']			int		number of images that should be shown on one page
+ * @param	$args['startwith']			int		number of the image that should be the first on the page
+ * @param	$args['managepicturelink']	int		set to 1 if manage own gallery link should be included in picture ur
  * @return 	array (pictures) or integer (with countonly parameter)
+ * return array: // see pntables.php for more details and the userpictures core columns!
+ * 			assoc_persons:		associated persons as array
+ * 			category: 			private category information as array
+ * 			code:				code to display existing picture
+ * 			code_thumbnail:		code to dispay image as thumbnail including links, lighbox and overin
+ * 			comment:			picture's comment
+ * 			date:				picture's upload date as timestamp
+ * 			filename:			picture's filename
+ * 			filename_absolute:	absolute filename, but not including pngetaseurl()!
+ * 			global_category:	global category information as array
+ * 			id:					picture's id
+ * 			template_id			picture's template id
+ * 			thumb_url:			Link to the thumbnail overview
+ * 			url:				Link to the picture in single dispay mode
  */
 function UserPictures_userapi_get($args)
 {
 	// Get parameters
-	$assoc_uid		= (int)	$args['assoc_uid'];
-	$cat_id			= (int)	$args['cat_id'];
-	$uid			= (int)	$args['uid'];
-	$picture_id		= (int)	$args['id'];
-	$globalcat_id 	= (int)	$args['globalcat_id'];
-	$template_id 	= 		$args['template_id'];
-	$startwith		= 		$args['startwith'];
+	$assoc_uid			= (int)	$args['assoc_uid'];
+	$cat_id				= (int)	$args['cat_id'];
+	$uid				= (int)	$args['uid'];
+	$picture_id			= (int)	$args['id'];
+	$globalcat_id 		= (int)	$args['globalcat_id'];
+	$managepicturelink 	= (int)	$args['managepicturelink'];
+	$template_id 		= 		$args['template_id'];
+	$startwith			= 		$args['startwith'];
 	if (!($startwith > 0)) $startwith = 1;
-	$showmax		= 		$args['showmax'];
-	$expand			= 		$args['expand'];
+	$showmax			= 		$args['showmax'];
+	$expand				= 		$args['expand'];
 	if (!isset($expand) || !is_bool($expand)) $expand = true;
 	if (isset($args['countonly'])) 	$countonly = true;
 	else 							$countonly = false;
 	
   	// Get database information
-    $tables =& pnDBGetTables();
+    $tables 					=& pnDBGetTables();
     $picturescolumn 			= &$tables['userpictures_column'];
     $personscolumn 				= &$tables['userpictures_persons_column'];
     $categoriescolumn 			= &$tables['userpictures_categories_column'];
@@ -183,8 +199,12 @@ function UserPictures_userapi_get($args)
 		if ($assoc_uid >= 0) 	$viewarray['assoc_uid'] 	= $assoc_uid;
 		if ($cat_id >= 0) 		$viewarray['cat_id']		= $cat_id;
 		if ($globalcat_id >= 0) $viewarray['globalcat_id']	= $globalcat_id;
-								$viewarray['singlemode']	= 1;
-								$viewarray['upstartwith']	= $counter;		
+								$viewarray['upstartwith']	= $counter;	
+		if (isset($managepicturelink) && ($managepicturelink > 0)) $viewarray['managepicturelink'] = 1;
+		// create the link to the singe picture
+		$obj['thumb_url']	= pnModURL('UserPictures','user','view',$viewarray);
+		// create the link to the singe picture
+		$viewarray['singlemode']	= 1;
 		$obj['url']	= pnModURL('UserPictures','user','view',$viewarray);
 		// Add additional information if requested
 		if ($expand) {	

@@ -8,6 +8,9 @@
  * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
 
+/**
+ * handler for avatar management
+ */
 class UserPictures_user_AvatarHandler
 {
 	function initialize(&$render)
@@ -48,6 +51,9 @@ class UserPictures_user_AvatarHandler
     }
 }
 
+/**
+ * handler for user settings management
+ */
 class UserPictures_user_SettingsHandler
 {
   	var $uid;
@@ -79,6 +85,9 @@ class UserPictures_user_SettingsHandler
     }
 }
 
+/**
+ * handler for associate person to pictures management
+ */
 class UserPictures_user_ViewHandler
 {
   	var $id;
@@ -102,26 +111,27 @@ class UserPictures_user_ViewHandler
 	
 	    // get pictures
 	    $pictures = pnModAPIFunc('UserPictures','user','get',array (
-	    		'uid'			=> $uid,
-	    		'assoc_uid'		=> $assoc_uid,
-	    		'template_id'	=> $template_id,
-	    		'cat_id'		=> $cat_id,
-	    		'id'			=> $picture_id,
-	    		'globalcat_id'	=> $globalcat_id,
-	    		'startwith'		=> $startwith,
-	    		'showmax'		=> $showmax,
-	    		'expand'		=> true
+	    		'uid'				=> $uid,
+	    		'assoc_uid'			=> $assoc_uid,
+	    		'template_id'		=> $template_id,
+	    		'cat_id'			=> $cat_id,
+	    		'id'				=> $picture_id,
+	    		'globalcat_id'		=> $globalcat_id,
+	    		'startwith'			=> $startwith,
+	    		'showmax'			=> $showmax,
+	    		'managepicturelink'	=> 1,
+	    		'expand'			=> true
 			));
 	
 		// get number of pictures for counter
 	    $pictures_count = pnModAPIFunc('UserPictures','user','get',array (
-	    		'uid'			=> $uid,
-	    		'assoc_uid'		=> $assoc_uid,
-	    		'template_id'	=> $template_id,
-	    		'id'			=> $picture_id,
-	    		'cat_id'		=> $cat_id,
-	    		'globalcat_id'	=> $globalcat_id,
-	    		'countonly'		=> true
+	    		'uid'				=> $uid,
+	    		'assoc_uid'			=> $assoc_uid,
+	    		'template_id'		=> $template_id,
+	    		'id'				=> $picture_id,
+	    		'cat_id'			=> $cat_id,
+	    		'globalcat_id'		=> $globalcat_id,
+	    		'countonly'			=> true
 			));
 
 		// Add overlib
@@ -137,33 +147,35 @@ class UserPictures_user_ViewHandler
 		$render->assign('no_uname',				(($uid > 1) || ($assoc_uic > 1)));
 		$render->assign('showmax',				$showmax);
 		$render->assign('ezcommentsavailable',	(pnModAvailable('EZComments') && pnModIsHooked('EZComments','UserPictures')));
-		$render->assign('managepicturelink',$managepicturelink);
+		$render->assign('managepicturelink',	$managepicturelink);
 		$render->assign('viewer_uid',			pnUserGetVar('uid'));
 		if ($singlemode > 0) {
 		  	// assign viewurl for EZComments integration and persons associations
 		  	$viewurl = pnModURL('UserPictures','user','view',array(
-	    		'uid'			=> $uid,
-	    		'assoc_uid'		=> $assoc_uid,
-	    		'template_id'	=> $template_id,
-	    		'cat_id'		=> $cat_id,
-	    		'globalcat_id'	=> $globalcat_id,
-	    		'upstartwith'	=> $startwith,
-	    		'showmax'		=> $showmax,
-	    		'singlemode'	=> 1
+	    		'uid'				=> $uid,
+	    		'assoc_uid'			=> $assoc_uid,
+	    		'template_id'		=> $template_id,
+	    		'cat_id'			=> $cat_id,
+	    		'globalcat_id'		=> $globalcat_id,
+	    		'upstartwith'		=> $startwith,
+	    		'showmax'			=> $showmax,
+	    		'managepicturelink'	=> $managepicturelink,
+	    		'singlemode'		=> 1
 			  	));
 		  	if (!($picture_id > 0))$viewthumbs = pnModURL('UserPictures','user','view',array(
-	    		'uid'			=> $uid,
-	    		'assoc_uid'		=> $assoc_uid,
-	    		'template_id'	=> $template_id,
-	    		'cat_id'		=> $cat_id,
-	    		'globalcat_id'	=> $globalcat_id,
-	    		'upstartwith'	=> 1
+	    		'uid'				=> $uid,
+	    		'assoc_uid'			=> $assoc_uid,
+	    		'template_id'		=> $template_id,
+	    		'cat_id'			=> $cat_id,
+	    		'globalcat_id'		=> $globalcat_id,
+	    		'managepicturelink'	=> $managepicturelink,
+	    		'upstartwith'		=> 1
 			  	));
 		  	$render->assign('authid',		SecurityUtil::generateAuthKey());
-		  	$render->assign('viewurl',		$viewurl);
 		  	$render->assign('viewthumbs',	$viewthumbs);
 			$p 				= $pictures[0];
-			$this->viewurl 	= $viewurl;
+			$render->assign('redirect',		base64_encode($p['url']));
+			$this->viewurl	= $p['url'];
 			$this->id 		= $p['id'];
 		}
 		return true;

@@ -129,20 +129,13 @@ function UserPictures_user_view()
 
 	// check action: delete association
 	$delassoc = FormUtil::getPassedValue('delassoc');
+	$redirect = FormUtil::getPassedvalue('redirect');
 	if (isset($delassoc) && ($delassoc > 0)) {
 	 	if (!SecurityUtil::confirmAuthKey()) LogUtil::registerAuthIDError();
 	 	else {
-	 	  	// get picture id and picture for redirect
-	 	  	$obj		= DBUtil::selectObjectByID('userpictures_persons',$delassoc);
-	 	  	$id 		= $obj['picture_id'];
-	 	  	print "id $id";
-			$pictures	= pnModAPIFunc('UserPicture','user','get',array('id' => $id));
-			$picture	= $pictures[0];
-			die(prayer($pictures));
-	 	  	// now delete
 		   	if (pnModAPIFunc('UserPictures','user','delPerson',array ('id' => $delassoc))) LogUtil::registerStatus(_USERPICTURESASSOCDELETED);
 			else LogUtil::registerError(_USERPICTURESERRORDELETINGASSOC);
-			return pnRedirect($picture['url'].'&managepicture=1&singlemode=1');
+			return pnRedirect(base64_decode($redirect));
 		}
 	}
 	// create output object
