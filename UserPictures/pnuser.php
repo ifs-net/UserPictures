@@ -300,6 +300,7 @@ function UserPictures_user_managePicture()
     $action 		= FormUtil::getPassedValue('action');
     $picture_id 	= FormUtil::getPassedValue('picture_id');
     $uid 			= pnUserGetVar('uid');
+    $privacy_status	= FormUtil::getPassedValue('privacy_status');
     $cat_id			= FormUtil::getPassedValue('cat_id',0);
     $template_id 	= FormUtil::getPassedValue('template_id');
     // check auth key first
@@ -332,9 +333,9 @@ function UserPictures_user_managePicture()
 			if (pnModAPIFunc('UserPictures','user','setGlobalCategory',array('picture_id'=>$picture_id,'uid' => $uid,'cat_id' => 0))) LogUtil::registerStatus(_USERPICTURESGLOBALCATASSOCDELETED);
 			else LogUtil::registerError(_USERPICTURESERRORDELETINGGLOBALCATASSOC);
 			break;
-		case "setcomment":
+		case "setcommentandprivacy":
 			$comment = pnVarCleanFromInput('comment');
-			if (pnModAPIFunc('UserPictures','user','setComment',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
+			if (pnModAPIFunc('UserPictures','user','setCommentAndPrivacy',array('picture_id'=>$picture_id,'uid'=>$uid,'comment'=>$comment,'privacy_status'=>$privacy_status))) LogUtil::registerStatus(_USERPICTURECOMMENTCHANGED);
 			else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
 			break;
 		case "rotate":

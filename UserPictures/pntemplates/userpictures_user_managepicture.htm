@@ -67,10 +67,17 @@
 	    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id]-->" />
 	    <input type="hidden" name="authid" value="<!--[$authid]-->" />
 	    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
-	    <input type="hidden" name="action" value="setcomment" />
+	    <input type="hidden" name="action" value="setcommentandprivacy" />
 	    <input type="text" name="comment" size="12" value="<!--[$picture.comment|pnvarprepfordisplay]-->" />
-		<input type="submit" value="<!--[pnml name="_USERPICTURESUPDATE"]-->" />
+	    <br />
+	    <!--[pnml name="_USERPICTURESVIEWABLEBY"]--><br />
+		<select name="privacy_status">
+			<option <!--[if $picture.privacy_status eq "0"]-->selected="selected" <!--[/if]-->value="0"><!--[pnml name="_USERPICTURESALL"]--></option>
+			<option <!--[if $picture.privacy_status eq "1"]-->selected="selected" <!--[/if]-->value="1"><!--[pnml name="_USERPICTURESCOMMUNITY"]--></option>
+<!--[* not yet implemented			<option <!--[if $picture.privacy_status eq "3"]-->selected="selected" <!--[/if]-->value="3"><!--[pnml name="_USERPICTURESBUDDIES"]--></option> *]-->
+		</select><input type="submit" value="<!--[pnml name="_USERPICTURESUPDATE"]-->" />
 	    </form>
+	    
 	    <!--[if $p.template_id eq 0]-->
 			<noscript>
 			<br />
