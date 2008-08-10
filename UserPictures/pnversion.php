@@ -34,4 +34,17 @@ $modversion['admin']          = 1;
 // headings in the permission module
 $modversion['securityschema'] = array('UserPictures::' => 'UserPictures item name::UserPictures item ID');
 
+// Some module dependencies
+$modversion['dependencies'] = array(
+	array(	'modname'    => 'EZComments',
+			'minversion' => '1.6', 'maxversion' => '',
+            'status'     => PNMODULE_DEPENDENCY_RECOMMENDED),
+	array(	'modname'    => 'ContactList',
+			'minversion' => '1.0', 'maxversion' => '',
+            'status'     => PNMODULE_DEPENDENCY_RECOMMENDED),
+    array(	'modname'    => 'MultiHook',
+            'minversion' => '5.0', 'maxversion' => '',
+            'status'     => PNMODULE_DEPENDENCY_RECOMMENDED)
+	);
+
 ?>
