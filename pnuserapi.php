@@ -51,6 +51,7 @@ function UserPictures_userapi_showPicture($args)
  *  + associated global category
  *  + associated persons
  *
+ * @param	$args['id']					int		picture id if only one specific is needed
  * @param	$args['uid']				int		filter: show pictures of a specified user only
  * @param	$args['template_id']		int		filter: show specific template
  * @param	$args['cat_id']				int		filter: show specific private category
@@ -175,7 +176,7 @@ function UserPictures_userapi_get($args)
 	}
 	// Otherwise get object array with one or more requested picture(s)
 	else if ($picture_id > 0) {
-	  	$obj = DBUtil::selectExpandedObjectByID('userpictures',$joinInfo,"tbl.".$picture_id);
+	  	$obj = DBUtil::selectExpandedObjectByID('userpictures',$joinInfo,$picture_id);
 	  	$objArray[] = $obj;
 	}
 	else $objArray = DBUtil::selectExpandedObjectArray('userpictures',$joinInfo,$where,$order,($startwith-1),$showmax);
