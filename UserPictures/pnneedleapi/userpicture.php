@@ -33,7 +33,7 @@ function UserPictures_needleapi_userpicture($args)
 
     // We need to add some page vars
     $scripts[] = 'javascript/ajax/prototype.js';
-	$scripts[] = 'javascript/ajax/pnajax.js');
+	$scripts[] = 'javascript/ajax/pnajax.js';
     $scripts[] = 'javascript/ajax/scriptaculous.js';
     $scripts[] = 'javascript/ajax/behaviour.js';
     $scripts[] = 'javascript/ajax/lightbox.js';
