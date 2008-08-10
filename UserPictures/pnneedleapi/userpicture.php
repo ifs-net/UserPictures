@@ -48,7 +48,7 @@ function UserPictures_needleapi_userpicture($args)
             if(pnModAvailable('UserPictures')) {
 				// Get picture
 				$pictures 	= pnModAPIFunc('UserPictures','user','get',array('id' => $nid));
-				$code 		= (string)$pictures[0]['code_thumbnail'];
+				if ($pictures[0]['id'] > 0) $code = (string)$pictures[0]['code_thumbnail'];
 				if (isset($code)) 	$cache[$nid] = $code;
 				else 				$cache[$nid] = '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTFOUNDORNOPERMISSION) . '</em>';
             } 
