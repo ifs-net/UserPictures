@@ -81,11 +81,16 @@
 					<!--[/if]-->
 				</ul>
 			</div>
-			<div>
-				<!--[pnml name="_USERPICTURESWANTTOLINKPIC"]-->? <!--[pnml name="_USERPICTURESUSEURL"]-->: <br />
-				<input onfocus="this.select()" name="linkurl" size="55" id="linkurl" type="text" value="<!--[pngetbaseurl]--><!--[pnmodurl modname="UserPictures" type="user" func="view" id=$p.id]-->" />
-			</div>
 			</center>
+			<div>
+			<h3><!--[pnml name="_USERPICTURESWANTTOLINKPIC"]-->?</h3>
+			<ul>
+				<li><!--[pnml name="_USERPICTURESUSEURL"]-->: <br />
+				<input onfocus="this.select()" name="linkurl" size="55" id="linkurl" type="text" value="<!--[pngetbaseurl]--><!--[pnmodurl modname="UserPictures" type="user" func="view" id=$p.id]-->" /></li>
+				<li><!--[pnml name="_USERPICTURESLINKASNEEDLE"]-->:<br />
+				<!--[pnml name="_USERPICTURESNEEDLELINK"]-->: <i>USERPICTURE<!--[$p.id]--></i><br />
+			</ul>
+			</div>
 		<!--[/if]-->
 	<!--[/foreach]-->
 	</div>

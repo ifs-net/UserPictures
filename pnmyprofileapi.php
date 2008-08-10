@@ -74,7 +74,7 @@ function UserPictures_myprofileapi_tab($args)
 	print pnModAPIFunc('UserPictures','user','latest',array(
 		'template_id'	=> 0,
 		'numcols'		=> 4,
-		'numrows'		=> 3,
+		'numrows'		=> 2,
 		'uid'			=> $uid,
 		'startwith'		=> $startwith
 		));

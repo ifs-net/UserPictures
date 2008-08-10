@@ -13,6 +13,10 @@ define('_USERPICTURESWELCOME',					'Welcome to the user pictures');
 define('_USERPICTURESDESC',						'Here you can manage your pictures and your picture settings. You can upload pictures in using templates the site admin offer you or in using your own gallery. You can manage your own gallery in creating private categories / albums. You also can associate your picture with gloabl categories that will result in community albums. But this is not enough - to make this community and your pictures "social", you are able to associate your pictures with other user profiles. Have a lot of fun...');
 define('_USERPICTURESLASTUPLOADS',				'Latest picture uploads');
 define('_USERPICTURESUSAGEDESC',				'To manage you pictures  please use the "manage my pictures"-link in the menu line above.');
+// needle
+define('_USERPICTURESNOTAVAILABLE',				'UserPictures module is not available and activated');
+define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'The picture id was not found or you do not have permissions to view this picture');
+define('_USERPICTURESNONEEDLEID',				'There was no id found for a picture to display');
 // manage
 define('_USERPICTURESYOURPICTURES',				'Your picture gallery');
 define('_USERPICTURESASSOCEDWITHYOU',			'Pictures associated with your username');
@@ -77,6 +81,8 @@ define('_USERPICTURESVIEWTHUMBNAILS',			'View thumbnail overview');
 define('_USERPICTURESWANTTOLINKPIC',			'You want to show this picture to others');
 define('_USERPICTURESUSEURL',					'Give the following URL to your friends');
 define('_USERPICTURESFILTER',					'filter');
+define('_USERPICTURESLINKASNEEDLE',				'Integrate this picture into any kind of content on this community platform');
+define('_USERPICTURESNEEDLELINK',				'Writing the following text will show this image as thumbnail instead');
 // managepicture
 // new
 define('_USERPICTURESVIEWABLEBY',				'Viewable by');
