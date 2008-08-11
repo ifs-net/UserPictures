@@ -31,7 +31,7 @@ function UserPictures_userapi_showPicture($args)
 	  		'template_id'	=> $template_id
 		  ));
 	$template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id' => $template_id));
-	if (count($picture) == 0) return array (
+	if (count($picture) == 0 && ($template['defaultimage'] != '')) return array (
 			'code'			=> "<img src=\"".$template['defaultimage']."\" />",
 			'template_id'	=> $template_id,
 			'uid'			=> $uid,
@@ -40,7 +40,6 @@ function UserPictures_userapi_showPicture($args)
 	else return $picture[0];
 }
  
-
 /**
  * get fuction
  *
@@ -812,16 +811,14 @@ function UserPictures_userapi_resizePicture($args)
  *
  * @param	$args['uid']		int
  * @param	$args['picture_id']	int
- * @param	$args['template_id']	int
  * @return	bool
  */
 function UserPictures_userapi_deletePicture($args)
 {
     // get data and verify data
     $uid 			= $args['uid'];
-    $template_id 	= $args['template_id'];
     $picture_id 	= $args['picture_id'];
-    if (!($uid>0)  || !($template_id>(-1) || !($picture_id>0))) return false;
+    if (!($uid>0)  || !($picture_id>0)) return false;
 
     // Get picture object 
     $picObj = DBUtil::selectObjectByID('userpictures',$picture_id);
