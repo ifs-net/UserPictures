@@ -99,7 +99,6 @@
 	<br class="userpictures_clearboth" />
 	<!--[if $p.template_id eq 0]-->
 		<!--[if $ezcommentsavailable eq 1 and $showmax eq 1]-->
-			<!--[pnml name="_USERPICTURESPUBLICCOMMENTS"]-->:
 			<!--[* 			integrate EZComments 					
 							====================
 							+ get user settings to check if picture should be commentable
@@ -107,6 +106,7 @@
 																									*]-->
 			<!--[pnmodapifunc modname="UserPictures" type="user" func="getSettings" uid=$p.uid assign="settings"]-->
 			<!--[if $settings.nocomments ne 1]-->
+				<!--[pnml name="_USERPICTURESPUBLICCOMMENTS"]-->:
 				<!--[pnmodcallhooks hookobject=item hookaction=display hookid=$p.id module="UserPictures" returnurl=$viewUrl owneruid=$p.uid implode=false]-->
 				<!--[$hooks.EZComments]-->
 			<!--[/if]-->
