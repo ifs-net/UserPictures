@@ -11,4 +11,7 @@
 define('_USERPICTURESUSERPICTURETITLE',	'Picture management');
 define('_USERPICTURESASSOCSBOTHSIDES',	'association(s) from and to the user');
 define('_USERPICTURESCATEGORIES',		'private categories');
+define('_USERPICTURESPICTURES',			'uploaded picture(s)');
+define('_USERPICTURESAND',				'and');
+define('_USERPICTURESFORUSER',			'for the user');
 ?>
