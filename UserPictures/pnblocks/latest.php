@@ -68,8 +68,9 @@ function UserPictures_latestblock_display($blockinfo)
 
     // Populate block info and pass to theme
     $blockinfo['content'] = pnModAPIFunc('UserPictures','user','latest',array(
-			'numcols' => $vars['numrows'], 
-			'numrows' => $vars['numcols']));
+			'numcols' 	=> $vars['numrows'], 
+			'nopager' 	=> 1,
+			'numrows' 	=> $vars['numcols']));
     return themesideblock($blockinfo);
 }
 

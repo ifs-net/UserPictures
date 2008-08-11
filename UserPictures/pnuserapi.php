@@ -200,6 +200,7 @@ function UserPictures_userapi_get($args)
 		if ($assoc_uid >= 0) 	$viewarray['assoc_uid'] 	= $assoc_uid;
 		if ($cat_id >= 0) 		$viewarray['cat_id']		= $cat_id;
 		if ($globalcat_id >= 0) $viewarray['globalcat_id']	= $globalcat_id;
+		if ($picture_id > 0)	$viewarray['id']			= $picture_id;
 								$viewarray['upstartwith']	= $counter;	
 		if (isset($managepicturelink) && ($managepicturelink > 0)) $viewarray['managepicturelink'] = 1;
 		// create the link to the singe picture
@@ -286,8 +287,9 @@ function UserPictures_userapi_latest($args)
   	$numrows 	= (int) $args['numrows'];
   	$numcols 	= (int) $args['numcols'];
   	$nopager 	= (int) $args['nopager'];
+  	if ($nopager != 1) $nopager = 0;
   	$uid 		= (int) $args['uid'];
-  	$startwith	= (int) $args['startwith'];
+  	$startwith	= (int)	FormUtil::getPassedValue('upstartwith');
   	$showmax 	= $numcols * $numrows;
   	if (!($showmax > 0)) return _USERPICTURESWRONGPARAMETERS;
 	// load handler class
@@ -313,6 +315,7 @@ function UserPictures_userapi_latest($args)
 	if ($nopager > 0) $render->assign('nopager',	$nopager);
 	$render->assign('cycle',				up_getCycle($numcols));
 	$render->assign('pictures',				$pictures);
+	$render->assign('nopager',				$nopager);
 	$render->assign('showmax',				$showmax);
 	$render->assign('pictures_count',		$pictures_count);
 	$render->assign('ezcommentsavailable',	pnModAvailable('EZComments'));
