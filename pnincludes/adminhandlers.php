@@ -11,21 +11,25 @@ class userpictures_admin_mainHandler
 								array('text' => _USERPICTURESTCCONVERT, 'value' => 'convert'),
 								array('text' => _USERPICTURESTCGDLIB, 	'value' => 'openlayers')
 								);
-		$render->assign('items_thumbnailcreation',	$items_thumbnailcreation);
-		$render->assign('activated',				pnModGetVar('UserPictures','activated'));
-		$render->assign('avatarmanagement',			pnModGetVar('UserPictures','avatarmanagement'));
-		$render->assign('convert',					pnModGetVar('UserPictures','convert'));
-		$render->assign('avatarsize',				pnModGetVar('UserPictures','avatarsize'));
-		$render->assign('ownuploads',				pnModGetVar('UserPictures','ownuploads'));
-		$render->assign('maxfilesize',				pnModGetVar('UserPictures','maxfilesize'));
-		$render->assign('disabledtext',				pnModGetVar('UserPictures','disabledtext'));
-		$render->assign('maxwidth',					pnModGetVar('UserPictures','maxwidth'));
-		$render->assign('maxheight',				pnModGetVar('UserPictures','maxheight'));
-		$render->assign('thumbnailsize',			pnModGetVar('UserPictures','thumbnailsize'));
-		$render->assign('thumbnailcreation',		pnModGetVar('UserPictures','thumbnailcreation'));
-		$render->assign('datadir',					pnModGetVar('UserPictures','datadir'));
-		$render->assign('hint',						pnModGetVar('UserPictures','hint'));
-		$render->assign('verifytext',				pnModGetVar('UserPictures','verifytext'));
+		$data = array(
+			'items_thumbnailcreation'	=> $items_thumbnailcreation,
+			'activated'					=> pnModGetVar('UserPictures','activated'),
+			'avatarmanagement'			=> pnModGetVar('UserPictures','avatarmanagement'),
+			'convert'					=> pnModGetVar('UserPictures','convert'),
+			'avatarsize'				=> pnModGetVar('UserPictures','avatarsize'),
+			'ownuploads'				=> pnModGetVar('UserPictures','ownuploads'),
+			'maxfilesize'				=> pnModGetVar('UserPictures','maxfilesize'),
+			'disabledtext'				=> pnModGetVar('UserPictures','disabledtext'),
+			'maxwidth'					=> pnModGetVar('UserPictures','maxwidth'),
+			'maxheight'					=> pnModGetVar('UserPictures','maxheight'),
+			'thumbnailsize'				=> pnModGetVar('UserPictures','thumbnailsize'),
+			'thumbnailcreation'			=> pnModGetVar('UserPictures','thumbnailcreation'),
+			'datadir'					=> pnModGetVar('UserPictures','datadir'),
+			'avatardir'					=> pnModGetVar('UserPictures','avatardir'),
+			'hint'						=> pnModGetVar('UserPictures','hint'),
+			'verifytext'				=> pnModGetVar('UserPictures','verifytext')
+				);
+		$render->assign($data);
 		return true;
     }
     function handleCommand(&$render, &$args)
@@ -33,6 +37,7 @@ class userpictures_admin_mainHandler
 		if ($args['commandName']=='update') {
 		    if (!$render->pnFormIsValid()) return false;
 		    $obj = $render->pnFormGetValues();
+		    // store everything that is submitted in $obj as module variable
 		  	foreach ($obj as $key=>$val) pnModSetVar('UserPictures',$key,$val);
 		  	LogUtil::registerStatus(_USERPICTURESSTORED);
 		}
