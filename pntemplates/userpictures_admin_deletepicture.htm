@@ -1,11 +1,10 @@
 <!--[include file="userpictures_admin_menu.htm"]-->
 <h1><!--[pnml name="_USERPICTURESDELETEPICTURE"]--></h1>
-<br />
 <form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="deletePicture"]-->">
 <input type="hidden" name="action" value="delete" />
-<input type="hidden" name="authid" value="<!--[pnsecgenauthkey module="UserPictures"]-->" />
+<input type="hidden" name="authid" value=<!--[$authid]--> />
 
-<br /><!--[pnml name="_USERPICTURESPICTUREID"]-->:<br />
-<input name="picture_id" value="<!--[$picture_id]-->" />
-<br /><input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
+<!--[pnml name="_USERPICTURESPICTUREID"]-->:<br />
+<input name="picture_id" value="<!--[$picture_id]-->" /> 
+<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
 </form>
