@@ -241,19 +241,21 @@ function UserPictures_userapi_get($args)
 				}
 			}
 			$infobox 	= pnRender::getInstance('UserPictures');
-			$title 		= $info.$assoc_string.'<br /><a href="'.$obj['url'].'">'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
+			$title 		= $info.$assoc_string.'<br /><a href='.$obj['url'].'>'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
 			$info 		= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
 	  	}
 
 		// Add code part
-		$obj['code_thumbnail'] 	= '<a 	id="p'.$obj['id'].'" javascript:void(0);" 
-										onmouseover="return overlib(\''.up_prepDisplay($info).'\')" 
+		$obj['code_thumbnail'] 	= '<a 	id="p'.$obj['id'].'" 
+										onmouseover="return overlib(\''.up_prepDisplay($info).'\');" 
 										onmouseout="return nd();" 
-										href="'.pnModURL('UserPictures','user','view',$viewarray).'" 
-										rel="lightbox[set]"><img id="pt'.$obj['id'].'" class="userpictures_photo" 
+										href="'.$obj['url'].'" 
+										rel="lightbox[set]">
+									<img id="pt'.$obj['id'].'" 
+										class="userpictures_photo" 
 										src="'.$obj['filename_absolute'].'.thumb.jpg" /></a>
 									<script type="text/javascript">
-										$(\'p'.$obj['id'].'\').href="'.$obj['filename_absolute'].'";
+										$(\'p'.$obj['id'].'\').href="'.pnGetBaseURL().$obj['filename_absolute'].'";
 										$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
 										$(\'pt'.$obj['id'].'\').title=" ";
 									</script>';
