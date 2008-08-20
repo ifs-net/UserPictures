@@ -9,7 +9,7 @@ class userpictures_admin_mainHandler
       	// assign existing categories
 		$items_thumbnailcreation = array (	
 								array('text' => _USERPICTURESTCCONVERT, 'value' => 'convert'),
-								array('text' => _USERPICTURESTCGDLIB, 	'value' => 'openlayers')
+								array('text' => _USERPICTURESTCGDLIB, 	'value' => 'gdlib')
 								);
 		$data = array(
 			'items_thumbnailcreation'	=> $items_thumbnailcreation,
