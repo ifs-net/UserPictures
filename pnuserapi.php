@@ -260,7 +260,7 @@ function UserPictures_userapi_get($args)
 										$(\'pt'.$obj['id'].'\').title=" ";
 									</script>';
 
-		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.$obj['filename_absolute'].'" />';
+		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.pnGetBaseURL().$obj['filename_absolute'].'" />';
 
 		// Increase counter to have the upstartwith-variable with the right values
 	  	$counter++;
