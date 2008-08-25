@@ -12,7 +12,7 @@
 // for display and upgrade purposes
 $modversion['name']           = 'UserPictures';
 // the version string must not exceed 10 characters!
-$modversion['version']        = '0.94';
+$modversion['version']        = '1.0';
 $modversion['description']    = 'Give your users the chance to create own galleries and enhance your profile pages etc. with user pictures using UserPictures';
 $modversion['displayname']    = 'UserPictures';
 
