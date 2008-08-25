@@ -71,7 +71,7 @@
 										<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$person.assoc_uname|userprofilelink]-->
 										(<!--[pnml name="_USERPICTURESLINKEDBY"]-->
 										<img src="modules/UserPictures/pnimages/profile.gif" /> <!--[$person.uname|userprofilelink]-->
-									<!--[if $person.uid eq $viewer_uid or $person.assoc_uid eq $viewer_uid]-->,
+									<!--[if $person.uid eq $viewer_uid or $person.assoc_uid eq $viewer_uid or $viewer_uid eq $p.uid]-->,
 										<a href="<!--[$p.url]-->&delassoc=<!--[$person.id]-->&id=<!--[$p.id]-->&managepicturelink=<!--[$managepicturelink]-->&authid=<!--[$authid]-->&redirect=<!--[$redirect]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>
 									<!--[/if]-->
 										)
@@ -107,7 +107,7 @@
 			<!--[pnmodapifunc modname="UserPictures" type="user" func="getSettings" uid=$p.uid assign="settings"]-->
 			<!--[if $settings.nocomments ne 1]-->
 				<!--[pnml name="_USERPICTURESPUBLICCOMMENTS"]-->:
-				<!--[pnmodcallhooks hookobject=item hookaction=display hookid=$p.id module="UserPictures" returnurl=$viewUrl owneruid=$p.uid implode=false]-->
+				<!--[pnmodcallhooks hookobject=item hookaction=display hookid=$p.id module="UserPictures" returnurl=$viewUrl owneruid=$p.uid useurl=$useurl implode=false]-->
 				<!--[$hooks.EZComments]-->
 			<!--[/if]-->
 		<!--[/if]-->

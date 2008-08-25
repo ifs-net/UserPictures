@@ -129,7 +129,7 @@ function UserPictures_user_view()
 
 	// check action: delete association
 	$delassoc = FormUtil::getPassedValue('delassoc');
-	$redirect = FormUtil::getPassedvalue('redirect');
+	$redirect = FormUtil::getPassedvalue('redirect');	
 	if (isset($delassoc) && ($delassoc > 0)) {
 	 	if (!SecurityUtil::confirmAuthKey()) LogUtil::registerAuthIDError();
 	 	else {
