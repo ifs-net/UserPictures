@@ -13,7 +13,7 @@
 $modversion['name']           = 'UserPictures';
 // the version string must not exceed 10 characters!
 $modversion['version']        = '1.0';
-$modversion['description']    = 'Give your users the chance to create own galleries and enhance your profile pages etc. with user pictures using UserPictures';
+$modversion['description']    = 'zikula\'s social gallery software';
 $modversion['displayname']    = 'UserPictures';
 
 // The following in formation is used by the credits module
