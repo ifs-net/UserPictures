@@ -71,14 +71,13 @@ function UserPictures_myprofileapi_tab($args)
     }
 
 	$startwith = (int) FormUtil::getPassedValue('upstartwith');
-	print pnModAPIFunc('UserPictures','user','latest',array(
+	$output = pnModAPIFunc('UserPictures','user','latest',array(
 		'template_id'	=> 0,
 		'numcols'		=> 4,
 		'numrows'		=> 2,
 		'uid'			=> $uid,
 		'startwith'		=> $startwith
 		));
-
-	return;
+	return $output;
 }
 
