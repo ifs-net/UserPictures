@@ -9,6 +9,6 @@
  */
 
 // myprofile plugin
-define('_USERPICTURESTABTITLE',		'Benutzer-Gallerie');
-define('_USERPICTURESHASNOGALLERY',	'Es wurden noch keine Bilder hochgeladen');
+define('_USERPICTURESTABTITLE',		'Galerie');
+define('_USERPICTURESHASNOGALLERY',	'Der Benutzer hat keine Bilder in seine Galerie geladen');
 ?>
