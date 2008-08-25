@@ -163,6 +163,7 @@ class UserPictures_user_ViewHandler
 	    		'managepicturelink'	=> $managepicturelink,
 	    		'singlemode'		=> 1
 			  	));
+		  	// create thumbnail URL if needed
 		  	if (!($picture_id > 0))$viewthumbs = pnModURL('UserPictures','user','view',array(
 	    		'uid'				=> $uid,
 	    		'assoc_uid'			=> $assoc_uid,
@@ -175,7 +176,10 @@ class UserPictures_user_ViewHandler
 		  	$render->assign('authid',		SecurityUtil::generateAuthKey());
 		  	$render->assign('viewthumbs',	$viewthumbs);
 			$p 				= $pictures[0];
+			// assign useurl for EZComments to get a unique url just for the commented picture
+		  	$viewurl = pnModURL('UserPictures','user','view',array('id'	=> $p['id']));
 			$render->assign('redirect',		base64_encode($p['url']));
+			$render->assign('useurl',		base64_encode($viewurl));
 			$this->viewurl	= $p['url'];
 			$this->id 		= $p['id'];
 		}

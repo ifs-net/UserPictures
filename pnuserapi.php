@@ -629,17 +629,21 @@ function UserPictures_userapi_getCategory($args)
 /**
  * delete an associaiton to a picture
  *
- * @param	$args['id']		int	id of the association
+ * @param	$args['id']				int	id of the association
  * @return	bool
  */
 function UserPictures_userapi_delAssociation($args)
 {
     $id	= (int)$args['id'];
     if (!isset($id) || (!($id>0))) return false;
+
+	// get picture information because we need to know who is the owner of the picture
+	$obj = DBUtil::selectObjectByID('userpictures',$id);
+	$picture_uid = $obj['uid'];
     
-    // Get db table array
+    // get data from db
 	$obj = DBUtil::selectObjectByID('userpictures_persons',$id);
-	if (($obj['uid'] == pnUserGetVar('uid')) || ($obj['assoc_uid'] == pnUserGetVar('uid'))) return DBUtil::deleteObject($obj,'userpictures_persons');
+	if (($obj['uid'] == pnUserGetVar('uid')) || ($obj['assoc_uid'] == pnUserGetVar('uid') || (pnUserGetVars('uid') == $picture_uid))) return DBUtil::deleteObject($obj,'userpictures_persons');
 	return false;	// otherwise
 } 
 
