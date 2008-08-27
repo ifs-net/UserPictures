@@ -10,7 +10,7 @@
 
 // main
 define('_USERPICTURESWELCOME',			'Willkommen bei den Benutzer-Bildern');
-define('_USERPICTURESDESC',			'Hier kannst Du Deine Bilder und Bilder-Einstellungen verwalten. Du kannst Bilder zu Vorlagen hochladen, die vom Administrator eingerichtet wurden, oder zu Deiner privaten Gallerie. Du kannst deine eigene Gallerie verwalten und durch privaten Kategorien / Alben organisieren. Du kannst Deine Bilder auch allgemeine Kategorien zuordnen - wodurch Gemeinschafts-Alben entstehen. Aber das ist noch nicht alles - um den "sozialen" Gedanken der Gemeinschaft durch Deine Bilder zu fördern, kannst Du sie mit anderen Benutzer-Profilen verknüpfen. Viel Spaß...');
+define('_USERPICTURESDESC',			'Hier kannst Du Deine Bilder und Bilder-Einstellungen verwalten. Du kannst Bilder zu Vorlagen hochladen, die vom Administrator eingerichtet wurden, oder zu Deiner privaten Galerie. Du kannst deine eigene Galerie verwalten und durch privaten Kategorien / Alben organisieren. Du kannst Deine Bilder auch allgemeine Kategorien zuordnen - wodurch Gemeinschafts-Alben entstehen. Aber das ist noch nicht alles - um den "sozialen" Gedanken der Gemeinschaft durch Deine Bilder zu fördern, kannst Du sie mit anderen Benutzer-Profilen verknüpfen. Viel Spaß...');
 define('_USERPICTURESLASTUPLOADS',		'Zuletzt hochgeladene Bilder');
 define('_USERPICTURESUSAGEDESC',		'Um Deine Bilder zu verwalten benutze bitte den Link "Meine Bilder verwalten" oben im Menü.');
 // needle
@@ -18,16 +18,16 @@ define('_USERPICTURESNOTAVAILABLE',		'Das UserPictures ist nicht verfügbar');
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'Die Bilder-Kennung ist nicht vorhanden, oder Du bist nicht berechtigt dieses Bild zu sehen');
 define('_USERPICTURESNONEEDLEID',		'Es wurde keine Bilder-Kennung für das anzuzeigende Bild gefunden');
 // manage
-define('_USERPICTURESYOURPICTURES',		'Deine eigene Bilder-Gallerie');
+define('_USERPICTURESYOURPICTURES',		'Deine eigene Bilder-Galerie');
 define('_USERPICTURESASSOCEDWITHYOU',		'Bilder, die mit Deinem Benutzernamen verknüpft sind');
 define('_USERPICTURESVIEWLATEST',		'Zuletzt hochgeladene Bilder');
-define('_USERPICTURESUSERGALLERYVIEWOPTIONS',	'Deine privaten Gallerie');
-define('_USERPICTURESTEMPLATEGALLERY',		'Zeige Gallerie mit allen Bildern der Vorlage');
-define('_USERPICTURESTEMPLATEGALLERIES',	'Vorlagen-Gallerie');
+define('_USERPICTURESUSERGALLERYVIEWOPTIONS',	'Deine privaten Galerie');
+define('_USERPICTURESTEMPLATEGALLERY',		'Zeige Galerie mit allen Bildern der Vorlage');
+define('_USERPICTURESTEMPLATEGALLERIES',	'Vorlagen-Galerie');
 define('_USERPICTURESVIEWOPTIONS',		'Hochgeladene Bilder anzeigen');
 define('_USERPICTURESPICTURESTODISPLAY',	'Bild(er) zur Anzeige auf dieser Seite');
 define('_USERPICTURESUPLOADDATE',		'Hochgeladen am');
-define('_USERPICTURESGCOMMUNITYGALLERIES',	'Gemeinschaft-Gallerie');
+define('_USERPICTURESGCOMMUNITYGALLERIES',	'Gemeinschaft-Galerie');
 define('_USERPICTURESGCOMMUNITYGALLERY',	'Allgemeine Kategorie');
 define('_USERPICTURESAVATAREXPLTEXT',		'Alle Deine hochgeladenen Bilder können als Profilbild verwendet werden. Ein Profilbild (oder "Avatar") ist ein Bild, das häufig bei Verknüpfungen zu Dir angezeigt wird - etwa neben Deinen Foren-Beiträgen');
 define('_USERPICTURESMANAGEAVATAR',		'Dein Profilbild (Avatar) verwalten');
@@ -36,10 +36,10 @@ define('_USERPICTURESUPLOADPICFIRST',		'Es muss mindestens ein Bild hochgeladen 
 define('_USERPICTURESMANAGEYOURPICTURES',	'Meine Bilder verwalten');
 define('_USERPICTURESMANAGEYOURPICSHERE',	'Der Administrator hat verschiedene Vorlagen eingerichtet zu denen jeweil ein Bild hochgeladen werden kann');
 define('_USERPICTURESMANAGE',			'Verwalten');
-define('_USERPICTURESOWNUPLOADSPOSSIBLE',	'Es ist möglich Bilder in eine private Gallerie hochzuladen');
-define('_USERPICTURESCANBEUPLOADED',		'Bilder können in die private Gallerie jedes Benutzers hochgeladen werden');
-define('_USERPICTURESUPLOADPICTURES',		'Meine private Gallerie verwalten');
-define('_USERPICTURESMANAGECATEGORIES',		'Kategorien der privaten Gallerie verwalten');
+define('_USERPICTURESOWNUPLOADSPOSSIBLE',	'Es ist möglich Bilder in eine private Galerie hochzuladen');
+define('_USERPICTURESCANBEUPLOADED',		'Bilder können in die private Galerie jedes Benutzers hochgeladen werden');
+define('_USERPICTURESUPLOADPICTURES',		'Meine private Galerie verwalten');
+define('_USERPICTURESMANAGECATEGORIES',		'Kategorien der privaten Galerie verwalten');
 // email "you were added"
 define('_USERPICTURESHELLO',			'Hallo');
 define('_USERPICTURESTHEUSER',			'Der Benutzer');
@@ -123,14 +123,14 @@ define('_USERPICTURESDELETEERROR',		'Beim Versuch ein Bild zu löschen ist ein Fe
 define('_USERPICTURESDELETED',			'Bild gelöscht');
 define('_USERPICTURESCACHEPROBLEM',		'');
 define('_USERPICTURESMAFILESIZEREACHED',	'Die Datei ist zu groß! Bitte verkleinere das Bild und versuch es nochmal');
-define('_USERPICTURESOWNGALLERY',		'Private Benutzer-Gallerie');
+define('_USERPICTURESOWNGALLERY',		'Private Benutzer-Galerie');
 define('_USERPICTURESUPLOADLIMITREACHED',	'Die maximal erlaubte Anzahl hochgeladener Bilder wurde ereicht');
 define('_USERPICTURESROTATED',			'...erledigt.');
 define('_USERPICTURESROTATEDERROR',		'Beim Drehen des Bildes ist ein Fehler aufgetreten');
 define('_USERPICTURESROTATEPICTURE',		'Dieses Bild drehen');
 define('_USERPICTURESWITHCLOCK',		'im Uhrzeigersinn');
 define('_USERPICTURESAGAINSTCLOCK',		'gegen den Uhrzeigersinn');
-define('_USERPICTURESGALLERYVIEW',		'Gehe zu meiner Gallerie');
+define('_USERPICTURESGALLERYVIEW',		'Gehe zu meiner Galerie');
 define('_USERPICTURESONTOP',			'nach oben schieben');
 define('_USERPICTURESDOWN',			'nach unten schieben');
 define('_USERPICTURESDATACHANGED',		'Daten wurden aktualisiert');
@@ -170,7 +170,7 @@ define('_USERPICTURESALL',			'jeden');
 define('_USERPICTURESOR',			'oder');
 define('_USERPICTURESHANDLEEXISTINGASSOCS',	'Falls Du Dich jetzt dafür entscheidest, dass Dein Profil nicht mit Bildern verknüpft werden soll, werden vorhandene Zuordnungen nicht automatisch entfernt. Mit dem folgenden Link werden auch bestehende Zuordnungen entfernt'); 
 // category management
-define('_USERPICTURESMANAGEYOURGALLERY',	'Meine private Gallerie verwalten');
+define('_USERPICTURESMANAGEYOURGALLERY',	'Meine private Galerie verwalten');
 define('_USERPICTURESMANAGECATTEXT',		'Hier können eigene Kategorien eingerichtet werden. Jedes Deiner Bilder kann einer oder mehreren Kategorien zugeordnet werden');
 define('_USERPICTURESNAMEOFNEWCAT',		'Name');
 define('_USERPICTURESTEXTOFNEWCAT',		'Beschreibung');
