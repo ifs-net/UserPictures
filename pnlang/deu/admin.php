@@ -21,10 +21,10 @@ define('_USERPICTURESTOACTIVETE',		'Bilder aktivieren');
 define('_USERPICTURESCONVERT',			'Wo befindet sich das Programm "convert"? (Standard: /usr/bin/convert)');
 define('_USERPICTURESDISABLEDTEXT',		'Text der angezeigt wird, falls derzeitig keine Bilder hochgeladen werden dürfen');
 define('_USERPICTURESMAXFILESIZE',		'Maximale Upload-Größe in KB (Standard 1500) bevor ein Bild auf die Größe skaliert wird, die in der Vorlage festgelegt ist');
-define('_USERPICTURESOWNUPLOADS',		'Wie viele Bilder darf ein Benutzer in seine private Gallerie hochladen?');
+define('_USERPICTURESOWNUPLOADS',		'Wie viele Bilder darf ein Benutzer in seine private Galerie hochladen?');
 define('_USERPICTURESPICTURES',			'Bilder');
-define('_USERPICTURESMAXWIDTHUSERGALLERY',	'Maximale Breite der Bilder in der privaten Benutzer-Gallerie');
-define('_USERPICTURESMAXHEIGHTUSERGALLERY',	'Maximale Höhe der Bilder in der privaten Benutzer-Gallerie');
+define('_USERPICTURESMAXWIDTHUSERGALLERY',	'Maximale Breite der Bilder in der privaten Benutzer-Galerie');
+define('_USERPICTURESMAXHEIGHTUSERGALLERY',	'Maximale Höhe der Bilder in der privaten Benutzer-Galerie');
 define('_USERPICTURESPIXEL',			'Pixel');
 define('_USERPICTURESTHUMBNAILSIZE',            'Größe der Vorschau-Bilder');
 define('_USERPICTURESAVATARDIRECTORY',		'Avatar-Verzeichnis');
@@ -44,7 +44,7 @@ define('_USERPICTURESDELETEDTHUMBNAILS',	'Anzahl gelöschter Vorschau-Bilder');
 define('_USERPICTURESGLOBALCATEGORYMANAGEMENT',	'Verwaltung der allgemeinen Bilder-Kategorien');
 define('_USERPICTURESCATEGORIES',		'Allgemeine Kategorien');
 define('_USERPICTURESADDGLOBALCATEGORY',	'Allgemeine Bilder-Kategorie erstellen oder bearbeiten');
-define('_USERPICTURESGLOBALCATEGORYEXPL',	'Falls eine allgemeine Kategorie erstellt wird, können alle Benutzer ihre Bilder zu dieser Kategorie hinzufügen - damit werden echte Gemeinschafts-Gallerien ermöglicht');
+define('_USERPICTURESGLOBALCATEGORYEXPL',	'Falls eine allgemeine Kategorie erstellt wird, können alle Benutzer ihre Bilder zu dieser Kategorie hinzufügen - damit werden echte Gemeinschafts-Galerien ermöglicht');
 define('_USERPICTURESTEXT',			'Beschreibung der allgemeinen Kategorie');
 define('_USERPICTURESDATE',			'Zugeordnetes Datum (wird zur Sortierung verwendet)');
 define('_USERPICTUREDELETEGLOBALCATEGORY',	'Diese allgemeine Kategorie löschen');
@@ -56,7 +56,7 @@ define('_USERPICTURESACTIONDONE',		'Aktion erfolgreich beendet');
 
 // templates
 define('_USERPICTURESTEMPLATESADMINPANEL',	'Verwaltung der Vorlagen');
-define('_USERPICTURESWHATARETEMPLATES',		'Für jede Art von Bildern, die ein Benutzer neben seiner privaten Gallerie hochladen kann, muss eine eigene Vorlage erstellt werden');
+define('_USERPICTURESWHATARETEMPLATES',		'Für jede Art von Bildern, die ein Benutzer neben seiner privaten Galerie hochladen kann, muss eine eigene Vorlage erstellt werden');
 define('_USERPICTURESNEWTEMPLATE',		'Vorlagen-Einstellungen');
 define('_USERPICTURESTITLE',			'Titel');
 define('_USERPICTURESMAXWIDTH',			'Bilder auf diese Breite skalieren');
@@ -83,12 +83,12 @@ define('_USERPICTURESREALLYDELETE',		'Ja, ich will die Vorlage und alle zugeordn
 define('_USERPICTURESERRORSAVING',		'Beim Versuch die Daten zu speichern trat ein Fehler auf');
 define('_USERPICTURESEDIT',			'Bearbeiten');
 define('_USERPICTURESDELETED',			'Daten wurden gelöscht');
-define('_USERPICTURESOWNGALLERY',		'Eigene Gallerie (optional)');
+define('_USERPICTURESOWNGALLERY',		'Eigene Galerie (optional)');
 
 // browser
 define('_USERPICTURESCHOSETEMPLATE',		'Bitte wähle die Vorlage deren hochgeladene Bilder angezeigt werden sollen');
 define('_USERPICTURESMANAGE',			'Auswahl');
-define('_USERPICTURESUSERGALLERIES',		'Private Benutzer-Gallerie');
+define('_USERPICTURESUSERGALLERIES',		'Private Benutzer-Galerie');
 define('_USERPICTURESUSERNAME',			'Benutzername');
 define('_USERPICTURESCOMMENT',			'Kommentar');
 define('_USERPICTURESDELETETHISPICTURE',	'Dieses Bild löschen');

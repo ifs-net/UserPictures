@@ -10,6 +10,6 @@
 
 define('_USERPICTUREROWS',		'Anzahl Spalten der Bilder-Übersicht');
 define('_USERPICTURECOLS',		'Anzahl Zeilen der Bilder-Übersicht');
-define('_USERPICTURESNEWGALLERYPICS',	'Neueste Bilder der Benutzer-Gallerien');
+define('_USERPICTURESNEWGALLERYPICS',	'Neueste Bilder der Benutzer-Galerien');
 define('_USERPICTURESMORELATESTIMAGES',	'Alle neu hochgeladenen Bilder anzeigen');
 ?>
