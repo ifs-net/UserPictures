@@ -1,12 +1,17 @@
 <!--[include file="userpictures_admin_menu.htm"]-->
 <div class="pn-admincontainer">
 <h2><!--[pnml name="_USERPICTURESDELETEPICTURE"]--></h2>
-<form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="deletePicture"]-->">
+<form class="pn-adminform" method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="deletePicture"]-->">
 <input type="hidden" name="action" value="delete" />
-<input type="hidden" name="authid" value=<!--[$authid]--> />
+<input type="hidden" name="authid" value="<!--[$authid]-->" />
 
-<!--[pnml name="_USERPICTURESPICTUREID"]-->:<br />
+<div class="pn-adminformrow">
+<label for="picture_id"><!--[pnml name="_USERPICTURESPICTUREID"]--></label>
 <input name="picture_id" value="<!--[$picture_id]-->" /> 
-<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
+</div>
+<div class="pn-adminformrow pn-adminformbuttons">
+<!--[pnbutton src=button_ok.gif set=icons/small alt="_USERPICTURESSEND" title="_USERPICTURESSEND"]--> 
+<a href="<!--[pnmodurl modname=UserPictures type=admin]-->"><!--[pnimg modname=core src=button_cancel.gif set=icons/small altml=true titleml=true alt="_CANCEL" title="_CANCEL"]--></a>
+</div>
 </form>
 </div>
