@@ -89,3 +89,10 @@
 .userpictures_bold {
   	font-weight: bold;
 }
+
+.pn-adminformrow .pn-adminformdateinput {
+	margin-left: 0;
+}
+.pn-adminformbuttons button {
+	cursor: pointer;
+}
