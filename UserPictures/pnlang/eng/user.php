@@ -18,6 +18,9 @@ define('_USERPICTURESNOTAVAILABLE',				'UserPictures module is not available and
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'The picture id was not found or you do not have permissions to view this picture');
 define('_USERPICTURESNONEEDLEID',				'There was no id found for a picture to display');
 // manage
+define('_USERPICTURESPRIVACYOPTIONS',			'Privacy options');
+define('_USERPICTURESPRIVACYOPTIONSDESC',		'You can choose for each picture who should be allowed to view the picture. If you choose "nobody" the image is uploaded for integration into other content only. So you can choose who should be able to view the picture wherever you integrate the picture.');
+define('_USERPICTURESNOBODY',					'nobody');
 define('_USERPICTURESYOURPICTURES',				'Your picture gallery');
 define('_USERPICTURESASSOCEDWITHYOU',			'Pictures associated with your username');
 define('_USERPICTURESVIEWLATEST',				'Latest uploads of pictures');

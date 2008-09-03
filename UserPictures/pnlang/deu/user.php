@@ -18,6 +18,9 @@ define('_USERPICTURESNOTAVAILABLE',		'Das UserPictures ist nicht verfügbar');
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'Die Bilder-Kennung ist nicht vorhanden, oder Du bist nicht berechtigt dieses Bild zu sehen');
 define('_USERPICTURESNONEEDLEID',		'Es wurde keine Bilder-Kennung für das anzuzeigende Bild gefunden');
 // manage
+define('_USERPICTURESPRIVACYOPTIONS',			'Privatsphäreneinstellungen für Bilder');
+define('_USERPICTURESPRIVACYOPTIONSDESC',		'Für jedes Bild kann festgelegt werden, wer es sehen darf. Wenn "Niemand" gewählt wird, wird das Bild nur zu Integrationszwecken hochgeladen. Damit entscheidest Du selbst, wo es angezeigt werden soll, indem Du es an entsprechender Stelle in anderen Inhalten plazierst.');
+define('_USERPICTURESNOBODY',			'Niemanden');
 define('_USERPICTURESYOURPICTURES',		'Deine eigene Bilder-Galerie');
 define('_USERPICTURESASSOCEDWITHYOU',		'Bilder, die mit Deinem Benutzernamen verknüpft sind');
 define('_USERPICTURESVIEWLATEST',		'Zuletzt hochgeladene Bilder');

@@ -61,6 +61,7 @@ function UserPictures_userapi_showPicture($args)
  * @param	$args['showmax']			int		number of images that should be shown on one page
  * @param	$args['startwith']			int		number of the image that should be the first on the page
  * @param	$args['managepicturelink']	int		set to 1 if manage own gallery link should be included in picture ur
+ * @param	$args['managepictures']		bool	true also retrieves images marked to be viewed by nobody!
  * @return 	array (pictures) or integer (with countonly parameter)
  * return array: // see pntables.php for more details and the userpictures core columns!
  * 			assoc_persons:		associated persons as array
@@ -87,6 +88,7 @@ function UserPictures_userapi_get($args)
 	$globalcat_id 		= (int)	$args['globalcat_id'];
 	$managepicturelink 	= (int)	$args['managepicturelink'];
 	$template_id 		= 		$args['template_id'];
+	$managepictures		= 		$args['managepictures'];
 	$startwith			= 		$args['startwith'];
 	if (!($startwith > 0)) $startwith = 1;
 	$showmax			= 		$args['showmax'];
@@ -127,11 +129,12 @@ function UserPictures_userapi_get($args)
 	// We'll built an array with all sql where parts we need and transform this array to a string later
 	// The following where parts refer to the normal userpictures table. To make the columns unique we have to use the prefix tbl.
 	if (strlen($template_id) == 0) $template_id = -99;	// Little hack to avoid troubles with a not specified template id
-	if (!pnUserLoggedIn())							$whereArray['notloggedin']	= "tbl.".$picturescolumn['privacy_status']." = 0";
-	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 	= "tbl.".$picturescolumn['template_id']." = ".$template_id;
-	if (isset($uid) 		&& ($uid > 0))	 		$whereArray['uid'] 			= "tbl.".$picturescolumn['uid']." = ".$uid;
-	if (isset($cat_id) 		&& ($cat_id > 0)) 		$whereArray['cat_id']		= "tbl.".$picturescolumn['category']." = ".$cat_id;
-	if (isset($globalcat_id)&& ($globalcat_id > 0))	$whereArray['globalcat_id'] = "tbl.".$picturescolumn['global_category']." = ".$globalcat_id;
+	if (!pnUserLoggedIn())							$whereArray['notloggedin']			= "tbl.".$picturescolumn['privacy_status']." = 0";
+	if (!($managepictures))							$whereArray['skipIntegrateOnly']	= "tbl.".$picturescolumn['privacy_status']." != 3";
+	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 			= "tbl.".$picturescolumn['template_id']." = ".$template_id;
+	if (isset($uid) 		&& ($uid > 0))	 		$whereArray['uid'] 					= "tbl.".$picturescolumn['uid']." = ".$uid;
+	if (isset($cat_id) 		&& ($cat_id > 0)) 		$whereArray['cat_id']				= "tbl.".$picturescolumn['category']." = ".$cat_id;
+	if (isset($globalcat_id)&& ($globalcat_id > 0))	$whereArray['globalcat_id'] 		= "tbl.".$picturescolumn['global_category']." = ".$globalcat_id;
 
 	// Load common lib
 	Loader::requireOnce('modules/UserPictures/pnincludes/common.php');

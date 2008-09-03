@@ -398,8 +398,9 @@ function UserPictures_user_managePicture()
 
     // Assign some values to some variables
 	$pictures = pnModAPIFunc('UserPictures','user','get',array (
-			'uid' 			=> $uid,
-			'template_id' 	=> $template_id
+			'uid' 				=> $uid,
+			'template_id' 		=> $template_id,
+			'managepictures'	=> true
 		));
 
 	// Add order link to make position changes possible if javascript is disabled

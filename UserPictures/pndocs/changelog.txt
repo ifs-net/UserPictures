@@ -25,7 +25,7 @@ new features:
 - drag-and-drop sorting for pictures
 - lightbox.js added for slideshows and some optical effects
 - every user can now link users on all pictures
-- different privacy settings for each picture that is uploaded
+- different privacy settings for each picture that is uploaded (nobody up to all)
 
 removed features:
 -----------------
