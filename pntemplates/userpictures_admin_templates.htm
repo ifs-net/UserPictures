@@ -3,18 +3,29 @@
 <h2><!--[pnml name="_USERPICTURESTEMPLATESADMINPANEL"]--></h2>
 <!--[pnml name="_USERPICTURESWHATARETEMPLATES"]-->
 <h3><!--[pnml name="_USERPICTURESNEWTEMPLATE"]--></h3>
-<form method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="templates"]-->">
+<form class="pn-adminform" method="post" action="<!--[pnmodurl modname="UserPictures" type="admin" func="templates"]-->">
 <input type="hidden" name="action" value="send" />
 <input type="hidden" name="id" value="<!--[$id]-->" />
-<br /><!--[pnml name="_USERPICTURESTITLE]-->:<br />
-<input type="text" name="title" value="<!--[$title]-->" />
-<br /><!--[pnml name="_USERPICTURESMAXWIDTH]-->:<br />
-<input type="text" name="max_width" value="<!--[$max_width]-->" size="5" /> <!--[pnml name="_USERPICTURESPIXELS"]-->
-<br /><!--[pnml name="_USERPICTURESMAXHEIGHT]-->:<br />
-<input type="text" name="max_height" value="<!--[$max_height]-->" size="5" /> <!--[pnml name="_USERPICTURESPIXELS"]-->
-<br /><!--[pnml name="_USERPICTURESDDEFAULTIMAGE]-->:<br />
-<input type="text" name="defaultimage" value="<!--[$defaultimage]-->" size="60" /><br />
-<input type="submit" value="<!--[pnml name="_USERPICTURESSEND"]-->" />
+<div class="pn-adminformrow">
+<label for="title"><!--[pnml name="_USERPICTURESTITLE]-->:</label>
+<input id="title" type="text" name="title" value="<!--[$title]-->" />
+</div>
+<div class="pn-adminformrow">
+<label for="max_width"><!--[pnml name="_USERPICTURESMAXWIDTH]-->:</label>
+<input id="max_width" type="text" name="max_width" value="<!--[$max_width]-->" size="5" /> <!--[pnml name="_USERPICTURESPIXELS"]-->
+</div>
+<div class="pn-adminformrow">
+<label for="max_height"><!--[pnml name="_USERPICTURESMAXHEIGHT]-->:</label>
+<input id="max_height" type="text" name="max_height" value="<!--[$max_height]-->" size="5" /> <!--[pnml name="_USERPICTURESPIXELS"]-->
+</div>
+<div class="pn-adminformrow">
+<label for="defaultimage"><!--[pnml name="_USERPICTURESDDEFAULTIMAGE]-->:</label>
+<input id="defaultimage" type="text" name="defaultimage" value="<!--[$defaultimage]-->" size="60" /><br />
+</div>
+<div class="pn-adminformrow pn-adminformbuttons">
+<!--[pnbutton src=button_ok.gif set=icons/small alt="_USERPICTURESSEND" title="_USERPICTURESSEND"]--> 
+<a href="<!--[pnmodurl modname=UserPictures type=admin]-->"><!--[pnimg modname=core src=button_cancel.gif set=icons/small altml=true titleml=true alt="_CANCEL" title="_CANCEL"]--></a> 
+</div>
 </form>
 
 <h3><!--[pnml name="_USERINFOEXISTINGTEMPLATES"]--></h3>
@@ -45,8 +56,8 @@
 	<td><!--[$template.defaultimage]--></td>
     <td><!--[pnmodapifunc modname="UserPictures" type="user" func="get" template_id=$template.id countonly="1"]--></td>
 	<td>
-	    <a onclick="return confirm('<!--[pnml name="_USERPICTURESREALLYDELETE"]-->')" href="<!--[pnmodurl modname="UserPictures" type="admin" func="templates" action="delete" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESDELETE"]--></a>
-	    <a href="<!--[pnmodurl modname="UserPictures" type="admin" func="templates" action="edit" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESEDIT"]--></a>
+	    <a href="<!--[pnmodurl modname="UserPictures" type="admin" func="templates" action="edit" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[pnimg modname=core src=edit.gif set=icons/extrasmall altml=true titleml=true alt="_USERPICTURESEDIT" title="_EDIT"]--></a>
+	    <a onclick="return confirm('<!--[pnml name="_USERPICTURESREALLYDELETE"]-->')" href="<!--[pnmodurl modname="UserPictures" type="admin" func="templates" action="delete" template_id=$template.id|pnvarprephtmldisplay]-->"><!--[pnimg modname=core src=editdelete.gif set=icons/extrasmall altml=true titleml=true alt="_USERPICTURESDELETE" title="_DELETE"]--></a>
 	</td>
     </tr>
     <!--[/foreach]-->

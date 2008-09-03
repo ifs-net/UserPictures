@@ -4,27 +4,30 @@
 
 <h3><!--[pnml name="_USERPICTURESADDGLOBALCATEGORY"]--></h3>
 
-<!--[pnml name="_USERPICTURESGLOBALCATEGORYEXPL"]--><br /><br />
-<!--[pnform]-->
-
-	<!--[pnformvalidationsummary]-->
-
-    <!--[pnformlabel for="title" text="_USERPICTURESTITLE"]-->:<br />
+<!--[pnml name="_USERPICTURESGLOBALCATEGORYEXPL"]-->
+<!--[pnform cssClass=pn-adminform]-->
+<!--[pnformvalidationsummary]-->
+    <div class="pn-adminformrow">
+    <!--[pnformlabel for="title" text="_USERPICTURESTITLE"]-->
     <!--[pnformtextinput maxLength="120" id="title" mandatory="1"]-->
-	<br /><br />
-    <!--[pnformlabel for="text" text="_USERPICTURESTEXT"]-->:<br />
-    <!--[pnformtextinput maxLength="120" textMode="multiLine" mandatory="0"]-->
-	<br /><br />
-    <!--[pnformlabel for="date" text="_USERPICTURESDATE"]-->:<br />
-	<!--[pnformdateinput id="date" mandatory="0"]-->
-	<br /><br />
+    </div>
+    <div class="pn-adminformrow">
+    <!--[pnformlabel for="text" text="_USERPICTURESTEXT"]-->
+    <!--[pnformtextinput id="text" maxLength="120" textMode="multiLine" mandatory="0"]-->
+    </div>
+    <div class="pn-adminformrow">
+    <!--[pnformlabel for="date" text="_USERPICTURESDATE"]-->
+<!--[pnformdateinput cssClass="pn-adminformdateinput" id="date" mandatory="0"]--></div>
 	<!--[if $id gt 0]-->
-	    <!--[pnformcheckbox id="delete" checked="0"]--><!--[pnformlabel for="delete" text="_USERPICTUREDELETEGLOBALCATEGORY]-->
-		<br /><br />
+    <div class="pn-adminformrow">
+	    <!--[pnformlabel for="delete" text="_USERPICTUREDELETEGLOBALCATEGORY]-->
+	    <!--[pnformcheckbox id="delete" checked="0"]-->
+    </div>
 	<!--[/if]-->
-	<!--[pnformbutton commandName="update" text="_USERPICTURESSAVEGLOBALCAT"]-->
-	<a href="<!--[pnmodurl modname="UserPictures" type="admin" func="categories"]-->"><!--[pnml name="_USERPICTURESCLEARFORM"]--></a>
-	<br /><br />
+    <div class="pn-adminformrow pn-adminformbuttons">
+	<!--[pnformimagebutton commandName="update" text="_USERPICTURESSAVEGLOBALCAT" imageUrl=images/icons/small/button_ok.gif]-->
+	<a href="<!--[pnmodurl modname="UserPictures" type="admin" func="categories"]-->"><!--[pnimg modname=core src=button_cancel.gif set=icons/small altml=true titleml=true alt="_USERPICTURESCLEARFORM" title="_USERPICTURESCLEARFORM"]--></a>
+    </div>
 <!--[/pnform]-->
 
 <h3><!--[pnml name="_USERPICTURESEXISTINGCATEGORIES"]--></h3>
@@ -33,7 +36,7 @@
 
 <ul>
 <!--[foreach from=$categories item="category"]-->
-	<li><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="categories" cat_id=$category.id]-->"><!--[$category.title]--> [<!--[pnml name="_USERPICTURESEDIT"]-->]</a></li>
+	<li><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="categories" cat_id=$category.id]-->"><!--[$category.title]--> <!--[pnimg modname=core src=edit.gif set=icons/extrasmall altml=true titleml=true alt="_EDIT" title="_EDIT"]--></a></li>
 <!--[/foreach]-->
 </ul>
 </div>
