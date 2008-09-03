@@ -31,6 +31,8 @@
 	<ul>
 		<li><!--[pnml name="_USERPICTURESPOSITIONMOVEMENT"]-->:<br />
 		<!--[pnml name="_USERPICTURESDRAGANDDROP"]--></li>
+		<li><!--[pnml name="_USERPICTURESPRIVACYOPTIONS"]-->:<br />
+		<!--[pnml name="_USERPICTURESPRIVACYOPTIONSDESC"]--></li>
 		<li>
 			<!--[pnml name="_USERPICTURESPRIVATECATEGORIES"]-->: <br />
 			<!--[pnml name="_USERPICTURESASSOCIATEDWITHPRIVATE"]-->. <a href="<!--[pnmodurl modname="UserPictures" type="user" func="manageCategories"]-->"><!--[pnml name="_USERPICTURESCATEGORYMANAGEMENT"]--></a>.
@@ -57,6 +59,9 @@
 	    <!--[else]-->
 			<!--[$picture.code_thumbnail]-->
 	    <!--[/if]--><br />
+	    <!--[if $picture.privacy_status eq "3"]-->
+	    	<input type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->" />
+	    <!--[/if]-->
 	</dl>
 	<dl class="userpictures_picinfobox">
 	    <span id="item_delete_<!--[$picture.id]-->"><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a></span>
@@ -74,7 +79,8 @@
 		<select name="privacy_status">
 			<option <!--[if $picture.privacy_status eq "0"]-->selected="selected" <!--[/if]-->value="0"><!--[pnml name="_USERPICTURESALL"]--></option>
 			<option <!--[if $picture.privacy_status eq "1"]-->selected="selected" <!--[/if]-->value="1"><!--[pnml name="_USERPICTURESCOMMUNITY"]--></option>
-<!--[* not yet implemented			<option <!--[if $picture.privacy_status eq "3"]-->selected="selected" <!--[/if]-->value="3"><!--[pnml name="_USERPICTURESBUDDIES"]--></option> *]-->
+<!--[* not yet implemented			<option <!--[if $picture.privacy_status eq "2"]-->selected="selected" <!--[/if]-->value="3"><!--[pnml name="_USERPICTURESBUDDIES"]--></option> *]-->
+			<option <!--[if $picture.privacy_status eq "3"]-->selected="selected" <!--[/if]-->value="3"><!--[pnml name="_USERPICTURESNOBODY]--></option>
 		</select><input type="submit" value="<!--[pnml name="_USERPICTURESUPDATE"]-->" />
 	    </form>
 	    
