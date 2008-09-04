@@ -57,6 +57,7 @@ function UserPictures_userapi_showPicture($args)
  * @param	$args['globalcat_id']		int		filter: show specific global category
  * @param	$args['assoc_uid']			int		filter: show pictures associated to a given user
  * @param	$args['expand']				bool	additional information
+ * @param	$args['key']				int		optional key for private pictures
  * @param	$args['countonly']			bool	only return number of pictures not an array
  * @param	$args['showmax']			int		number of images that should be shown on one page
  * @param	$args['startwith']			int		number of the image that should be the first on the page
@@ -89,6 +90,7 @@ function UserPictures_userapi_get($args)
 	$managepicturelink 	= (int)	$args['managepicturelink'];
 	$template_id 		= 		$args['template_id'];
 	$managepictures		= 		$args['managepictures'];
+	$key				= (int)	$args['key'];
 	$startwith			= 		$args['startwith'];
 	if (!($startwith > 0)) $startwith = 1;
 	$showmax			= 		$args['showmax'];
@@ -207,9 +209,20 @@ function UserPictures_userapi_get($args)
 		if (isset($managepicturelink) && ($managepicturelink > 0)) $viewarray['managepicturelink'] = 1;
 		// create the link to the singe picture
 		$obj['thumb_url']	= pnModURL('UserPictures','user','view',$viewarray);
+		// Add viewkey
+		if (($picture_id > 0) || (isset($managepictures) && ($managepictures))) $obj['viewkey'] = (($obj['uid']^2*$obj['id'])%2000);
+		// return empty result if key is not correct
+		if (($obj['privacy_status'] == 3) && ($picture_id > 0 && (!isset($managepictures)) && ($obj['viewkey'] != $key))) return array();
+
 		// create the link to the singe picture
 		$viewarray['singlemode']	= 1;
+		if (($managepictures) || ($picture_id > 0)) {
+			unset($viewarray);
+			$viewarray['id']	= $obj['id'];
+			$viewarray['key']	= $obj['viewkey'];
+		}
 		$obj['url']	= pnModURL('UserPictures','user','view',$viewarray);
+
 		// Add additional information if requested
 		if ($expand) {	
 			// Add private category

@@ -97,6 +97,7 @@ class UserPictures_user_ViewHandler
 	{	    
 	    // get parameters
 	    $uid				= (int)	FormUtil::getPassedValue('uid');
+	    $key				= (int) FormUtil::getPassedValue('key');
 	    $assoc_uid			= (int)	FormUtil::getPassedValue('assoc_uid');
 	    $template_id		= 		FormUtil::getPassedValue('template_id');
 	    $picture_id			= 		FormUtil::getPassedValue('id');
@@ -121,6 +122,7 @@ class UserPictures_user_ViewHandler
 	    		'startwith'			=> $startwith,
 	    		'showmax'			=> $showmax,
 	    		'managepicturelink'	=> 1,
+	    		'key'				=> $key,
 	    		'expand'			=> true
 			));
 	
@@ -132,6 +134,7 @@ class UserPictures_user_ViewHandler
 	    		'id'				=> $picture_id,
 	    		'cat_id'			=> $cat_id,
 	    		'globalcat_id'		=> $globalcat_id,
+	    		'key'				=> $key,
 	    		'countonly'			=> true
 			));
 
