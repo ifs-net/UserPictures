@@ -59,9 +59,11 @@
 	    <!--[else]-->
 			<!--[$picture.code_thumbnail]-->
 	    <!--[/if]--><br />
+	   	<!--[pnml name="_USERPICTUREINCLUDECODE"]-->:<br />
 	    <!--[if $picture.privacy_status eq "3"]-->
-	    	<!--[pnml name="_USERPICTUREINCLUDECODE"]-->:<br />
-	    	<input type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->" />
+	    	<input onfocus="this.select()" type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->-<!--[$picture.viewkey]-->" />
+	    <!--[else]-->
+	    	<input onfocus="this.select()" type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->" />
 	    <!--[/if]-->
 	</dl>
 	<dl class="userpictures_picinfobox">
