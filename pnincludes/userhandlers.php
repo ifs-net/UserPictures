@@ -110,6 +110,11 @@ class UserPictures_user_ViewHandler
 	    if (!($startwith > 0)) 	$startwith 		= 0;
 	    if ($singlemode > 0)	$showmax 		= 1;
 	    else					$showmax 		= 20;	// Todo: replace with module variable
+	    
+	    // if startwith is nto 1, 21, 41 etc we have to set the variabel new
+	    // otherwise some pictures (if startwith = 5: 1,2,3,4) will not be 
+		// shown in the overview page
+		$startwith = ((int)($startwith/$showmax))+1;
 
 	    // get pictures
 	    $pictures = pnModAPIFunc('UserPictures','user','get',array (
