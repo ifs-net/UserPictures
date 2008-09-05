@@ -16,7 +16,8 @@
  * who want to include UserPictures into their modules should use this function to include
  * a template image.
  *
- * @param	$args['template_id']
+ * @param	$args['template_id']	int	template_id
+ * @param	$args['uid']			int	user id
  * @return	string
  */
 function UserPictures_userapi_showPicture($args)
