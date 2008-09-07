@@ -12,6 +12,7 @@
  * UserPicture needle
  *
  * @param $args['nid'] 	int	(needle id = picture id)
+ *                      int - int (picture id and key separated with "-" character)
  * @return array()
  */
 function UserPictures_needleapi_userpicture($args)
@@ -24,13 +25,7 @@ function UserPictures_needleapi_userpicture($args)
       	$key = (int)$nidArray[1];
 	}
 	else $nid = (int)$nid;
-    
-    // cache the results
-    static $cache;
-    if(!isset($cache)) {
-        $cache = array();
-    } 
-    
+
     // Load language
     pnModLangLoad('UserPictures','user');
     
@@ -49,28 +44,18 @@ function UserPictures_needleapi_userpicture($args)
 
 	// Now the main needle part    
     if(!empty($nid)) {
-      	// check for cache only if picture is not protected with a key.
-        if(!isset($cache[$nid]) || isset($key)) {
-            // not in cache array
-            if(pnModAvailable('UserPictures')) {
-				// Get picture
-				$pictures 	= pnModAPIFunc('UserPictures','user','get',array(
-					'id' => $nid,
-					'key' => $key
-					));
-				if ($pictures[0]['id'] > 0) $code = (string)$pictures[0]['code_thumbnail'];
-				if (isset($code)) 	$cache[$nid] = $code;
-				else 				$cache[$nid] = '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTFOUNDORNOPERMISSION) . '</em>';
-            } 
-			else {
-                $cache[$nid] = '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTAVAILABLE) . '</em>';
-            }
-        }
-        $result = $cache[$nid];
+       if(pnModAvailable('UserPictures')) {
+			// Get picture
+            $pictures = pnModAPIFunc('UserPictures','user','get',array(
+				'id'  => $nid,
+				'key' => $key
+		      ));
+            if ($pictures[0]['id'] > 0) $code = (string)$pictures[0]['code_thumbnail'];
+		    if (isset($code)) 	return $code;
+            else 				return '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTFOUNDORNOPERMISSION) . '</em>';
+        } 
+        else return '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTAVAILABLE) . '</em>';
     } 
-	else {
-        $result = '<em>' . DataUtil::formatForDisplay(_USERPICTURESNONEEDLEID) . '</em>';
-    }
-    return $result;    
+	else return '<em>' . DataUtil::formatForDisplay(_USERPICTURESNONEEDLEID) . '</em>';
 }
 ?>

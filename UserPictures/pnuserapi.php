@@ -262,6 +262,14 @@ function UserPictures_userapi_get($args)
 			$info 		= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
 	  	}
 
+        // This part is needed to avoid problems with non unique ids for lightbox and any other js
+        $old_id = $obj['id'];
+        static $userpictures_counter;
+        if (!isset($userpictures_counter)) $userpictures_counter = 1;
+        $obj['id'] = $old_id."-".$userpictures_counter;
+        $obj['unique'] = $userpictures_counter;
+        $userpictures_counter++;
+        
 		// Add code part
 		$obj['code_thumbnail'] 	= '<a 	id="p'.$obj['id'].'" 
 										onmouseover="return overlib(\''.up_prepDisplay($info).'\');" 
@@ -278,7 +286,7 @@ function UserPictures_userapi_get($args)
 									</script>';
 
 		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.pnGetBaseURL().$obj['filename_absolute'].'" />';
-
+        $obj['id'] = $old_id;
 		// Increase counter to have the upstartwith-variable with the right values
 	  	$counter++;
 	  	// Add picture array to result array
