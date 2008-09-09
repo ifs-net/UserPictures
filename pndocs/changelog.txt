@@ -26,6 +26,8 @@ new features:
 - lightbox.js added for slideshows and some optical effects
 - every user can now link users on all pictures
 - different privacy settings for each picture that is uploaded (nobody up to all)
+- german translation 
+- common look & feel for admin backend pages
 
 removed features:
 -----------------
