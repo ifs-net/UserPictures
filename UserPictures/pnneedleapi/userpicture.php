@@ -51,7 +51,10 @@ function UserPictures_needleapi_userpicture($args)
 				'key' => $key
 		      ));
             if ($pictures[0]['id'] > 0) $code = (string)$pictures[0]['code_thumbnail'];
-		    if (isset($code)) 	return $code;
+		    if (isset($code)) 	{
+		      	if (pnModGetName() == 'pnWikka') return '{{image url="'.pngetBaseURL().$pictures[0]['filename_absolute'].'.thumb.jpg" link="'.pngetBaseURL().$pictures[0]['url'].'"}}';
+				else return $code;
+			}
             else 				return '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTFOUNDORNOPERMISSION) . '</em>';
         } 
         else return '<em>' . DataUtil::formatForDisplay(_USERPICTURESNOTAVAILABLE) . '</em>';
