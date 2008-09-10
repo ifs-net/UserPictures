@@ -15,6 +15,7 @@
 		    <!--[if $verifytext ne '']--><!--[$verifytext|pnvarprepfordisplay|nl2br]--><br /><!--[/if]-->
 		    <input type="hidden" name="authid" value="<!--[$authid]-->" />
 		    <input type="hidden" name="action" value="upload" />
+		    <input type="hidden" name="template_id" value="<!--[$template.id]-->" />
 		    <input type="file" name="file" id="file" size="32" />
 		    <br /><!--[pnml name="_USERPICTURESCOMMENT"]-->:<br />
 		    <input name="comment" />
@@ -75,6 +76,7 @@
 	    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=$template.id]-->" />
 	    <input type="hidden" name="authid" value="<!--[$authid]-->" />
 	    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
+	    <input type="hidden" name="template_id" value="<!--[$template.id]-->" />
 	    <input type="hidden" name="action" value="setcommentandprivacy" />
 	    <input type="text" name="comment" size="12" value="<!--[$picture.comment|pnvarprepfordisplay]-->" />
 	    <br />
@@ -122,12 +124,13 @@
 			<!--[if $categories|@count gt 0]-->
 				<!--[if $picture.category gt 0]-->
 					<!--[pnml name="_USERPICTURESASSOCPRIVATEALBUM"]-->:<br />
-					<!--[$picture.category.title]--> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delfromcat" picture_id=$picture.id authid=$authid]-->">(<!--[pnml name="_USERPICTURESDELETE"]--></a>)<br />
+					<!--[$picture.category.title]--> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delfromcat" template_id=$template.id picture_id=$picture.id authid=$authid]-->">(<!--[pnml name="_USERPICTURESDELETE"]--></a>)<br />
 				<!--[else]-->
 					<!--[pnml name="_USERPICTURESASSOCTOPRIVATEALBUM"]--><br />
 				    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture"]-->">
 				    <input type="hidden" name="authid" value="<!--[$authid]-->" />
 				    <input type="hidden" name="action" value="addtocat" />
+				    <input type="hidden" name="template_id" value="<!--[$template.id]-->" />
 				    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
 				    <select name="cat_id">
 					<!--[foreach item="cat" from=$categories]-->
@@ -142,12 +145,13 @@
 				<!--[if $picture.global_category ne null]-->
 					<!--[pnml name="_USERPICTURESASSOCIATEDWITHGLOBALCAT"]-->:<br />
 				    <!--[$picture.global_category.title]-->
-			        <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delfromglobalassoc" picture_id=$picture.id authid=$authid]-->">(<!--[pnml name="_USERPICTURESDELETE"]-->)</a>
+			        <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delfromglobalassoc" picture_id=$picture.id template_id=$template.id authid=$authid]-->">(<!--[pnml name="_USERPICTURESDELETE"]-->)</a>
 				<!--[else]-->
 					<!--[pnml name="_USERPICTURESASSOCIATEWITHGLOBALCAT"]--><br />
 				    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture"]-->">
 				    <input type="hidden" name="authid" value="<!--[$authid]-->" />
 				    <input type="hidden" name="action" value="addtoglobalcat" />
+				    <input type="hidden" name="template_id" value="<!--[$template.id]-->" />
 				    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
 				    <select name="cat_id">
 					<!--[foreach item="cat" from=$globalcategories]-->

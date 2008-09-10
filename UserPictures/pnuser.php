@@ -311,6 +311,14 @@ function UserPictures_user_managePicture()
 	        return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
 	    }
 	}
+	// template id has to be set.
+    if (!isset($template_id) || !($template_id >= 0)) {
+      	$template_id = 0;
+		/* till http://code.zikula.org/core/ticket/193 is not fixed we'll set template_id to 0 if it is not set
+		LogUtil::registerError(_USERPICTURESTEMPLATENUMBERFALSE);
+		return pnRedirect(pnModURL('UserPictures','user','manage'));
+		*/
+    }
 	// check for requested action
 	switch ($action) {
 	  	case "delete":
@@ -392,7 +400,7 @@ function UserPictures_user_managePicture()
     $template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
     if (!($template[id]>=0)) {
 		LogUtil::registerError(_USERPICTURESTEMPLATENUMBERFALSE);
-		return pnRedirect(pnModURL('UserPictures','user','main'));
+		return pnRedirect(pnModURL('UserPictures','user','manage'));
     }
     else $template_id = $template['id'];
 
