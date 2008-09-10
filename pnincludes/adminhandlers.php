@@ -7,12 +7,27 @@ class userpictures_admin_mainHandler
     function initialize(&$render)
     {
       	// assign existing categories
+      	$templates = pnModAPIFunc('UserPictures','admin','getTemplates');
+      	$items_templatetoavatar[] = array(
+		      			'text' => _USERPICTURESDONOTUSE,
+		    			'value' => 0
+		  );
+      	foreach ($templates as $template) {
+		    if ($template['id'] > 0) {
+				$items_templatetoavatar[] = array(
+		    			'text' => $template['title'] ,
+		    			'value' => $template['id']
+					);
+			}
+		}
 		$items_thumbnailcreation = array (	
 								array('text' => _USERPICTURESTCCONVERT, 'value' => 'convert'),
 								array('text' => _USERPICTURESTCGDLIB, 	'value' => 'gdlib')
 								);
 		$data = array(
 			'items_thumbnailcreation'	=> $items_thumbnailcreation,
+			'items_templatetoavatar'	=> $items_templatetoavatar,
+			'templatetoavatar'			=> pnModGetVar('UserPictures','templatetoavatar'),
 			'activated'					=> pnModGetVar('UserPictures','activated'),
 			'avatarmanagement'			=> pnModGetVar('UserPictures','avatarmanagement'),
 			'convert'					=> pnModGetVar('UserPictures','convert'),

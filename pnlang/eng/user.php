@@ -112,6 +112,7 @@ define('_USERPICTURESASSOCTOPRIVATEALBUM',		'Add to private album');
 define('_USERPICTURESASSOCIATEWITHGLOBALCAT',	'Add to global album');
 define('_USERPICTURESOPENPICFORASSOC',			'Associate persons with this picture');
 define('_USERPICTURESWRONGFILEEXTENSION',		'Illegal image file type');
+define('_USERPICTURESUNSUPPORTEDFORMAT',		'Unsupported file type');
 // old
 define('_USERPICTURESMOVEDOWN',					'down');
 define('_USERPICTURESMOVEUP',					'up');

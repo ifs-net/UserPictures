@@ -111,6 +111,7 @@ define('_USERPICTURESASSOCTOPRIVATEALBUM',	'Zu privatem Album hinzufügen');
 define('_USERPICTURESASSOCIATEWITHGLOBALCAT',	'Zu Gemeinschafts-Album hinzufügen');
 define('_USERPICTURESOPENPICFORASSOC',		'Benutzer diesem Bild zuordnen');
 define('_USERPICTURESWRONGFILEEXTENSION',	'Unzulässiger Bilddatei-Typ');
+define('_USERPICTURESUNSUPPORTEDFORMAT',	'Unzulässiges Dateiformat');
 // old
 define('_USERPICTURESMOVEDOWN',			'nach unten');
 define('_USERPICTURESMOVEUP',			'nach oben');
