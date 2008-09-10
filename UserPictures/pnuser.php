@@ -319,6 +319,14 @@ function UserPictures_user_managePicture()
 		return pnRedirect(pnModURL('UserPictures','user','manage'));
 		*/
     }
+    // Get template information
+    $template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
+    if (!($template[id]>=0)) {
+		LogUtil::registerError(_USERPICTURESTEMPLATENUMBERFALSE);
+		return pnRedirect(pnModURL('UserPictures','user','manage'));
+    }
+    else $template_id = $template['id'];
+
 	// check for requested action
 	switch ($action) {
 	  	case "delete":
@@ -347,7 +355,11 @@ function UserPictures_user_managePicture()
 			else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
 			break;
 		case "rotate":
-			if (pnModAPIFunc('UserPictures','user','rotatePicture',array('angle'=>pnVarCleanFromInput('angle'),'uid'=>pnUserGetVar('uid'),'template_id'=>$template_id,'picture_id'=>$picture_id)  ) ) LogUtil::registerStatus(_USERPICTURESROTATED);
+			if (pnModAPIFunc('UserPictures','user','rotatePicture',array('angle'=>pnVarCleanFromInput('angle'),'uid'=>pnUserGetVar('uid'),'template_id'=>$template_id,'picture_id'=>$picture_id)  ) ) {
+				LogUtil::registerStatus(_USERPICTURESROTATED);
+				// if there is a change we have to update the avatar if tempalteToAvatar is enabled
+				pnModAPIFunc('UserPictures','user','templateToAvatar',array('template_id' => $template_id));
+			}
 			else LogUtil::registerError(_USERPICTURESROTATEDERROR);
 			break;
 		case "upload":
@@ -367,6 +379,8 @@ function UserPictures_user_managePicture()
 			switch ($res) {
 			  case 1:
 				LogUtil::registerStatus(_USERPICTURESUPLOADED);
+				// success.. Is this template activated for the template to avatar function?
+				pnModAPIFunc('UserPictures','user','templateToAvatar',array('template_id' => $template_id));
 			  	break;
 			  case 2:
 	            LogUtil::registerError(_USERPICTURESWRONGFILEEXTENSION);
@@ -380,6 +394,10 @@ function UserPictures_user_managePicture()
 			    LogUtil::registerError(_USERPICTURESUPLOADERROR);
 			    return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
 			  	break;
+			  case '5':
+			    LogUtil::registerError(_USERPICTURESUNSUPPORTEDFORMAT);
+			    return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
+			    break;
 			  default:
 			    LogUtil::registerError(_USERPICTURESERRORUPLOADING."-$res");
 			    return pnRedirect(pnModURL('UserPictures','user','managePicture',array('template_id'=>$template_id)));
@@ -395,14 +413,6 @@ function UserPictures_user_managePicture()
 
     // Create regular output - no action was to be done
     $render = pnRender::getInstance('UserPictures');
-
-    // Get template information
-    $template = pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id'=>$template_id));
-    if (!($template[id]>=0)) {
-		LogUtil::registerError(_USERPICTURESTEMPLATENUMBERFALSE);
-		return pnRedirect(pnModURL('UserPictures','user','manage'));
-    }
-    else $template_id = $template['id'];
 
     // Assign some values to some variables
 	$pictures = pnModAPIFunc('UserPictures','user','get',array (

@@ -52,6 +52,8 @@ function UserPictures_init()
     pnModSetVar('UserPictures', 'hint', (($hint<>false) ? $hint : 1));
     $avatardir = pnSessionGetVar('userpictures_avatardir');
     pnModSetVar('UserPictures', 'avatardir', (($avatardir<>false) ? $avatardir : 'images/avatar'));
+    $templatetoavatar = pnSessionGetVar('userpictures_templatetoavatar');
+    pnModSetVar('UserPictures', 'templatetoavatar', (($templatetoavatar<>false) ? $templatetoavatar : 'images/avatar'));
 
     // clean up
     pnSessionDelVar('userpictures_hint');
@@ -66,7 +68,8 @@ function UserPictures_init()
     pnSessionDelVar('userpictures_disabledtext');
     pnSessionDelVar('userpictures_datadir');
     pnSessionDelVar('userpictures_avatardir');
-
+    pnSessionDelVar('userpictures_templatetoavatar');
+    
     // Initialisation successful
     return true;
 }
@@ -241,6 +244,8 @@ function UserPictures_upgrade($oldversion)
 				DBUtil::updateObject($obj,'userpictures_persons');
 			}
 		  	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
+		  	// set template to avatar to deactivated
+		  	pnModSetVar('UserPictures','templatetoavatar',0);
 		default:
 		    return true;
 	}

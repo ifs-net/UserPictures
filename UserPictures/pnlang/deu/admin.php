@@ -39,7 +39,9 @@ define('_USERPICTURESTCGDLIB',			'gdlib (schärfer, mehr Möglichkeiten)');
 define('_USERPICTURESSHOWHINTONTHUMBNAILS',	'Einen Hinweis in den Vorschau-Bildern zeigen (dafür muss "gdlib" ausgewählt sein)');
 define('_USERPICTURESDELETETHUMBNAILSFORRECREATION',	'Löschen aller Vorschau-Bilder für Neu-Erstellung (das kann dauren!)');
 define('_USERPICTURESDELETEDTHUMBNAILS',	'Anzahl gelöschter Vorschau-Bilder');
- 
+define('_USERPICTURESTEMPLATETOAVATAR',			'Neue Uploads einer Vorlage automatisch als Avatar eines Benutzers setzen');
+define('_USERPICTURESDONOTUSE',				'deaktiviert');
+
 // global category management
 define('_USERPICTURESGLOBALCATEGORYMANAGEMENT',	'Verwaltung der allgemeinen Bilder-Kategorien');
 define('_USERPICTURESCATEGORIES',		'Allgemeine Kategorien');

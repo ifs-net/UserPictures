@@ -764,7 +764,7 @@ function UserPictures_userapi_setcommentandprivacy($args)
 }
 
 /**
- * copyPictureAsAvatar
+ * make and set picture as avatar
  *
  * This function is neccesary for the avatar management and 
  * copies an existing picture into zikula's avatar directory 
@@ -1005,5 +1005,36 @@ function UserPictures_userapi_handleUploadedPicture($args)
 																	'comment' 			=> FormUtil::getPassedValue('comment')))) return 6;
     // upload successfull...
     return 1;
+}
+
+/**
+ * template To Avatar
+ *
+ * This function sets the picture stored for a given template as avatasr
+ * for the actual user
+ *
+ * @param	$args['template_id']
+ * @return	void
+ */
+function UserPictures_userapi_templateToAvatar($args)
+{
+	$templatetoavatar = pnModGetVar('UserPictures','templatetoavatar');
+	$template_id = $args['template_id'];
+	if (!isset($template_id) || (!($template_id > 0))) return false;
+	if (isset($templatetoavatar) && ($templatetoavatar > 0) && ($templatetoavatar == $template_id)) {
+	  	// get picture id
+	  	$pictures = pnModAPIFunc('UserPictures','user','get',array (
+	  			'uid' 			=> pnUserGetVar('uid'),
+	  			'template_id'	=> $template_id
+		  	));
+		$picture = $pictures[0];
+	  	// and set as avatar
+		if (pnModAPIFunc('UserPictures','user','setAvatar',array(
+			'picture_id'	=> $picture['id'],
+			'uid'			=> pnUserGetVar('uid')))) {
+			LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
+		}
+		else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
+	}
 }
 ?>

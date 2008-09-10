@@ -39,6 +39,8 @@ define('_USERPICTURESTCGDLIB',					'gdlib (sharper, more features)');
 define('_USERPICTURESSHOWHINTONTHUMBNAILS',		'Show a hint on the thumbnails (you have to choose gdlib for that feature)');
 define('_USERPICTURESDELETETHUMBNAILSFORRECREATION',	'Delete all existing thumbnails for recreation (this may take a while!)');
 define('_USERPICTURESDELETEDTHUMBNAILS',		'Number of deleted thumbnails');
+define('_USERPICTURESTEMPLATETOAVATAR',			'Set new uploads of given template automatically as actual avatar');
+define('_USERPICTURESDONOTUSE',					'deactivated');
  
 // global category management
 define('_USERPICTURESGLOBALCATEGORYMANAGEMENT',	'Global picture category management');

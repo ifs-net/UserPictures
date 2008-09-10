@@ -21,6 +21,8 @@ fixed bugs:
 
 new features:
 -------------
+- templateToAvatar: Configurable in admin interface. Specify one template
+  that should automatically be set as avatar when a picture gets uploaded or rotated
 - introduced global categories
 - drag-and-drop sorting for pictures
 - lightbox.js added for slideshows and some optical effects
