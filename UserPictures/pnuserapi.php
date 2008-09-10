@@ -727,7 +727,7 @@ function UserPictures_userapi_rotatePicture($args)
   	// get picture and check the owner first
   	$obj = DBUtil::selectObjectByID('userpictures',$picture_id);
 	if ($obj['uid'] != $uid) return false;
-	
+
 	// delete old thumbnail; new is generated on demand later
 	$datadir		= pnModGetVar('UserPictures','datadir');
 	$image			= $datadir.$obj['filename'];
@@ -735,13 +735,23 @@ function UserPictures_userapi_rotatePicture($args)
 	$image_new		= $datadir.$filename_new;
 	$thumbnail		= $image.'.thumb.jpg';
 	if (file_exists($thumbnail)) unlink($thumbnail);
-
 	// read source image, rotate it and store result
-	if (imagejpeg(imagerotate(imagecreatefromjpeg($image), $angle, 0),$image_new,100)) {
-	  	$obj['filename'] = $filename_new;
-	  	return DBUtil::updateObject($obj,'userpictures');
+	if (eregi('.png',$image)) {
+		 if (imagejpeg(imagerotate(imagecreatefrompng($image), $angle, 0),$image_new,100)) {
+			if (file_exists($image)) unlink($image);
+		  	$obj['filename'] = $filename_new;
+		  	return DBUtil::updateObject($obj,'userpictures');
+		} 
+		else return false;
 	}
-	else return false;
+	else {
+		 if (imagejpeg(imagerotate(imagecreatefromjpeg($image), $angle, 0),$image_new,100)) {
+			if (file_exists($image)) unlink($image);
+		  	$obj['filename'] = $filename_new;
+		  	return DBUtil::updateObject($obj,'userpictures');
+		} 
+		else return false;
+	}
 }
 
 /**

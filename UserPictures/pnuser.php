@@ -355,7 +355,12 @@ function UserPictures_user_managePicture()
 			else LogUtil::registerError(_USERPICTURESCOMMENTCHANGEERROR);
 			break;
 		case "rotate":
-			if (pnModAPIFunc('UserPictures','user','rotatePicture',array('angle'=>pnVarCleanFromInput('angle'),'uid'=>pnUserGetVar('uid'),'template_id'=>$template_id,'picture_id'=>$picture_id)  ) ) {
+			if (pnModAPIFunc('UserPictures','user','rotatePicture',array(
+					'angle'			=> FormUtil::getPassedValue('angle'),
+					'uid'			=> pnUserGetVar('uid'),
+					'picture_id'	=> $picture_id
+				)  ) ) 
+			{
 				LogUtil::registerStatus(_USERPICTURESROTATED);
 				// if there is a change we have to update the avatar if tempalteToAvatar is enabled
 				pnModAPIFunc('UserPictures','user','templateToAvatar',array('template_id' => $template_id));
