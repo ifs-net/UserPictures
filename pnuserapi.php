@@ -131,7 +131,7 @@ function UserPictures_userapi_get($args)
 
 	// We'll built an array with all sql where parts we need and transform this array to a string later
 	// The following where parts refer to the normal userpictures table. To make the columns unique we have to use the prefix tbl.
-	if (strlen($template_id) == 0) $template_id = -99;	// Little hack to avoid troubles with a not specified template id
+	if (!isset($template_id) || strlen($template_id) == 0) $template_id = -99;	// Little hack to avoid troubles with a not specified template id
 	if (!pnUserLoggedIn())							$whereArray['notloggedin']			= "tbl.".$picturescolumn['privacy_status']." = 0";
 	if (!($managepictures))							$whereArray['skipIntegrateOnly']	= "tbl.".$picturescolumn['privacy_status']." != 3";
 	if (isset($template_id) && ($template_id >= 0)) $whereArray['template_id'] 			= "tbl.".$picturescolumn['template_id']." = ".$template_id;
