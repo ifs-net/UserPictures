@@ -33,10 +33,10 @@ define('_USERPICTURESPICTURESTODISPLAY',	'Bild(er) zur Anzeige auf dieser Seite'
 define('_USERPICTURESUPLOADDATE',		'Hochgeladen am');
 define('_USERPICTURESGCOMMUNITYGALLERIES',	'Gemeinschaft-Galerie');
 define('_USERPICTURESGCOMMUNITYGALLERY',	'Allgemeine Kategorie');
-define('_USERPICTURESAVATAREXPLTEXT',		'Alle Deine hochgeladenen Bilder können als Profilbild verwendet werden. Ein Profilbild (oder "Avatar") ist ein Bild, das häufig bei Verknüpfungen zu Dir angezeigt wird - etwa neben Deinen Foren-Beiträgen');
-define('_USERPICTURESMANAGEAVATAR',		'Dein Profilbild (Avatar) verwalten');
+define('_USERPICTURESAVATAREXPLTEXT',		'Alle Deine hochgeladenen Bilder können als Avatar verwendet werden. Ein Avatar ist ein Bild, das häufig bei Verknüpfungen zu Dir angezeigt wird - etwa neben Deinen Foren-Beiträgen, News-Beiträgen, Kommentaren etc.');
+define('_USERPICTURESMANAGEAVATAR',		'Dein Avatar verwalten');
 define('_USERPICTURESHASNOGALLERY',		'Kein Bild gefunden');
-define('_USERPICTURESUPLOADPICFIRST',		'Es muss mindestens ein Bild hochgeladen sein, um es als Profilbild zu verwenden');
+define('_USERPICTURESUPLOADPICFIRST',		'Es muss mindestens ein Bild hochgeladen sein, um es als Avatar zu verwenden');
 define('_USERPICTURESMANAGEYOURPICTURES',	'Meine Bilder verwalten');
 define('_USERPICTURESMANAGEYOURPICSHERE',	'Der Administrator hat verschiedene Vorlagen eingerichtet zu denen jeweil ein Bild hochgeladen werden kann');
 define('_USERPICTURESMANAGE',			'Verwalten');
@@ -60,7 +60,7 @@ define('_USERPICTURESAVATARMANAGEMENT',		'Profilbild-Verwaltung');
 define('_USERPICTURESACTUALAVATAR',		'Dein Profilbild');
 define('_USERPICTURESSELECTNEWAVATAR',		'Neues Profilbild wählen');
 define('_USERPICTURESDELETEAVATAR',		'Vorhandenes Profilbild löschen');
-define('_USERPICTURESSETASAVATARNOW',		'Das gewählte Bild als Profilbild verwenden');
+define('_USERPICTURESSETASAVATARNOW',		'Das gewählte Bild als Avatar verwenden');
 define('_USERPICTURESSETASAVATARERROR',		'Beim Erstellen des neuen Profilbildes ist ein Fehler aufgetreten');
 define('_USERPICTURESAVATARREMOVED',		'Dein Profilbild wurde gelöscht');
 // view
@@ -147,8 +147,8 @@ define('_USERPICTURESMOVEUPEERROR',		'Beim Versuch ein Bild zu verschieben trat 
 define('_USERPICTURESMOVEDUP',			'Position des Bildes geändert');
 define('_USERPICTURESADDTOCAT',			'zur Kategorie hinzufügen');
 define('_USERPICTURESCATEGORYMANAGEMENT',	'Deine privaten Kategorien verwalten');
-define('_USERPICTURESCOPYASAVATAR',		'Als Profilbild verwenden');
-define('_USERPICTURESSETASAVATAR',		'Das Bild wird als Profilbild verwendet');
+define('_USERPICTURESCOPYASAVATAR',		'Als Avatar verwenden');
+define('_USERPICTURESSETASAVATAR',		'Das Bild wurde als aktuelles Avatar gesetzt');
 
 // assoc persons
 define('_USERPICTURESASSOCPERSONS',		'Eine Verknüpfung erstellen');
