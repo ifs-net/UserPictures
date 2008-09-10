@@ -53,7 +53,7 @@
 <!--[foreach item=picture from=$pictures]-->
    	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">
 	<a name="<!--[$picture.id]-->">&nbsp;</a>
-	<dl class="userpictures_picleftbox" style="width: <!--[if $template.id gt 0]--><!--[$template.max_width]--><!--[else]--> 100<!--[/if]-->px;" />
+	<dl class="userpictures_picleftbox" <!--[if $template.id eq 0]--> style="width:100px<!--[/if]-->" />
 	    <!--[if $template.id gt 0]-->
 			<!--[$picture.code]-->
 	    <!--[else]-->
@@ -66,7 +66,7 @@
 	    	<input onfocus="this.select()" type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->" />
 	    <!--[/if]-->
 	</dl>
-	<dl class="userpictures_picinfobox">
+	<dl class="userpictures_picinfobox" style="width: 200px;">
 	    <span id="item_delete_<!--[$picture.id]-->"><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a></span>
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=270|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockwith.gif" title="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" alt="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" /></a>
 	    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=90|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockagainst.gif" title="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" alt="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" /></a>
