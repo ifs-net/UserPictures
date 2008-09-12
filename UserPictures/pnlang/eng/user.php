@@ -89,6 +89,7 @@ define('_USERPICTURESLINKASNEEDLE',				'Integrate this picture into any kind of 
 define('_USERPICTURESNEEDLELINK',				'Writing the following text will show this image as thumbnail instead');
 // managepicture
 // new
+define('_USERPICTURESTHUMBNAILCREATIONERROR ',	'An error occured while creating the thumbnail picturei');
 define('_USERPICTURESVIEWABLEBY',				'Viewable by');
 define('_USERPICTURESDRAGANDDROP',				'The position of a picture can easily be changed via drag and drop');
 define('_USERPICTURESASSOCIATEPERSONDESC',		'Link each person that is shown at the picture and make you pictures "social"');

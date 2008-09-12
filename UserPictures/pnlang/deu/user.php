@@ -89,6 +89,7 @@ define('_USERPICTURESLINKASNEEDLE',		'Dieses Bild in irgend einem Inhalt dieser 
 define('_USERPICTURESNEEDLELINK',		'Durch hinzufügen des folgenden Textes wird ein Vorschau-Bild angezeigt');
 // managepicture
 // new
+define('_USERPICTURESTHUMBNAILCREATIONERROR ',	'Fehler - das Vorschaubild konnte nicht erzeugt werden');
 define('_USERPICTURESVIEWABLEBY',		'Sichtbar für');
 define('_USERPICTURESDRAGANDDROP',		'Die Bilder können einfach durch Klicken und Ziehen angeordnet werden');
 define('_USERPICTURESASSOCIATEPERSONDESC',	'Verknüpfe jede auf dem Bild sichtbare Person und fördere so den sozialen Gedanken');
