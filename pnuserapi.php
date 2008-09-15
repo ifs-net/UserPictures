@@ -973,6 +973,16 @@ function UserPictures_userapi_handleUploadedPicture($args)
     $uid 			= pnUserGetVar('uid');
     $prefix 		= pnModGetVar('UserPictures','datadir');
 
+	// first we should check if there really is no picture uploaded yet for this template!
+	$pictures 		= UserPictures_userapi_get(array(
+						'template_id'	=> $template_id,
+						'uid'			=> $uid
+							));
+	if (($template_id > 0) && (count($pictures) > 0)) {
+		// a picture was already found for this template, maybe a user tried to hack the manage picture site
+		LogUtil::registerError(_USERPICTURESTEMPLATEINUSE);
+		return false;
+	}
     // Get file and file information
     $file 			= FormUtil::getPassedValue('file');
     $filename 		= $_FILES['file']['name'];
