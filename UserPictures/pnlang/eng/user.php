@@ -19,6 +19,7 @@ define('_USERPICTURESNOTAVAILABLE',				'UserPictures module is not available and
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'The picture id was not found or you do not have permissions to view this picture');
 define('_USERPICTURESNONEEDLEID',				'There was no id found for a picture to display');
 // manage
+define('_USERPICTURESTEMPLATEINUSE',			'There is already a picture uploaded for this template and only one picture is possible to be uplaoded');
 define('_USERPICTUREASSOCDELERROR',				'An error occured while deleting a picture\'s associations to a member');
 define('_USERPICTUREINCLUDECODE',				'Integrationcode');
 define('_USERPICTURESPRIVACYOPTIONS',			'Privacy options');

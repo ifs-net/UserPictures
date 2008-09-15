@@ -19,6 +19,7 @@ define('_USERPICTURESNOTAVAILABLE',		'Das UserPictures ist nicht verfügbar');
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'Die Bilder-Kennung ist nicht vorhanden, oder Du bist nicht berechtigt dieses Bild zu sehen');
 define('_USERPICTURESNONEEDLEID',		'Es wurde keine Bilder-Kennung für das anzuzeigende Bild gefunden');
 // manage
+define('_USERPICTURESTEMPLATEINUSE',			'Für diese Vorlage kann maximal ein Bild hochgeladen werden und ein Bild wurde bereits hochgeladen');
 define('_USERPICTUREASSOCDELERROR',				'Eine Verbindung mit einem anderen Mitglied konnte nicht gelöscht werden');
 define('_USERPICTUREINCLUDECODE',	'Integrationscode');
 define('_USERPICTURESPRIVACYOPTIONS',			'Privatsphäreneinstellungen für Bilder');
