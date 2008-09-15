@@ -662,14 +662,20 @@ function UserPictures_userapi_delAssociation($args)
     $id	= (int)$args['id'];
     if (!isset($id) || (!($id>0))) return false;
 
+	// get picture id
+	$person_obj = DBUtil::selectObjectByID('userpictures_persons',$id);
+	$picture_id = $person_obj['picture_id'];
+	if (!($picture_id > 0)) return false;
+	
 	// get picture information because we need to know who is the owner of the picture
-	$obj = DBUtil::selectObjectByID('userpictures',$id);
-	$picture_uid = $obj['uid'];
-    
-    // get data from db
-	$obj = DBUtil::selectObjectByID('userpictures_persons',$id);
-	if (($obj['uid'] == pnUserGetVar('uid')) || ($obj['assoc_uid'] == pnUserGetVar('uid') || (pnUserGetVars('uid') == $picture_uid))) return DBUtil::deleteObject($obj,'userpictures_persons');
-	return false;	// otherwise
+	$picture_obj = DBUtil::selectObjectByID('userpictures',$picture_id);
+	$picture_uid = $picture_obj['uid'];
+	
+	$uid = pnUserGetVar('uid');
+	if (	($person_obj['uid'] 		== $uid) ||
+			($person_obj['assoc_uid'] 	== $uid) || 
+			($picture_uid				== $uid)	) return DBUtil::deleteObject($person_obj,'userpictures_persons');
+	else return false;	// otherwise
 } 
 
 /**
@@ -870,7 +876,12 @@ function UserPictures_userapi_deletePicture($args)
 
     // delete all associated persons
     $dummy = UserPictures_userapi_getPersons(array('picture_id'=>$picture_id));
-    foreach ($dummy as $assoc) if (!UserPictures_userapi_delAssociation(array('id'=>$assoc['id']))) return false;
+    foreach ($dummy as $assoc) {
+		if (!UserPictures_userapi_delAssociation(array('id'=>$assoc['id']))) {
+			LogUtil::registerError(_USERPICTUREASSOCDELERROR);
+			return false;
+		}
+	}
     
     // get the picture's filename to delete it - if it does exist
     $path = pnModGetVar('UserPictures','datadir');
