@@ -13,6 +13,7 @@ define('_USERPICTURESWELCOME',			'Willkommen bei den Benutzer-Bildern');
 define('_USERPICTURESDESC',			'Hier kannst Du Deine Bilder und Bilder-Einstellungen verwalten. Du kannst Bilder zu Vorlagen hochladen, die vom Administrator eingerichtet wurden, oder zu Deiner privaten Galerie. Du kannst deine eigene Galerie verwalten und durch privaten Kategorien / Alben organisieren. Du kannst Deine Bilder auch allgemeine Kategorien zuordnen - wodurch Gemeinschafts-Alben entstehen. Aber das ist noch nicht alles - um den "sozialen" Gedanken der Gemeinschaft durch Deine Bilder zu fördern, kannst Du sie mit anderen Benutzer-Profilen verknüpfen. Viel Spaß...');
 define('_USERPICTURESLASTUPLOADS',		'Zuletzt hochgeladene Bilder');
 define('_USERPICTURESUSAGEDESC',		'Um Deine Bilder zu verwalten benutze bitte den Link "Meine Bilder verwalten" oben im Menü.');
+define('_USERPICTURESTHUMBNAILCREATIONERROR',	'Ein Fehler ist aufgetreten beim Erstellen eines Vorschaubildes');
 // needle
 define('_USERPICTURESNOTAVAILABLE',		'Das UserPictures ist nicht verfügbar');
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'Die Bilder-Kennung ist nicht vorhanden, oder Du bist nicht berechtigt dieses Bild zu sehen');
