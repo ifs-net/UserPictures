@@ -13,6 +13,7 @@ define('_USERPICTURESWELCOME',					'Welcome to the user pictures');
 define('_USERPICTURESDESC',						'Here you can manage your pictures and your picture settings. You can upload pictures in using templates the site admin offer you or in using your own gallery. You can manage your own gallery in creating private categories / albums. You also can associate your picture with gloabl categories that will result in community albums. But this is not enough - to make this community and your pictures "social", you are able to associate your pictures with other user profiles. Have a lot of fun...');
 define('_USERPICTURESLASTUPLOADS',				'Latest picture uploads');
 define('_USERPICTURESUSAGEDESC',				'To manage you pictures  please use the "manage my pictures"-link in the menu line above.');
+define('_USERPICTURESTHUMBNAILCREATIONERROR',	'Error: A small preview image could not be created!');
 // needle
 define('_USERPICTURESNOTAVAILABLE',				'UserPictures module is not available and activated');
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'The picture id was not found or you do not have permissions to view this picture');
