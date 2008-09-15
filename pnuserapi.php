@@ -872,9 +872,11 @@ function UserPictures_userapi_deletePicture($args)
     $dummy = UserPictures_userapi_getPersons(array('picture_id'=>$picture_id));
     foreach ($dummy as $assoc) if (!UserPictures_userapi_delAssociation(array('id'=>$assoc['id']))) return false;
     
-    // get the picture's filename to delete it
-    if (!unlink(pnModGetVar('UserPictures','datadir').$picObj['filename'])) return false;
-    unlink(pnModGetVar('UserPictures','datadir').$picObj['filename'].'.thumb.jpg');
+    // get the picture's filename to delete it - if it does exist
+    $path = pnModGetVar('UserPictures','datadir');
+    if (!unlink($path.$picObj['filename']) && file_exists($path.$picObj['filename'])) return false;
+    // delete thumbnail picture
+    if (file_exists($path.$picObj['filename'])) unlink($path.$picObj['filename'].'.thumb.jpg');
 
 	// and delete the picture object
 	return DBUtil::deleteObject($picObj,'userpictures');
