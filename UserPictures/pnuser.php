@@ -41,7 +41,7 @@ function UserPictures_user_main()
 function UserPictures_user_manage()
 {
     // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
 
     // Create output, assign data and return output
     $render = pnRender::getInstance('UserPictures');    
@@ -95,7 +95,7 @@ function UserPictures_user_browse()
 function UserPictures_user_avatar()
 {
     // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
 
 	// check for action
 	$action = FormUtil::getPassedValue('action');
