@@ -40,8 +40,11 @@ function UserPictures_user_main()
  */
 function UserPictures_user_manage()
 {
-    // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
 
     // Create output, assign data and return output
     $render = pnRender::getInstance('UserPictures');    
@@ -67,8 +70,11 @@ function UserPictures_user_manage()
  */
 function UserPictures_user_browse()
 {
-    // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
 
     // Create output, assign data and return output
     $render = pnRender::getInstance('UserPictures');    
@@ -94,8 +100,11 @@ function UserPictures_user_browse()
  */
 function UserPictures_user_avatar()
 {
-    // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
 
 	// check for action
 	$action = FormUtil::getPassedValue('action');
@@ -124,8 +133,11 @@ function UserPictures_user_avatar()
  */
 function UserPictures_user_view() 
 {
-    // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) return LogUtil::registerPermissionError();
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_OVERVIEW)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
 
 	// check action: delete association
 	$delassoc = FormUtil::getPassedValue('delassoc');
@@ -152,8 +164,11 @@ function UserPictures_user_view()
  */
 function UserPictures_user_settings()
 {
-    // Security check
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
 
 	// is there any action to do?
     $action=FormUtil::getPassedValue('action','');
@@ -189,8 +204,11 @@ function UserPictures_user_settings()
  */
 function UserPictures_user_manageCategories()
 {
-    // Security check 
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
 
     // Create output
     $pnRender = pnRender::getInstance('UserPictures');
@@ -460,6 +478,12 @@ function UserPictures_user_managePicture()
  */
 function UserPictures_user_saveList()
 {
+   // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) {
+	  	LogUtil::registerPermissionError();
+		return pnRedirect(pnModURL('UserPictures','user','main'));
+    }
+
 	$order = unserialize(FormUtil::getPassedValue('order'));
     // Security check
     if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
