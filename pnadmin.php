@@ -56,13 +56,12 @@ function UserPictures_admin_deletePicture()
     if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return LogUtil::registerPermissionError();
 
     $action 	= FormUtil::getPassedValue('action','');
-    $uid		= FormUtil::getPassedValue('uid');
     $picture_id	= FormUtil::getPassedValue('picture_id');
-    if (isset($action)) {
+    if (isset($action) && (strlen($action) > 0)) {
 		// auth-key check here!
 		if (!pnSecConfirmAuthKey()) LogUtil::registerPermissionError();
 		else if ($action == 'delete') {
-		    if (pnModAPIFunc('UserPictures','admin','deletePicture',array('picture_id'=>$picture_id))) LogUtil::registerStatus(_USERPICTURESDELETED);
+		    if (pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id'=>$picture_id))) LogUtil::registerStatus(_USERPICTURESDELETED);
 		    else LogUtil::registerError(_USERPICTURESDELETEERROR);
 		}
     }

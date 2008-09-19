@@ -865,13 +865,16 @@ function UserPictures_userapi_deletePicture($args)
     // get data and verify data
     $uid 			= $args['uid'];
     $picture_id 	= $args['picture_id'];
-    if (!($uid>0)  || !($picture_id>0)) return false;
+    if (!(($uid>0) || SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN))  || !($picture_id>0)) return false;
 
     // Get picture object 
     $picObj = DBUtil::selectObjectByID('userpictures',$picture_id);
     if ($picObj['uid'] != $uid) {
-	  	LogUtil::registerError(_USERPICTURESDELETEONLYOWNPICTURES);
-	  	return false;
+      	// the admin should be able to delete other pictures...
+		if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) {
+		  	LogUtil::registerError(_USERPICTURESDELETEONLYOWNPICTURES);
+	  		return false;
+	  	}
 	}
 
     // delete all associated persons
