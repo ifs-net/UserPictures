@@ -1,10 +1,9 @@
 <!--[include file="userpictures_admin_menu.htm"]-->
 <div class="pn-admincontainer">
-<!--[pnsecgenauthkey module="UserPictures" assign=authid]-->
 <h2><!--[pnml name="_USERPICTURESFINDORPHANS"]--></h2>
 <!--[pnml name="_USERPICTURESAMOUNTOFFILES"]-->: <!--[$amount]--><br /><br />
 
-<!--[if $files gt 0]-->
+<!--[if $files|@count gt 0]-->
     <br /><!--[pnml name="_USERPICTURESFILESYSTEM"]-->
     <br /><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="findOrphans" action="deletefiles" authid=$authid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESDELETEFILES"]--></a>
     <br />
@@ -17,7 +16,7 @@
     <br /><!--[pnml name="_USERPICTURESNOORPHANFILES"]-->
 <!--[/if]-->
 
-<!--[if $dbfiles gt 0]-->
+<!--[if $dbfiles|@count gt 0]-->
     <br /><!--[pnml name="_USERPICTURESDBFILESYSTEM"]-->
     <br /><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="findOrphans" action="deletedbfiles" authid=$authid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESDELETEDBFILES"]--></a>
     <br />
@@ -30,7 +29,7 @@
     <br /><!--[pnml name="_USERPICTURESNODBORPHANFILES"]-->
 <!--[/if]-->
 
-<!--[if $pics gt 0]-->
+<!--[if $pics|@count gt 0]-->
     <br /><!--[pnml name="_USERPICTURESORPHANPICS"]-->
     <br /><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="findOrphans" action="deleteorphanpics" authid=$authid|pnvarprephtmldisplay]-->"><!--[pnml name="_USERPICTURESDELETEORPHANPICS"]--></a>
     <br />
