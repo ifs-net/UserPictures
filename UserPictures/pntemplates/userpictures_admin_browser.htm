@@ -1,0 +1,43 @@
+<!--[include file="userpictures_admin_menu.htm"]-->
+
+<h1><!--[pnml name="_USERPICTURESBROWSER"]--></h1>
+
+<p /><!--[pnml name="_USERPICTURESCHOSETEMPLATE"]-->
+
+<!--[pnmodapifunc modname="UserPictures" type="admin" func="getTemplates" assign=templates]-->
+
+<ul>
+<!--[foreach from=$templates item=template]-->
+    <li><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="browser" template_id=$template.id]-->"><!--[$template.title]--> <!--[pnml name="_USERPICTURESMANAGE"]--></a></li>
+<!--[/foreach]-->
+    <li><a href="<!--[pnmodurl modname="UserPictures" type="admin" func="browser" template_id=0]-->"><!--[pnml name="_USERPICTURESUSERGALLERIES"]--> <!--[pnml name="_USERPICTURESMANAGE"]--></a></li>
+</ul>
+
+
+<hr />
+
+<!--[if $picturesCounter gt 0]-->
+
+<!--[$picturesCounter]--> <!--[pnml name="_USERPICTURESIMAGESAVAILABLE"]-->
+
+<!--[* Display a pager to go to the pages   *]-->
+<!--[pager show="page" rowcount=$picturesCounter limit=20 posvar=startnum shift=1]-->
+
+
+<!--[foreach from=$pictures item=picture]-->
+<p /><center><img src="<!--[$picture.filename]-->""><br />
+<!--[pnml name="_USERPICTURESUSERNAME"]-->: <!--[pnusergetvar name="uname" uid=$picture.uid]--><br />
+<!--[pnml name="_USERPICTURESCOMMENT"]-->: <!--[$picture.comment]--><br />
+<a href="<!--[pnmodurl modname="UserPictures" type="admin" func="deletePicture" picture_id=$picture.id]-->"><!--[pnml name="_USERPICTURESDELETETHISPICTURE"]--></a>
+</center>
+<!--[/foreach]-->
+
+<!--[* Display a pager to go to the pages   *]-->
+<!--[pager show="page" rowcount=$picturesCounter limit=20 posvar=startnum shift=1]-->
+
+<!--[/if]-->
+
+
+<!--[include file="userpictures_user_footer.htm"]-->
+
+

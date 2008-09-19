@@ -1,0 +1,5 @@
+Credits for the userpictures module
+
+The included class for resizing the images is from 
+phpclasses.org "imageresizeclass". This class is
+published under the GPL

@@ -1,0 +1,20 @@
+
+<!--[pnmodapifunc modname="UserPictures" type="user" func="getCategories" uid=$uid assign="categories"]-->
+<!--[if $categories|@count > 0]-->
+<center>
+<form method="POST" action="">
+<input type="hidden" name="uid" value="<!--[$uid]-->" />
+<select name="cat_id">
+<option value=""><!--[pnml name="_USERPICTURESNOFILTER"]--></option>
+<!--[foreach item="cat" from=$categories]-->
+    <option value="<!--[$cat.id]-->"><!--[$cat.title]--></option>
+<!--[/foreach]-->
+</select>
+<input type="submit" value="<!--[pnml name="_USERPICTURESFILTERCAT"]-->" />
+</form>
+</center>
+<!--[/if]-->
+<!--[if $cat_id>0]-->
+    <!--[pnmodapifunc modname="UserPictures" type="user" func="getCategory" cat_id=$cat_id assign="category"]-->
+    <strong><!--[$category.title]-->:</strong> <!--[$category.text]--><br />
+<!--[/if]-->

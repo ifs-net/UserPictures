@@ -1,0 +1,39 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+
+<br /><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" template_id=0 uid=$uid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/manage.gif" /> <!--[pnml name="_USERPICTURESMANAGEYOURGALLERY"]--></a><br />
+
+
+<h1><!--[pnml name="_USERPICTURESMANAGECATEGORIES"]-->:</h1>
+
+<!--[pnml name="_USERPICTURESMANAGECATTEXT"]--><br /><br />
+
+
+<!--[pnsecgenauthkey module="UserPictures" assign=authid]-->
+
+<form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="manageCategories"]-->">
+<!--[pnml name="_USERPICTURESNAMEOFNEWCAT"]-->:<br />
+<input type="text" name="title" /><br /><br />
+<!--[pnml name="_USERPICTURESTEXTOFNEWCAT"]-->: <!--[pnml name="_USERPICTURESOPTIONAL"]--><br />
+<textarea name="text"></textarea>
+<input type="hidden" name="authid" value="<!--[$authid]-->" />
+<input type="hidden" name="action" value="newcat" /><br /><br />
+<input type="submit" value="<!--[pnml name="_USERPICTURESSUBMIT"]-->" />
+</form>
+
+<hr />
+<!--[pnml name="_USERPICTURESEXISTINGCATS"]--><br /><br />
+<!--[foreach item="cat" from=$categories]-->
+    <form method="post" action="<!--[pnmodurl modname="UserPictures" type="user" func="manageCategories"]-->">
+    <input type="hidden" name="action" value="editcat" />
+    <input type="hidden" name="authid" value="<!--[$authid]-->" />
+    <input type="hidden" name="id" value="<!--[$cat.id]-->" />
+    <!--[pnml name="_USERPICTURESCATTITLE"]-->:<br />
+    <input type="text" name="title" value="<!--[$cat.title|pnvarprepfordisplay]-->" /><br />
+    <!--[pnml name="_USERPICTURESCATTEXT"]-->:<br />
+    <textarea name="text"><!--[$cat.text|pnvarprepfordisplay]--></textarea><br />
+    <input type="checkbox" name="delete" value="1" /> <!--[pnml name="_USERPICTURESDELETECAT"]--><br />
+    <input type="submit" value="<!--[pnml name="_USERPICTURESUPDATE"]-->" />
+    </form><br /><br />
+<!--[/foreach]-->
+
+<!--[include file="userpictures_user_footer.htm"]-->

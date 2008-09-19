@@ -1,0 +1,78 @@
+<!--[include file="userpictures_admin_menu.htm"]-->
+<div class="pn-admincontainer">
+<h2><!--[pnml name="_USERPICTURESADMINMAIN"]--></h2>
+<!--[versioncheck module="UserPictures"]-->
+<!--[pnform cssClass=pn-adminform]-->
+    <!--[pnformvalidationsummary]-->
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="hint" text="_USERPICTURESALLOWUPLOADS"]-->
+    <!--[pnformcheckbox id="activated" checked="0"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="disabledtext" text="_USERPICTURESDISABLEDTEXT"]-->
+    <!--[pnformtextinput id="disabledtext" textMode=multiLine]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="verifytext" text="_USERPICTURESVERIFYTEXT"]-->
+    <!--[pnformtextinput id="verifytext" textMode=multiLine]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="convert" text="_USERPICTURESCONVERT"]-->
+    <!--[pnformtextinput id="convert" maxLength="120" textMode="singleLine" mandatory="1"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="maxfilesize" text="_USERPICTURESMAXFILESIZE"]-->
+    <!--[pnformintinput id="maxfilesize" minValue="0" textMode="singleLine" mandatory="1"]--> KB
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="datadir" text="_USERPICTURESDATADIR"]-->
+    <!--[pnformtextinput id="datadir" maxLength="120" textMode="singleLine" mandatory="1"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="ownuploads" text="_USERPICTURESOWNUPLOADS"]-->
+    <!--[pnformintinput id="ownuploads" minValue="0" textMode="singleLine" mandatory="1"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="maxwidth" text="_USERPICTURESMAXWIDTHUSERGALLERY"]-->
+    <!--[pnformintinput id="maxwidth" minValue="0" textMode="singleLine" mandatory="1"]--> px
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="maxheight" text="_USERPICTURESMAXHEIGHTUSERGALLERY"]-->
+    <!--[pnformintinput id="maxheight" minValue="0" textMode="singleLine" mandatory="1"]--> px
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="thumbnailcreation" text="_USERPICTURESTHUMBNAILCREATIONMETHOD"]-->
+    <!--[pnformdropdownlist id="thumbnailcreation" items=$items_thumbnailcreation]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="hint" text="_USERPICTURESSHOWHINTONTHUMBNAILS"]-->
+    <!--[pnformcheckbox id="hint" checked="0"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="thumbnailsize" text="_USERPICTURESTHUMBNAILSIZE"]-->
+    <!--[pnformtextinput id="thumbnailsize" maxLength="12" textMode="singleLine" mandatory="1"]-->
+    <p><!--[pnml name="_USERPICTURESATTENTIONONCHANGE"]--></p>
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="templatetoavatar" text="_USERPICTURESTEMPLATETOAVATAR"]-->
+    <!--[pnformdropdownlist id="templatetoavatar" items=$items_templatetoavatar]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="avatarmanagement" text="_USERPICTURESALLOWAVATARMANAGEMENT"]-->
+    <!--[pnformcheckbox id="avatarmanagement" checked="0"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="avatardir" text="_USERPICTURESAVATARDIRECTORY"]-->
+    <!--[pnformtextinput id="avatardir" maxLength="120" textMode="singleLine" mandatory="0"]-->
+    </div>
+    <div class="pn-adminformrow" style="clear: both">
+    <!--[pnformlabel for="avatarsize" text="_USERPICTURESAVATARSIZE"]-->
+    <!--[pnformtextinput id="avatarsize" maxLength="120" textMode="singleLine" mandatory="0"]-->
+    <!--[pnml name="_USERPICTURESPIXELCROSSPIXEL"]-->
+    </div>
+    <div class="pn-adminformrow pn-adminformbuttons">
+    <!--[pnformimagebutton commandName="update" text="_USERPICTURESSAVEGLOBALCAT" imageUrl=images/icons/small/button_ok.gif]-->
+    <a href="<!--[pnmodurl modname=UserPictures type=admin]-->"><!--[pnimg modname=core src=button_cancel.gif set=icons/small altml=true titleml=true alt="_CANCEL" title="_CANCEL"]--></a>
+    </div>
+<!--[/pnform]-->
+</div>

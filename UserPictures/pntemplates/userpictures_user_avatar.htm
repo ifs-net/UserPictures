@@ -1,0 +1,28 @@
+<!--[include file="userpictures_user_menu.htm"]-->
+
+<h1><!--[pnml name="_USERPICTURESAVATARMANAGEMENT"]--></h1>
+<!--[$pictures|@count]--> <!--[pnml name="_USERPICTURESPICTURESTODISPLAY"]-->
+
+<h3><!--[pnml name="_USERPICTURESACTUALAVATAR"]--></h3>
+<img src="<!--[$avatar]-->?<!--[$timestamp]-->" class="userpictures_photo" /><br />
+<a href="<!--[pnmodurl modname="UserPictures" type="user" func="avatar" action="del" authid=$authid]-->"><!--[pnml name="_USERPICTURESDELETEAVATAR"]--></a>
+<h3><!--[pnml name="_USERPICTURESSELECTNEWAVATAR"]--></h3>
+<!--[pnform]-->
+	<!--[pnformvalidationsummary]-->
+	<div class="pn-floatbox userpictures_thumbnails">
+	<!--[foreach from=$pictures item="p"]-->
+		<div class="userpictures_thumbnail">
+			<div style="min-height:<!--[$thumbnailheight]-->px;">	
+				<!--[pnformradiobutton id=$p.id dataField="picture_id" mandatory="1"]--><br />
+				<label for="<!--[$p.id]-->">
+					<img src="<!--[$p.filename_absolute]-->.thumb.jpg" class="userpictures_photo" mandatory="1"/>
+				</label>
+			</div>
+		</div>
+		<!--[cycle values=",,,,<br class=\"userpictures_clearboth\" />"]-->
+	<!--[/foreach]-->
+	</div>
+	<br class="userpictures_clearboth" />
+	<div><!--[pnformbutton commandName="update" text="_USERPICTURESSETASAVATARNOW"]--><br /><br /></div>
+<!--[/pnform]-->
+<!--[include file="userpictures_user_footer.htm"]-->
