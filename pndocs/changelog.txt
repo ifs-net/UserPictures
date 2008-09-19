@@ -64,12 +64,6 @@ other technical changes:
 - attention. existing associations pictures - categories will 
   be lost with the upgrade
 
-todo:
------
-- MyMap integration
-- Transform hook / Multihook needle
-- expand preparation for album cover image in db
-
 0.93:
 =====
 - fixed bug "function_thumbs" when original file is missing 
