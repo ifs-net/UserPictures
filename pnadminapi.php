@@ -45,126 +45,108 @@ function UserPictures_adminapi_delGlobalCategory($args)
 /**
  * find orphan pictures
  *
- * @param	$args[delete]	int
+ * This function retrieves all pictures whoose owner 
+ * does not exist any more
+ *
+ * @param	$args[delete]		int
+ * @param	$args['pictures']	array
+ * @return	array
  */
 function UserPictures_adminapi_getOrphanPictures($args)
 {
-    $templates = UserPictures_adminapi_getTemplates();
-    // Get DB Setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-    // Get Tables
-    $userpicturestable = &$pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-    
-    $templates[]=array('id'=>0);
-    
-    foreach ($templates as $template) {
-		$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('template_id'=>$template[id]));
-		foreach ($pictures as $picture) {
-		    $email=pnUserGetVar('email',$picture['uid']);
-		    if (!(strlen($email)>0)) {
-				$pic['picture_id']=$picture['id'];
-				$pic['uid']=$picture['uid'];
-				$pic['template_id']=$picture['template_id'];
-				$pics[]=$pic;
-				if ($args[delete]=="1") {
-				    pnModAPIFunc('UserPictures','user','deletePicture',array(	'picture_id'	=> $pic['picture_id'],
-																				'template_id'	=> $pic['template_id'],
-																				'uid'			=> $pic['uid']));
-				}
+	$pictures = $args['pictures'];
+  	$pics 	= array();
+	foreach ($pictures as $picture) {
+	  	$uid 	= $picture['uid'];
+	  	$uname 	= pnUserGetVar('uname',$uid);
+	  	if (!(strlen($uname) > 0)) {
+	  	  	if ($delete > 0) {
+			    pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id' => $pic['picture_id']));
 			}
-        }
-    }
-    return $pics;
+			else {
+		  	  	$pic = array();
+				$pic['picture_id']	= $picture['id'];
+				$pic['uid']			= $picture['uid'];
+				$pic['template_id']	= $picture['template_id'];
+				$pics[]=$pic;
+			}
+		}
+	}
+	return $pics;
 }
 
 /**
- * find orphan DB entries
+ * get orphan db entries
  *
- * @param	$args[delete]	int
+ * This function retrieves all pictures that are listet in the database but the
+ * linked file is no more existent in the filesystem / data directory
+ *
+ * @param	$args[delete]		int
+ * @param	$args['pictures']	array
+ * @return	array
  */
 function UserPictures_adminapi_getOrphanDBFiles($args)
 {
-    $templates = UserPictures_adminapi_getTemplates();
-    // Get DB Setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-    // Get Tables
-    $userpicturestable = &$pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-    
-    $templates[]=array('id'=>0);
-    
-    foreach ($templates as $template) {
-		$pictures = pnModAPIFunc('UserPictures','user','getPictures',array('template_id'=>$template[id]));
-		foreach ($pictures as $picture) {
-		    if (!file_exists($picture[filename])) {
-				unset($file);
-				$file[filename]=$picture[filename];
-				$file[uid]=$picture[uid];
-				$files[]=$file;
-				if ($args[delete]=="1") {
-				    $f=explode("/",$picture[filename]);
-				    $filename=$f[(count($f)-1)];
-		    		    $sql="DELETE FROM $userpicturestable WHERE $userpicturescolumn[filename] = '". pnVarPrepForStore($filename)  ."' LIMIT 1";
-				    $dbconn->Execute($sql);
-				}
-		    }
+  	// get path to files
+    $pictures	= $args['pictures'];
+    $delete		= (int)$args['delete'];
+    $files 		= array();
+    foreach($pictures as $picture) {
+	  	if (!file_exists($picture['filename_absolute'])) {
+	  	  	if ($delete > 0) {
+				pnModAPIFunc('UserPictures','user','deletePicture',array('picture_id' => $picture['id']));
+			}
+			else {
+		  	  	$file 			= array();
+				$file[filename]	= $picture[filename];
+				$file[uid]		= $picture[uid];
+				$files[]		= $file;
+			}
 		}
-    }
-    return $files;
+	}
+	return $files;
 }
 
 /**
- * find orphan files in the filesystem
+ * get Orphan files
  *
- * @param	$args[delete]	int
+ * This function retrieves all files that have no entry in the database
+ *
+ * @param	$args['delete']		int
+ * @param	$args['pictures']	array
+ * @return	array
  */
 function UserPictures_adminapi_getOrphanFiles($args)
 {
-    $prefix=pnModGetVar('UserPictures','datadir');
-    $path=$prefix;
-    $verz=opendir($path);
+    $prefix 	= pnModGetVar('UserPictures','datadir');
+    $path 		= $prefix;
+    $verz 		= opendir($path);
+    $delete		= (int)$args['delete'];
+    $pictures	= $args['pictures'];
 
-    // Get DB Setup
-    $dbconn =& pnDBGetConn(true);
-    $pntable =& pnDBGetTables();
-    // Get Tables
-    $userpicturestable = &$pntable['userpictures'];
-    $userpicturescolumn = &$pntable['userpictures_column'];
-
-    while ($file=readdir($verz)) {
-		if ((filetype($path.$file)!="dir") && ($file != "..")  && ($file != ".") && ($file!="index.html") && ($file!="index.htm") && ($file!=".htaccess") 
-		    // and now check for thumbnails that are correct
-		    ) {
-		    $sql = "SELECT $userpicturescolumn[id] 
-			    FROM $userpicturestable
-	        	    WHERE $userpicturescolumn[filename] = '".$file."'";
-		    $result=$dbconn->Execute($sql);
-		    if ($dbconn->ErrorNo() == 0) {
-				$counter=$result->RecordCount();
-				if ($counter == 0) {
-		    	    
-				    // there is no entry in the Database.
-				    // we must see if the entry is a valid thumbnail
-				    // thumbnails are not stored in the database.
-				    $thumbnail=false;
-				    if (eregi('thumb.jpg',$file)) {
-					unset($orgfile);
-		    			$orgfile = $prefix.substr($file,0,(strlen($file)-strlen('thumb.jpg')-1));
-					if (file_exists($orgfile)) $thumbnail=true;
-				    }
-				    if (!$thumbnail) {
-					unset($item);
-					$item[filename]=$file;
-					if ($args[delete]=="1") {
-				    	    if (unlink($path.'/'.$file)) $item[deleted]=1;
-					}
-				    $items[]=$item;
-				    }
-		        }
-		    }
+	// reorder picture array
+	$dummy = array();
+	foreach ($pictures as $picture) {
+		$dummy[$picture['filename']]=$picture;
+	}
+	$pictures 	= $dummy;
+	$items 		= array();
+	// now scan the datadir
+    while ($file = readdir($verz)) {
+      	// we have some exclusions
+		if ((	filetype($path.$file) != "dir") && 
+				($file != "..")  && 
+				($file != ".") && 
+				($file != "index.html") && 
+				($file != "index.htm") && 
+				($file != ".htaccess")	) {
+			$id = $pictures[str_replace('.thumb.jpg','',$file)]['id'];
+			if (!($id > 0)) {
+				// delete file if needed
+				if ((int)$args['delete'] > 0) unlink($path.$file);
+			  	$item['filename'] = $file;
+			  	$items[] = $item;
+			}
 		}
     }
     return $items;
@@ -177,13 +159,18 @@ function UserPictures_adminapi_getOrphanFiles($args)
  */
 function UserPictures_adminapi_deletethumbnails()
 {
-    $prefix=pnModGetVar('UserPictures','datadir');
-    $path=$prefix;
-    $verz=opendir($path);
-    $c=0;
-    while ($file=readdir($verz)) {
-	if ((filetype($path.$file)!="dir") && ($file != "..")  && ($file != ".") && ($file!="index.html") && ($file!="index.htm") && ($file!=".htaccess")){
-	    if (eregi('thumb',$file)) {
+    $prefix = pnModGetVar('UserPictures','datadir');
+    $path	= $prefix;
+    $verz	= opendir($path);
+    $c = 0;
+    while ($file = readdir($verz)) {
+	if (	(filetype($path.$file)!="dir") && 
+			($file != "..")  && 
+			($file != ".") && 
+			($file != "index.html") && 
+			($file != "index.htm") && 
+			($file != ".htaccess")	){
+	    if (eregi('.thumb.jpg',$file)) {
 			if (unlink($prefix."/".$file)) $c++;
 		    }
 		}
@@ -198,10 +185,10 @@ function UserPictures_adminapi_deletethumbnails()
  */
 function UserPictures_adminapi_getNumberOfFiles()
 {
-    $prefix=pnModGetVar('UserPictures','datadir');
-    $path=$prefix;
-    $verz=opendir($path);
-    while ($file=readdir($verz)) $i++;
+    $prefix = pnModGetVar('UserPictures','datadir');
+    $path	= $prefix;
+    $verz	= opendir($path);
+    while ($file = readdir($verz)) $i++;
     return $i;
 }
 
