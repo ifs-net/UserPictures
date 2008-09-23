@@ -1049,25 +1049,32 @@ function UserPictures_userapi_handleUploadedPicture($args)
  * This function sets the picture stored for a given template as avatasr
  * for the actual user
  *
- * @param	$args['template_id']
+ * @param	$args['template_id']	int
+ * @param	$args['uid']			int (optional, for admin rights only)
  * @return	void
  */
 function UserPictures_userapi_templateToAvatar($args)
 {
+  	// admin can to more..
+    if (SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) {
+		$uid = $args['uid'];
+		if (!(isset($uid) && ($uid > 1))) $uid = pnUserGetVar('uid');
+	}
+  	else $uid = pnUserGetVar('uid');
 	$templatetoavatar = pnModGetVar('UserPictures','templatetoavatar');
 	$template_id = $args['template_id'];
 	if (!isset($template_id) || (!($template_id > 0))) return false;
 	if (isset($templatetoavatar) && ($templatetoavatar > 0) && ($templatetoavatar == $template_id)) {
 	  	// get picture id
 	  	$pictures = pnModAPIFunc('UserPictures','user','get',array (
-	  			'uid' 			=> pnUserGetVar('uid'),
+	  			'uid' 			=> $uid,
 	  			'template_id'	=> $template_id
 		  	));
 		$picture = $pictures[0];
 	  	// and set as avatar
 		if (pnModAPIFunc('UserPictures','user','setAvatar',array(
 			'picture_id'	=> $picture['id'],
-			'uid'			=> pnUserGetVar('uid')))) {
+			'uid'			=> $uid))) {
 			LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
 		}
 		else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
