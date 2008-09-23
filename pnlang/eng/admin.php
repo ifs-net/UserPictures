@@ -9,12 +9,19 @@
  */
 
 // main
+define('_USERPICTURESSETASAVATARERROR',			'Error while setting avatar for a user');
+define('_USERPICTURESFUNCTIONDONE',				'Function sucessfully completed');
+define('_USERPICTURESACTUALTEMPLATE',			'Configured template that should be used for this function');
+define('_USERPICTURESGOONORSTART',				'proceed / start');
+define('_USERPICTURESAVATARSETFOR',				'Function applied to number of accounts');
+define('_USERPICTURESSELECTTEMPLATEFIRST',		'Select a template that should be used for this function first');
+define('_USERPICTURESOVERWRITEAVATARS',			'You can apply template-to-avatar manually for all users to make the specified template picture to the avatar picture of each user');
+define('_USERPICTURESOVERWRITEAVATARSNOW',		'Set actual template-pictures as avatar now');
 define('_USERPICTURESSTORED',					'Settings stored');
 define('_USERPICTURESMAINADMINPANEL',			'Administration of UserPictures');
 define('_USERPICTURESALLOWUPLOADS',				'Allow picture uploads');
 define('_USERPICTURESVERIFYTEXT',				'Some text that is shown in the upload form (criteria for the pictures etc.');
 define('_USERPICTURESSEND',						'Submit');
-define('_USERPICTURESBROWSER',					'Browse pictures');
 define('_USERPICTURESTEMPLATESADMINMAIN',		'Picture templates');
 define('_USERPICTURESADMINMAIN',				'Main settings');
 define('_USERPICTURESTOACTIVETE',				'Activate pictures');
@@ -86,15 +93,6 @@ define('_USERPICTURESERRORSAVING',				'An error occured while trying to store th
 define('_USERPICTURESEDIT',						'edit');
 define('_USERPICTURESDELETED',					'Data was deleted');
 define('_USERPICTURESOWNGALLERY',				'own gallery (optional)');
-
-// browser
-define('_USERPICTURESCHOSETEMPLATE',			'Please choose the template of which you want to see the uploaded pictures');
-define('_USERPICTURESMANAGE',					'choose');
-define('_USERPICTURESUSERGALLERIES',			'User\'s own picture gallery');
-define('_USERPICTURESUSERNAME',					'Username');
-define('_USERPICTURESCOMMENT',					'Comment');
-define('_USERPICTURESDELETETHISPICTURE',		'Delete this image');
-define('_USERPICTURESIMAGESAVAILABLE',			'Images uploaded');
 
 // deletepicture
 define('_USERPICTURESDELETEPICTURE',			'Delete a picture');

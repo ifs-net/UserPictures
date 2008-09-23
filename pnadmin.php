@@ -29,6 +29,94 @@ function UserPictures_admin_main()
 }
 
 /**
+ * templateToAvatar function
+ *
+ * This page makes it possible to set actual template image as avatar
+ *
+ * @return		output
+ */
+function UserPictures_admin_templateToAvatar()
+{
+    // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return LogUtil::registerPermissionError();
+
+    // Create output object
+    $render = pnRender::getInstance('UserPictures');
+    
+    // Get data
+    $templatetoavatar 	= (int)pnModGetVar('UserPictures','templatetoavatar');
+    $template 			= pnModAPIFunc('UserPictures','admin','getTemplates',array('template_id' => $templatetoavatar));
+    if (($templatetoavatar == 0) || (!($template['id'] > 0))) {
+	  	// no template set - we cannnot do anything
+	  	LogUtil::registerError(_USERPICTURESSELECTTEMPLATEFIRST);
+	  	return pnRedirect(pnModURL('UserPictures','admin','main'));
+	}
+    
+    // Assign data
+    $render->assign('template', $template);
+    
+    // Action? Security Check?
+    $action 	= FormUtil::getPassedValue('action');
+	$workarray 	= pnSessionGetVar('up_workarray');
+    if (isset($action) && (strtolower($action) == 'process')) {
+	  	
+		// Check auth key
+		if (!SecurityUtil::confirmAuthKey()) {
+			LogUtil::registerAuthIDError();
+		  	return pnRedirect(pnModURL('UserPictures','admin','templatetoavatar'));
+		}
+		
+		// get all pictures of the template. if startwith = 0 (begin the transformation)
+		$pictures = pnModAPIFunc('UserPictures','user','get',array('template_id' => $template['id']));
+		if (!(isset($workarray) && is_array($workarray))) {
+		  	// There is no work array set yet - we'll construct this once for its usage
+			$workarray = array();
+			foreach($pictures as $picture) {
+			  	$uid = $picture['uid'];
+			  	$workarray[] = $uid;
+			}
+			unset($pictures);
+			pnSessionSetVar('up_workarray', $workarray);
+		}
+		
+		// no we'll have a workarray
+		$c = 0;
+		$stop = false;
+		$limit = 1;
+		while (!$stop) {
+		  	$c++;
+		  	$next = array_pop($workarray);
+		  	// set as avatar
+		  	pnModAPIFunc('UserPictures','user','templateToAvatar',
+			  	array(	'template_id' 	=> $template['id'], 
+				  		'uid' 			=> $next, 
+						'no_notice' 	=> 1)	);
+		  	// done?
+		  	if ((count($workarray) == 0) || ($c == $limit)) $stop = true;
+		}
+		// return to main admin page when totally completed
+	  	if (count($workarray) == 0) {
+	  	  	pnSessionDelVar('up_workarray');
+		    LogUtil::registerStatus(_USERPICTURESFUNCTIONDONE);
+		    return pnRedirect(pnModURL('UserPictures','admin','main'));
+		}
+		
+		// write log message
+		LogUtil::registerStatus(_USERPICTURESAVATARSETFOR.': '.$c);
+		
+		// update session var
+		pnSessionDelVar('up_workarray');
+		pnSessionSetVar('up_workarray', $workarray);
+		// we are ready for the next step now...
+	}
+	$render->assign('startwith', $startwith);
+	$render->assign('authid', SecurityUtil::generateAuthKey());
+    
+    // Return output
+    return $render->fetch('userpictures_admin_templatetoavatar.htm');
+}
+
+/**
  * pictures category management
  * 
  * @return       output

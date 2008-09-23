@@ -1,5 +1,11 @@
 Changelog for the userpictures module
 
+SVN:
+====
+- automatically transfer all template pictures to avatar
+
+
+
 UPGRADE INFORMATION:
 ====================
 - IMPORTANT NOTICE IF YOU WANT TO UPGRADE FROM LOWER VERSIONS.
