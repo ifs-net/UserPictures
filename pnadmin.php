@@ -66,10 +66,10 @@ function UserPictures_admin_templateToAvatar()
 		  	return pnRedirect(pnModURL('UserPictures','admin','templatetoavatar'));
 		}
 		
-		// get all pictures of the template. if startwith = 0 (begin the transformation)
-		$pictures = pnModAPIFunc('UserPictures','user','get',array('template_id' => $template['id']));
 		if (!(isset($workarray) && is_array($workarray))) {
 		  	// There is no work array set yet - we'll construct this once for its usage
+			// get all pictures of the template first. 
+			$pictures = pnModAPIFunc('UserPictures','user','get',array('template_id' => $template['id']));
 			$workarray = array();
 			foreach($pictures as $picture) {
 			  	$uid = $picture['uid'];
@@ -82,7 +82,7 @@ function UserPictures_admin_templateToAvatar()
 		// no we'll have a workarray
 		$c = 0;
 		$stop = false;
-		$limit = 1;
+		$limit = 100;
 		while (!$stop) {
 		  	$c++;
 		  	$next = array_pop($workarray);
