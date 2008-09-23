@@ -1051,6 +1051,7 @@ function UserPictures_userapi_handleUploadedPicture($args)
  *
  * @param	$args['template_id']	int
  * @param	$args['uid']			int (optional, for admin rights only)
+ * @param	$args['no_notice']		int (1 = no notice if successfull)
  * @return	void
  */
 function UserPictures_userapi_templateToAvatar($args)
@@ -1061,8 +1062,10 @@ function UserPictures_userapi_templateToAvatar($args)
 		if (!(isset($uid) && ($uid > 1))) $uid = pnUserGetVar('uid');
 	}
   	else $uid = pnUserGetVar('uid');
-	$templatetoavatar = pnModGetVar('UserPictures','templatetoavatar');
-	$template_id = $args['template_id'];
+  	// get parameter
+  	$no_notice 			= (int)$args['no_notice'];
+	$templatetoavatar 	= pnModGetVar('UserPictures','templatetoavatar');
+	$template_id 		= $args['template_id'];
 	if (!isset($template_id) || (!($template_id > 0))) return false;
 	if (isset($templatetoavatar) && ($templatetoavatar > 0) && ($templatetoavatar == $template_id)) {
 	  	// get picture id
@@ -1075,7 +1078,7 @@ function UserPictures_userapi_templateToAvatar($args)
 		if (pnModAPIFunc('UserPictures','user','setAvatar',array(
 			'picture_id'	=> $picture['id'],
 			'uid'			=> $uid))) {
-			LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
+			if (!isset($no_notice) || ($no_notice != 1)) LogUtil::registerStatus(_USERPICTURESSETASAVATAR);
 		}
 		else LogUtil::registerError(_USERPICTURESSETASAVATARERROR);
 	}
