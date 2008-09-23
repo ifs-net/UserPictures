@@ -316,4 +316,69 @@ function UserPictures_adminapi_deleteTemplate($args)
     // Let the calling process know that we have finished successfully
     return true;
 }
+
+/**
+ * template to avatar automatically function
+ *
+ * This function makes a given template-picture to the avatar picture for all users
+ *
+ * @param	$args['template']	array
+ * @return 	void
+ */
+function UserPictures_adminapi_templateToAvatar($args)
+{
+    // Security check 
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return false;
+  	$template = $args['template'];
+	// Check auth key
+	if (!SecurityUtil::confirmAuthKey()) {
+		LogUtil::registerAuthIDError();
+	  	return pnRedirect(pnModURL('UserPictures','admin','templatetoavatar'));
+	}
+	$workarray 	= pnSessionGetVar('up_workarray');	
+	if (!(isset($workarray) && is_array($workarray))) {
+	  	// There is no work array set yet - we'll construct this once for its usage
+		// get all pictures of the template first. 
+		$pictures = pnModAPIFunc('UserPictures','user','get',array('template_id' => $template['id']));
+		$workarray = array();
+		foreach($pictures as $picture) {
+		  	$uid = $picture['uid'];
+		  	$workarray[] = $uid;
+		}
+		unset($pictures);
+		pnSessionSetVar('up_workarray', $workarray);
+	}
+	
+	// no we'll have a workarray
+	$c = 0;
+	$stop = false;
+	$limit = 250;
+	while (!$stop) {
+	  	$c++;
+	  	$next = array_pop($workarray);
+	  	// set as avatar
+	  	pnModAPIFunc('UserPictures','user','templateToAvatar',
+		  	array(	'template_id' 	=> $template['id'], 
+			  		'uid' 			=> $next, 
+					'no_notice' 	=> 1)	);
+	  	// done?
+	  	if ((count($workarray) == 0) || ($c == $limit)) $stop = true;
+	}
+
+	// write log message
+	LogUtil::registerStatus(_USERPICTURESAVATARSETFOR.': '.$c);
+	// return to main admin page when totally completed
+	if (count($workarray) == 0) {
+	  	pnSessionDelVar('up_workarray');
+		// write log message
+	    LogUtil::registerStatus(_USERPICTURESFUNCTIONDONE);
+	    return pnRedirect(pnModURL('UserPictures','admin','main'));
+	}
+		
+	// update session var
+	pnSessionDelVar('up_workarray');
+	pnSessionSetVar('up_workarray', $workarray);
+	// we are ready for the next step now...
+	return;  
+}
 ?>
