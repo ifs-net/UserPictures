@@ -306,13 +306,16 @@ function UserPictures_userapi_get($args)
  * @param	$args['numrows']				int		pics per row
  * @param	$args['numcols']				int		pics per columns
  * @param	$args['nopager']				int		1 = show no pager
+ * @param	$args['small']					int		1 = use compact template (means also pager = 0)
  * @return	output
  */
 function UserPictures_userapi_latest($args)
 {
-  	$numrows 	= (int) $args['numrows'];
-  	$numcols 	= (int) $args['numcols'];
-  	$nopager 	= (int) $args['nopager'];
+  	$numrows 		= (int) $args['numrows'];
+  	$numcols 		= (int) $args['numcols'];
+  	$nopager 		= (int) $args['nopager'];
+  	$small	 		= (int) $args['small'];
+	$template_id	= $args['template_id'];
   	if ($nopager != 1) $nopager = 0;
   	$uid 		= (int) $args['uid'];
   	$startwith	= (int)	FormUtil::getPassedValue('upstartwith');
@@ -321,13 +324,13 @@ function UserPictures_userapi_latest($args)
 	// load handler class
 	Loader::includeOnce('modules/UserPictures/pninclides/common.php');
 	$pictures 	= UserPictures_userapi_get(array(
-			'template_id' 	=> $args['template_id'],
+			'template_id' 	=> $template_id,
 			'showmax'		=> $showmax,
 			'uid'			=> $uid,
 			'startwith'		=> $startwith
 		));
 	$pictures_count 	= UserPictures_userapi_get(array(
-			'template_id' 	=> $args['template_id'],
+			'template_id' 	=> $template_id,
 			'uid'			=> $uid,
 			'countonly'		=> 1
 		));
@@ -342,10 +345,12 @@ function UserPictures_userapi_latest($args)
 	$render->assign('cycle',				up_getCycle($numcols));
 	$render->assign('pictures',				$pictures);
 	$render->assign('nopager',				$nopager);
+	if (isset($template_id)) $render->assign('template_id',	$template_id);
 	$render->assign('showmax',				$showmax);
 	$render->assign('pictures_count',		$pictures_count);
 	$render->assign('ezcommentsavailable',	pnModAvailable('EZComments'));
-    return $render->fetch('userpictures_user_viewsimpleinclude.htm');
+    if ($small == 1) return $render->fetch('userpictures_user_viewsimpleincludesmall.htm');
+    else return $render->fetch('userpictures_user_viewsimpleinclude.htm');
 }
 
 /**

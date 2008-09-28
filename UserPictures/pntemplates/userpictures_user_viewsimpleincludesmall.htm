@@ -1,0 +1,18 @@
+<!--[pnajaxheader scriptaculous="1" prototype="1" lightbox="1" overlib="1"]-->
+<!--[if $pictures|@count eq 0]-->
+	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
+<!--[else]-->
+	<div class="pn-floatbox">
+	<!--[foreach from=$pictures item="p"]-->
+		<div style="float:left;">
+			<!--[$p.code_thumbnail]--><br />
+		</div>
+		<!--[if $cycle ne ""]-->
+			<!--[cycle values=$cycle]-->
+		<!--[else]-->
+			<!--[cycle values=",,,,<br class=\"userpictures_clearboth\" />"]-->
+		<!--[/if]-->
+	<!--[/foreach]-->
+	</div>
+	<br style="clear:both;" />
+<!--[/if]-->
