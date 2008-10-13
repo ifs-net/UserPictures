@@ -258,7 +258,7 @@ function UserPictures_userapi_get($args)
 				}
 			}
 			$infobox 	= pnRender::getInstance('UserPictures');
-			$title 		= $info.$assoc_string.'<br /><a href='.$obj['url'].'>'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
+			$title 		= $info.$assoc_string.'<br /> <a href='.$obj['url'].'>'._USERPICTURESVIEWCOMMENTSANDASSOCS.'</a>';
 			$info 		= '<div style="text-align:left;border: 1px dotted #000;">'.$info.$assoc_string.'</div>';
 	  	}
 
