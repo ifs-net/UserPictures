@@ -59,13 +59,13 @@ define('_USERPICTURESWHOCANDELETE',		'Zuordnungen zu Bildern können von der Pers
 define('_USERPICTURELINKTOPICTURE',		'Der Link zum Bild');
 define('_USERPICTURESYOUWEREFOUNDATPIC',	'Jemand hat Dich auf einem Bild entdeckt');
 // avatar
-define('_USERPICTURESAVATARMANAGEMENT',		'Profilbild-Verwaltung');
-define('_USERPICTURESACTUALAVATAR',		'Dein Profilbild');
-define('_USERPICTURESSELECTNEWAVATAR',		'Neues Profilbild wählen');
-define('_USERPICTURESDELETEAVATAR',		'Vorhandenes Profilbild löschen');
+define('_USERPICTURESAVATARMANAGEMENT',		'Avatarbild-Verwaltung');
+define('_USERPICTURESACTUALAVATAR',		'Dein Avatar');
+define('_USERPICTURESSELECTNEWAVATAR',		'Neues Avatar wählen');
+define('_USERPICTURESDELETEAVATAR',		'Vorhandenes Avatarbild löschen');
 define('_USERPICTURESSETASAVATARNOW',		'Das gewählte Bild als Avatar verwenden');
-define('_USERPICTURESSETASAVATARERROR',		'Beim Erstellen des neuen Profilbildes ist ein Fehler aufgetreten');
-define('_USERPICTURESAVATARREMOVED',		'Dein Profilbild wurde gelöscht');
+define('_USERPICTURESSETASAVATARERROR',		'Beim Erstellen des neuen Avatarbildes ist ein Fehler aufgetreten');
+define('_USERPICTURESAVATARREMOVED',		'Dein Avatarbild wurde gelöscht');
 // view
 define('_USERPICTURESASSOCEDPERSONS',		'Zugeordnete Personen');
 define('_USERPICTURESPUBLICCOMMENTS',		'Öffentliche Kommentare');
