@@ -222,7 +222,7 @@ function UserPictures_userapi_get($args)
 			$viewarray['id']	= $obj['id'];
 			$viewarray['key']	= $obj['viewkey'];
 		}
-		$obj['url']	= pnModURL('UserPictures','user','view',$viewarray);
+		$obj['url']	= pnModURL('UserPictures','user','view',$viewarray,null,null,true);
 
 		// Add additional information if requested
 		if ($expand) {	
@@ -278,7 +278,7 @@ function UserPictures_userapi_get($args)
 										rel="lightbox[set]">
 									<img id="pt'.$obj['id'].'" 
 										class="userpictures_photo" 
-										src="'.$obj['filename_absolute'].'.thumb.jpg" /></a>
+										src="'.pnGetBaseURL().$obj['filename_absolute'].'.thumb.jpg" /></a>
 									<script type="text/javascript">
 										$(\'p'.$obj['id'].'\').href="'.pnGetBaseURL().$obj['filename_absolute'].'";
 										$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
