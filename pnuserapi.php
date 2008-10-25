@@ -282,9 +282,11 @@ function UserPictures_userapi_get($args)
 
 		$script = '		<script type="text/javascript">
 							Event.observe(window, \'load\', function() {
-								$(\'p'.$obj['id'].'\').href="'.pnGetBaseURL().$obj['filename_absolute'].'";
-								$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
-								$(\'pt'.$obj['id'].'\').title=" ";
+								if ($(\'p'.$obj['id'].'\'))  {
+									$(\'p'.$obj['id'].'\').href="'.pnGetBaseURL().$obj['filename_absolute'].'";
+									$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
+									$(\'pt'.$obj['id'].'\').title=" ";
+								}
 							});
 						</script>';
 		PageUtil::addVar('rawtext', $script);
