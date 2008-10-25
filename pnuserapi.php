@@ -278,13 +278,16 @@ function UserPictures_userapi_get($args)
 										rel="lightbox[set]">
 									<img id="pt'.$obj['id'].'" 
 										class="userpictures_photo" 
-										src="'.pnGetBaseURL().$obj['filename_absolute'].'.thumb.jpg" /></a>
-									<script type="text/javascript">
-										$(\'p'.$obj['id'].'\').href="'.pnGetBaseURL().$obj['filename_absolute'].'";
-										$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
-										$(\'pt'.$obj['id'].'\').title=" ";
-									</script>';
+										src="'.pnGetBaseURL().$obj['filename_absolute'].'.thumb.jpg" /></a>';
 
+		$script = '		<script type="text/javascript">
+							Event.observe(window, \'load\', function() {
+								$(\'p'.$obj['id'].'\').href="'.pnGetBaseURL().$obj['filename_absolute'].'";
+								$(\'p'.$obj['id'].'\').title="'.str_replace('"','\"',$title).'";
+								$(\'pt'.$obj['id'].'\').title=" ";
+							});
+						</script>';
+		PageUtil::addVar('rawtext', $script);
 		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.pnGetBaseURL().$obj['filename_absolute'].'" />';
         $obj['id'] = $old_id;
 		// Increase counter to have the upstartwith-variable with the right values
