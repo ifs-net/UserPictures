@@ -37,7 +37,7 @@ define('_USERPICTURESUPLOADDATE',		'Hochgeladen am');
 define('_USERPICTURESGCOMMUNITYGALLERIES',	'Gemeinschaft-Galerie');
 define('_USERPICTURESGCOMMUNITYGALLERY',	'Allgemeine Kategorie');
 define('_USERPICTURESAVATAREXPLTEXT',		'Alle Deine hochgeladenen Bilder können als Avatar verwendet werden. Ein Avatar ist ein Bild, das häufig bei Verknüpfungen zu Dir angezeigt wird - etwa neben Deinen Foren-Beiträgen, News-Beiträgen, Kommentaren etc.');
-define('_USERPICTURESMANAGEAVATAR',		'Dein Avatar verwalten');
+define('_USERPICTURESMANAGEAVATAR',		'Mein Avatar verwalten');
 define('_USERPICTURESHASNOGALLERY',		'Kein Bild gefunden');
 define('_USERPICTURESUPLOADPICFIRST',		'Es muss mindestens ein Bild hochgeladen sein, um es als Avatar zu verwenden');
 define('_USERPICTURESMANAGEYOURPICTURES',	'Meine Bilder verwalten');
