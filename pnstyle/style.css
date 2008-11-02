@@ -3,32 +3,40 @@
 	border: 0px;
 	padding:0px; 
 	margin: 0px; 
-	float:left;
-	/*min-height:100px;*/
-	min-width: 130px;
 	text-align:center;
-	font-size: 60%;
+	font-size: 80%;
 }
 
+#userpictures_list .userpictures_picinfobox_container {
+	border: 0px;
+	padding:0px; 
+	margin: 0px; 
+	text-align:left;
+}
 #userpictures_list .userpictures_picinfobox {
 	border: 0px;
 	padding:0px; 
 	margin: 0px 5px 0px 0px; 
 	float:left;
-	/*min-height:100px;
-	width: 180px;*/
 	text-align:left;
-	font-size: 60%;
+	font-size: 80%;
 }
 
-.userpictures_sortableitem{
+#userpictures_list li {
 	background-color: #C0C0C0; 
 	padding:0px; 
 	margin: 5px; 
 	border: 1px dotted #000000;
-	cursor: move;
 	list-style: none;
 }
+.userpictures_sortablelist .userpictures_sortableitem{
+	cursor: move;
+}
+#userpictures_list input ,
+#userpictures_list select {
+	font-size: 100%;
+}
+
 
 .userpictures_uploadform{
 	background-color: #EEEEEE; 
@@ -37,7 +45,7 @@
 	padding: 5px;
 }
 
-.userpictures_sortablelist {
+#userpictures_list, .userpictures_sortablelist {
 	background-color: #E0E0E0; 
 	margin: 2px;
 	padding: 5px;

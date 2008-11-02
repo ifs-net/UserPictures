@@ -51,11 +51,13 @@
 
 <!--[if $pictures|@count gt 0]-->
 	<div>
-	<ul id="userpictures_list" class="userpictures_sortablelist">
+	<ul id="userpictures_list"<!--[if $template.id eq 0]--> class="userpictures_sortablelist"<!--[/if]-->>
 	<!--[foreach item=picture from=$pictures]-->
 	   	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">
-		<a name="<!--[$picture.id]-->">&nbsp;</a>
-		<dl class="userpictures_picleftbox" <!--[if $template.id eq 0]--> style="width:100px"<!--[/if]--> />
+		<table><tr>
+		<td>
+		<div class="userpictures_picleftbox"/>
+		    <a name="<!--[$picture.id]-->"></a>
 		    <!--[if $template.id gt 0]-->
 				<!--[$picture.code]-->
 		    <!--[else]-->
@@ -63,12 +65,14 @@
 		    <!--[/if]--><br />
 		   	<!--[pnml name="_USERPICTUREINCLUDECODE"]-->:<br />
 		    <!--[if $picture.privacy_status eq "3"]-->
-		    	<input onfocus="this.select()" type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->-<!--[$picture.viewkey]-->" />
+		    	<input onfocus="this.select()" type="text" size="20" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->-<!--[$picture.viewkey]-->" />
 		    <!--[else]-->
-		    	<input onfocus="this.select()" type="text" size="10" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->" />
+		    	<input onfocus="this.select()" type="text" size="20" id="<!--[$picture.id]-->_integrationCode" value="USERPICTURE<!--[$picture.id]-->" />
 		    <!--[/if]-->
-		</dl>
-		<dl class="userpictures_picinfobox" style="width: 200px;">
+		</div>
+		</td><td>
+		<div class="userpictures_picinfobox_container">
+		<div class="userpictures_picinfobox">
 		    <span id="item_delete_<!--[$picture.id]-->"><a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="delete" template_id=$template.id picture_id=$picture.id authid=$authid|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/trashcan.gif" title="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" alt="<!--[pnml name="_USERPICTURESDELETEPICTURE"]-->" /></a></span>
 		    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=270|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockwith.gif" title="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" alt="90&deg; <!--[pnml name="_USERPICTURESWITHCLOCK"]-->" /></a>
 		    <a href="<!--[pnmodurl modname="UserPictures" type="user" func="managePicture" action="rotate" template_id=$template.id picture_id=$picture.id authid=$authid angle=90|pnvarprephtmldisplay]-->"><img src="modules/UserPictures/pnimages/clockagainst.gif" title="270&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" alt="90&deg;<!--[pnml name="_USERPICTURESAGAINSTCLOCK"]-->" /></a>
@@ -79,7 +83,7 @@
 		    <input type="hidden" name="picture_id" value="<!--[$picture.id]-->" />
 		    <input type="hidden" name="template_id" value="<!--[$template.id]-->" />
 		    <input type="hidden" name="action" value="setcommentandprivacy" />
-		    <input type="text" name="comment" size="12" value="<!--[$picture.comment|pnvarprepfordisplay]-->" />
+		    <input type="text" name="comment" size="25" value="<!--[$picture.comment|pnvarprepfordisplay]-->" />
 		    <br />
 		    <!--[pnml name="_USERPICTURESVIEWABLEBY"]--><br />
 			<select name="privacy_status">
@@ -109,9 +113,9 @@
 				<!--[/if]-->
 				</noscript>
 			<!--[/if]-->
-		</dl>
+		</div>
 	    <!--[if $picture.template_id lt 1]-->
-			<dl class="userpictures_picinfobox">
+			<div class="userpictures_picinfobox">
 				<h3><!--[pnml name="_USERPICTURESASSOCEDPERSONS"]--></h3>
 				<ul>
 				<!--[foreach item="person" from=$picture.assoc_persons]-->
@@ -119,8 +123,8 @@
 				<!--[/foreach]-->
 				</ul>
 				<a href="<!--[$picture.url]-->"><!--[pnml name="_USERPICTURESOPENPICFORASSOC"]--></a>
-			</dl>
-			<dl class="userpictures_picinfobox">
+			</div>
+			<div class="userpictures_picinfobox">
 			    <h3><!--[pnml name="_USERPICTURESCATEGORIES"]--></h3>
 				<!--[if $categories|@count gt 0]-->
 					<!--[if $picture.category gt 0]-->
@@ -162,13 +166,16 @@
 					    </form>
 					<!--[/if]-->
 				<!--[/if]-->
-			</dl>
+			</div>
 		<!--[/if]-->
+		</div>
+		</td></tr></table>
 		<br class="userpictures_clearboth" />
 		</li>
 	<!--[/foreach]-->
 	</ul>
 	</div>
+	<!--[if $template.id eq 0]-->
 		<script type="text/javascript">
 		//<![CDATA[
 		Sortable.create("userpictures_list", {
@@ -183,5 +190,6 @@
 		})
 		//]]>
 		</script>
+	<!--[/if]-->
 <!--[/if]-->
 <!--[include file="userpictures_user_footer.htm"]-->
