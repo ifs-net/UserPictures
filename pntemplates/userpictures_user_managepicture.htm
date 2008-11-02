@@ -55,7 +55,7 @@
 	<!--[foreach item=picture from=$pictures]-->
 	   	<li class="userpictures_sortableitem" id="item_<!--[$picture.id]-->">
 		<a name="<!--[$picture.id]-->">&nbsp;</a>
-		<dl class="userpictures_picleftbox" <!--[if $template.id eq 0]--> style="width:100px<!--[/if]-->" />
+		<dl class="userpictures_picleftbox" <!--[if $template.id eq 0]--> style="width:100px"<!--[/if]--> />
 		    <!--[if $template.id gt 0]-->
 				<!--[$picture.code]-->
 		    <!--[else]-->
