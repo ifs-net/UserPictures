@@ -349,7 +349,7 @@ function UserPictures_adminapi_templateToAvatar($args)
 		pnSessionSetVar('up_workarray', $workarray);
 	}
 	
-	// no we'll have a workarray
+	// now we'll have a workarray
 	$c = 0;
 	$stop = false;
 	$limit = 500;

@@ -825,7 +825,7 @@ function UserPictures_userapi_setAvatar($args)
 			'targetfilename'	=> $targetfilename))) return false;
 
     // Set the user's variable
-    if (pnUserSetVar('_YOURAVATAR','pers_'.$uid.'.jpeg')) return true;
+  	if (pnUserSetVar('_YOURAVATAR','pers_'.$uid.'.jpeg',$uid)) return true;
     else return false;
 }
 
