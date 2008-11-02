@@ -77,7 +77,7 @@ define('_USERPICTURESASSOCIATEPERSONSDESC',	'Du kennst jemanden auf diesem Bild?
 define('_USERPICTURESADDSHOWNPERSONS',		'Verknüpfe dieses Bild mit dem entsprechenden Benutzer-Profil - einfach den Benutzernamen eingeben und "hinzufügen" drücken!');
 define('_USERPICTURESADDUNAME',			'Benutzername zuordnen');
 define('_USERPICTUREUNAMENOTFOUND',		'Benutzername nicht gefunden');
-define('_USERPICTURESVIEWCOMMENTSANDASSOCS',	'Kommentare und Benutzer-Verknüfungen betrachten oder erstellen');
+define('_USERPICTURESVIEWCOMMENTSANDASSOCS',	'Kommentare und Benutzer-Verknüpfungen betrachten oder erstellen');
 define('_USERPICTURESUSERALREADYADDED',		'Der Benutzer ist schon mit diesem Bild verknüpft!');
 define('_USERPICTURESPERSONADDED',		'Der Beutzer ist jetzt mit diesem Bild verküpft');
 define('_USERPICTURESNOLINKINGFORUSER',		'Der gewählte Benutzer lässt keine Verknüpfung zu');
