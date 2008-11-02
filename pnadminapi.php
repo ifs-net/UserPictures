@@ -352,7 +352,7 @@ function UserPictures_adminapi_templateToAvatar($args)
 	// no we'll have a workarray
 	$c = 0;
 	$stop = false;
-//	$limit = 250;
+	$limit = 500;
 	while (!$stop) {
 	  	$c++;
 	  	$next = array_pop($workarray);
