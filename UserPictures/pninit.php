@@ -246,6 +246,10 @@ function UserPictures_upgrade($oldversion)
 		  	if (!DBUtil::dropTable('userpictures_catassoc')) return false;
 		  	// set template to avatar to deactivated
 		  	pnModSetVar('UserPictures','templatetoavatar',0);
+		case '1.0':
+			// altered structure
+			if (!DBUtil::changeTable('userpictures')) return false;
+			if (!DBUtil::changeTable('userpictures_templates')) return false;
 		default:
 		    return true;
 	}
