@@ -52,8 +52,8 @@ function UserPictures_pntables()
     			'uid'					=> "I	NOTNULL DEFAULT 0",
     			'position'				=> "I	NOTNULL DEFAULT 0",
     			'template_id'			=> "I	NOTNULL DEFAULT 0",
-        		'comment'				=> "XL	NOTNULL DEFAULT ''",
-        		'filename'				=> "XL	NOTNULL DEFAULT ''",
+        		'comment'				=> "C(80)	NOTNULL DEFAULT ''",
+        		'filename'				=> "C(255)	NOTNULL DEFAULT ''",
         		'verified'				=> "C(1)	NOTNULL DEFAULT '0'",
         		'date'					=> "T	NOTNULL DEFAULT '0000-00-00 00:00:00'",
         		'global_category'		=> "I	NOTNULL DEFAULT 0",
@@ -72,10 +72,10 @@ function UserPictures_pntables()
 			    );
 	$pntable['userpictures_templates_column_def'] = array (
         		'id'					=> "I	AUTOINCREMENT PRIMARY",
-        		'title'					=> "XL	NOTNULL DEFAULT ''",
+        		'title'					=> "C(80)	NOTNULL DEFAULT ''",
         		'max_width'				=> "I	NOTNULL DEFAULT 320",
         		'max_height'			=> "I	NOTNULL DEFAULT 200",
-        		'defaultimage'			=> "XL	NOTNULL DEFAULT ''",
+        		'defaultimage'			=> "C(255)	NOTNULL DEFAULT ''",
         		'to_verify'				=> "C(1)	NOTNULL DEFAULT '0'"
 				);
 	$pntable['userpictures_persons_column'] = array(
