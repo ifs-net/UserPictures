@@ -12,8 +12,10 @@
 		<ul>
 		<h3><!--[pnml name="_USERPICTURESUSERGALLERYVIEWOPTIONS"]--></h3>
 		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0"]-->"><!--[pnml name="_USERPICTURESVIEWLATEST"]--></a></li>
-		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" assoc_uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESASSOCEDWITHYOU"]--></a></li>
-		<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESYOURPICTURES"]--></a></li>
+		<!--[if $viewer_uid gt 1]-->
+			<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" assoc_uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESASSOCEDWITHYOU"]--></a></li>
+			<li><a href="<!--[pnmodurl modname="UserPictures" type="user" func="view" template_id="0" uid=$viewer_uid]-->"><!--[pnml name="_USERPICTURESYOURPICTURES"]--></a></li>
+		<!--[/if]-->
 		</ul>
 	<!--[/if]-->
 	<!--[if $globalcategories|@count gt 0]-->
