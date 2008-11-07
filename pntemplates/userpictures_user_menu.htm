@@ -1,6 +1,9 @@
+<!--[pnusergetvar name="uid" assign="viewer_uid"]-->
 <!--[pnml name="_USERPICTURESMENU"]-->:
 <a href="<!--[pnmodurl modname="UserPictures"]-->"><!--[pnml name="_USERPICTURESMAIN"]--></a>
+<!--[if $viewer_uid gt 1]-->
 <img src="modules/UserPictures/pnimages/manage.gif" /> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="settings"]-->"><!--[pnml name="_USERPICTURESMANAGESETTINGS"]--></a>
 <img src="modules/UserPictures/pnimages/arrange.gif" /> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="manage"]-->"><!--[pnml name="_USERPICTURESMANAGEMYPICTURES"]--></a>
+<!--[/if]-->
 <img src="modules/UserPictures/pnimages/view.gif" /> <a href="<!--[pnmodurl modname="UserPictures" type="user" func="browse"]-->"><!--[pnml name="_USERPICTURESBROWSEPICTURES"]--></a>
 <br /><!--[pngetstatusmsg|pnvarprephtmldisplay]--><br />
