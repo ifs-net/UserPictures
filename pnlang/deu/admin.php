@@ -64,6 +64,7 @@ define('_USERPICTURESNUMBEROFCATEGORIES',		'Anzahl vorhandener allgemeiner Kateg
 define('_USERPICTURESACTIONDONE',				'Aktion erfolgreich beendet');
 
 // templates
+define('_USERPICTURESIMAGESAVAILABLE',			'vorh. Bilder');
 define('_USERPICTURESTEMPLATESADMINPANEL',		'Verwaltung der Vorlagen');
 define('_USERPICTURESWHATARETEMPLATES',			'Für jede Art von Bildern, die ein Benutzer neben seiner privaten Galerie hochladen kann, muss eine eigene Vorlage erstellt werden');
 define('_USERPICTURESNEWTEMPLATE',				'Vorlagen-Einstellungen');
