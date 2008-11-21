@@ -64,6 +64,7 @@ define('_USERPICTURESNUMBEROFCATEGORIES',		'Number of existing global categories
 define('_USERPICTURESACTIONDONE',				'Action done successfully');
 
 // templates
+define('_USERPICTURESIMAGESAVAILABLE',			'Available images');
 define('_USERPICTURESTEMPLATESADMINPANEL',		'Management for templates');
 define('_USERPICTURESWHATARETEMPLATES',			'For each type of picture a user should be able to upload beside the own gallery you have to create an own template');
 define('_USERPICTURESNEWTEMPLATE',				'Create a new template');
