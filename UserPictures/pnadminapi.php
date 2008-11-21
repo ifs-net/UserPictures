@@ -18,7 +18,7 @@ function UserPictures_adminapi_getGlobalCategory($args)
 {
   	$id = (int)$args['id'];
   	if ($id > 0) return DBUtil::selectObjectByID('userpictures_globalcategories',$id);
-	else return DBUtil::selectObjectArray('userpictures_globalcategories','','date');
+	else return DBUtil::selectObjectArray('userpictures_globalcategories','','date DESC');
 }
 
 /**
