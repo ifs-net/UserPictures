@@ -574,15 +574,15 @@ function UserPictures_userapi_editCategory($args)
 
     // SQL statement 
     if (isset($delete) && ($delete == '1')) {
+      	// delete the category itself
+	  	$obj = DBUtil::selectObjectByID('userpictures_categories',$id);
+	  	if ($obj['uid'] != $uid) return false;
+	  	else DBUtil::deleteObject($obj,'userpictures_categories');
 		// we now have to delete all associations between pictures and this category
-		// todo - änderungen wegen neuer tabellenstruktur
-		$catAssocs = UserPictures_userapi_getCategoryAssociations(array('cat_id'=>$id));
-		foreach ($catAssocs as $assoc) {
-		    if (!(pnModAPIFunc('UserPictures','user','delFromCategory',array('uid'=>$uid,'picture_id'=>$assoc['picture_id'],'cat_id'=>$id)))) return false;
-		}
-		$where = $userpictures_categoriescolumn['uid']." = '".$uid."'
-			    AND ". $userpictures_categoriescolumn['id']." = '".$id."'";
-		return DBUtil::deleteWhere('userpictures_categories',$where);
+		$pictures_table = $pntable['userpictures'];
+		$pictures_column = $pntable['userpictures_column'];
+		$sql = "UPDATE ".$pictures_table." SET ". $pictures_table.".".$pictures_column['category']." = 0 WHERE ".$pictures_table.".".$pictures_column['uid']." = ".$uid." AND ".$pictures_table.".".$pictures_column['category']." = ".$id;
+		return DBUtil::executeSQL($sql);
     }
     else {
 	  	// get object
