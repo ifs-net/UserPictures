@@ -238,7 +238,6 @@ class UserPictures_user_ViewHandler
 			$pic = DBUtil::selectObjectByID('userpictures',$id);
 			if (!($pic['id'] > 0 )) return false;	// something went wrong fetching the picture
 
-			print "id ist $id";
 			// get existing association
 			$where 		= $personscolumn['assoc_uid']." = ".$assoc_uid." AND ".$personscolumn['picture_id']." = ".$id;
 			$assocs 	= DBUtil::selectObjectArray('userpictures_persons',$where);
@@ -267,6 +266,9 @@ class UserPictures_user_ViewHandler
 	            if ($assoc_uid != $uid) pnMail(pnUserGetVar('email',$assoc_uid), $subject, $body, array('header' => '\nMIME-Version: 1.0\nContent-type: text/plain'), false);
 			  	
 			}
+			// maybe the viewurl has to be cleaned from base url
+			$this->viewurl = str_replace(pnGetBaseURL(),'',$this->viewurl);
+			// return the page now with an redirect
 			return pnRedirect(pnGetBaseURL().$this->viewurl);
 		}
 		return true;
