@@ -12,7 +12,7 @@
 // for display and upgrade purposes
 $modversion['name']           = 'UserPictures';
 // the version string must not exceed 10 characters!
-$modversion['version']        = '1.0';
+$modversion['version']        = '1.1';
 $modversion['description']    = 'zikula\'s social gallery software';
 $modversion['displayname']    = 'UserPictures';
 
