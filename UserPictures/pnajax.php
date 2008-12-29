@@ -16,7 +16,7 @@
 function UserPictures_ajax_ajaxSaveList()
 {
     // Security check
-    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_ADMIN)) return LogUtil::registerPermissionError();
+    if (!SecurityUtil::checkPermission('UserPictures::', '::', ACCESS_COMMENT)) return LogUtil::registerPermissionError();
 	// store the new order    
 	pnModAPIFunc('UserPictures','user','ajaxSaveList',array('list'=> FormUtil::getPassedValue('userpictures_list')));
     return true;
