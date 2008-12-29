@@ -250,6 +250,7 @@ function UserPictures_upgrade($oldversion)
 			// altered structure
 			if (!DBUtil::changeTable('userpictures')) return false;
 			if (!DBUtil::changeTable('userpictures_templates')) return false;
+		case '1.1':
 		default:
 		    return true;
 	}
