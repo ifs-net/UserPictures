@@ -1,4 +1,6 @@
 <!--[pnajaxheader scriptaculous="1" prototype="1" lightbox="1" overlib="1"]-->
+<!--[pnajaxheader modname="Users"]-->
+
 
 <!--[if $pictures|@count eq 0]-->
 	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
@@ -59,8 +61,18 @@
 						
 						<!--[pnformlabel for="uname" text=_USERPICTURESADDUNAME]-->
 						<!--[pnformtextinput mandatory="1" id="uname" maxLength="30"]-->
+					        <div id="username_choices" class="autocomplete_user"></div>
+						<script type="text/javascript">
+							//Element.removeClassName('liveusersearch', 'pn-hide');
+							new Ajax.Autocompleter("uname", "username_choices",
+								document.location.pnbaseURL+"ajax.php?module=Users&func=getusers",
+								{paramName: 'fragment', minChars: 3 }
+							);
+						</script>
+
 						
 						<!--[pnformbutton commandName="add" text=_USERPICTURESADD]-->
+						<!--[ pnimg id="ajax_indicator" style="display: none;" modname=core set=icons/extrasmall src="indicator_circle.gif" alt="" ]-->
 						<!--[/pnform]-->
 	
 						<!--[if $p.assoc_persons|@count gt 0]-->
