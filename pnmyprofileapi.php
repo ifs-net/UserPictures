@@ -39,8 +39,14 @@ function UserPictures_myprofileapi_noAjax($args)
  */
 function UserPictures_myprofileapi_getTitle($args)
 {
-    pnModLangLoad('UserPictures','myprofile');
-    return _USERPICTURESTABTITLE;
+  	$uid = (int)FormUtil::getPassedValue('uid');
+  	$picturecounter = pnModAPIFunc('UserPictures','user','get',array('countonly' => 1, 'uid' => $uid, 'template_id' => 0));
+  	if ($picturecounter > 0) {
+	    pnModLangLoad('UserPictures','myprofile');
+	    return _USERPICTURESTABTITLE." (".$picturecounter.")";
+	} else {
+	  	return false;
+	}
 }
 
 /**
