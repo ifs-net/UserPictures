@@ -12,7 +12,7 @@
 // for display and upgrade purposes
 $modversion['name']           = 'UserPictures';
 // the version string must not exceed 10 characters!
-$modversion['version']        = '1.1';
+$modversion['version']        = '1.2';
 $modversion['description']    = 'zikula\'s social gallery software';
 $modversion['displayname']    = 'UserPictures';
 
@@ -41,6 +41,9 @@ $modversion['dependencies'] = array(
             'status'     => PNMODULE_DEPENDENCY_RECOMMENDED),
 	array(	'modname'    => 'ContactList',
 			'minversion' => '1.0', 'maxversion' => '',
+            'status'     => PNMODULE_DEPENDENCY_RECOMMENDED),
+	array(	'modname'    => 'MyProfile',
+			'minversion' => '1.2', 'maxversion' => '',
             'status'     => PNMODULE_DEPENDENCY_RECOMMENDED),
     array(	'modname'    => 'MultiHook',
             'minversion' => '5.0', 'maxversion' => '',
