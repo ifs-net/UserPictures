@@ -312,6 +312,7 @@ function UserPictures_userapi_get($args)
  * @param	$args['numcols']				int		pics per columns
  * @param	$args['nopager']				int		1 = show no pager
  * @param	$args['small']					int		1 = use compact template (means also pager = 0)
+ * @param	$args['uid']					int		optional user id of the user whose pictures should be shown
  * @return	output
  */
 function UserPictures_userapi_latest($args)
@@ -327,7 +328,7 @@ function UserPictures_userapi_latest($args)
   	$showmax 	= $numcols * $numrows;
   	if (!($showmax > 0)) return _USERPICTURESWRONGPARAMETERS;
 	// load handler class
-	Loader::includeOnce('modules/UserPictures/pninclides/common.php');
+	Loader::includeOnce('modules/UserPictures/pnincludes/common.php');
 	$pictures 	= UserPictures_userapi_get(array(
 			'template_id' 	=> $template_id,
 			'showmax'		=> $showmax,
