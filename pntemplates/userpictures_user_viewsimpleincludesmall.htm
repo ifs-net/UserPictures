@@ -2,6 +2,14 @@
 <!--[if $pictures|@count eq 0]-->
 	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
 <!--[else]-->
+
+    <!--[foreach from=$prefix item="ArrayItem"]-->
+        <!--[foreach from=$ArrayItem item="item"]-->
+            <a href="<!--[$item.filename_absolute]-->" rel="lightbox[set]"></a>
+        <!--[/foreach]-->
+    <!--[/foreach]-->
+
+
 	<div class="pn-floatbox">
 	<!--[foreach from=$pictures item="p"]-->
 		<div style="float:left;">
@@ -15,4 +23,12 @@
 	<!--[/foreach]-->
 	</div>
 	<br style="clear:both;" />
+
+
+    <!--[foreach from=$addon item="ArrayItem"]-->
+        <!--[foreach from=$ArrayItem item="item"]-->
+            <a href="<!--[$item.filename_absolute]-->" rel="lightbox[set]"></a>
+        <!--[/foreach]-->
+    <!--[/foreach]-->
+
 <!--[/if]-->
