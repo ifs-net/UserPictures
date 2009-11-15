@@ -1,8 +1,18 @@
 <!--[pnajaxheader scriptaculous="1" prototype="1" lightbox="1" overlib="1"]-->
 
+
 <!--[if $pictures|@count eq 0]-->
 	<!--[pnml name="_USERPICTURESHASNOGALLERY"]-->
 <!--[else]-->
+
+
+    <!--[foreach from=$prefix item="ArrayItem"]-->
+        <!--[foreach from=$ArrayItem item="item"]-->
+            <a href="<!--[$item.filename_absolute]-->" rel="lightbox[set]"></a>
+        <!--[/foreach]-->
+    <!--[/foreach]-->
+
+
 	<!--[if $nopager ne "1"]-->
 		<div class="userpictures_pager">
 		<!--[pager show="page" rowcount=$pictures_count limit=$showmax posvar=upstartwith shift=1]-->
@@ -42,4 +52,12 @@
 		<!--[/if]-->
 	<!--[/foreach]-->
 	</div>
+
+    <!--[foreach from=$addon item="ArrayItem"]-->
+        <!--[foreach from=$ArrayItem item="item"]-->
+            <a href="<!--[$item.filename_absolute]-->" rel="lightbox[set]"></a>
+        <!--[/foreach]-->
+    <!--[/foreach]-->
+
+
 <!--[/if]-->

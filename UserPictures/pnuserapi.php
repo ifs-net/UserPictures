@@ -340,6 +340,38 @@ function UserPictures_userapi_latest($args)
 			'uid'			=> $uid,
 			'countonly'		=> 1
 		));
+	if ($pictures_count > $showmax) {
+        // If we have more pictures than the pictures that are already loaded load others too 
+        // because we want to include all pictures in the ajax slideshow!
+        $dummy = 1;
+        if ($startwith == 0) {
+            $startwith++;
+        }
+        $prefix = array();
+        while ($dummy < $startwith) {
+            $prefix[] = UserPictures_userapi_get(array(
+        			'template_id' 	=> $template_id,
+        			'showmax'		=> $showmax,
+        			'uid'			=> $uid,
+        			'startwith'		=> $dummy
+        		));
+            $dummy = $dummy + $showmax;
+        }
+        if (!($uid > 1)) {
+            // otherwise we'll get a memory limit problem if there are many pictures uploaded
+            $limit = 300;
+        } else {
+            // show all pictures if an user gallery is chosen
+            $limit = null;
+        }
+        $addon = array();
+        $addon[] = UserPictures_userapi_get(array(
+        			'template_id' 	=> $template_id,
+        			'showmax'		=> $showmax,
+        			'uid'			=> $uid,
+        			'startwith'		=> ($startwith+$showmax)
+        		));
+    }
 
 	// Add overlib
     PageUtil::addVar('javascript','javascript/overlib/overlib.js');
@@ -355,6 +387,8 @@ function UserPictures_userapi_latest($args)
 	$render->assign('showmax',				$showmax);
 	$render->assign('pictures_count',		$pictures_count);
 	$render->assign('ezcommentsavailable',	pnModAvailable('EZComments'));
+	$render->assign('prefix',               $prefix);
+	$render->assign('addon',                $addon);
     if ($small == 1) return $render->fetch('userpictures_user_viewsimpleincludesmall.htm');
     else return $render->fetch('userpictures_user_viewsimpleinclude.htm');
 }
