@@ -14,6 +14,8 @@ define('_USERPICTURESDESC',						'Here you can manage your pictures and your pic
 define('_USERPICTURESLASTUPLOADS',				'Latest picture uploads');
 define('_USERPICTURESUSAGEDESC',				'To manage you pictures  please use the "manage my pictures"-link in the menu line above.');
 define('_USERPICTURESTHUMBNAILCREATIONERROR',	'Error: A small preview image could not be created!');
+define('_USERPICTURESINSTALLEDVERSION',         'Installed version');
+define('_USERPICTURESSUPPORT',                  'Click here to support the development of this module');
 // needle
 define('_USERPICTURESNOTAVAILABLE',				'UserPictures module is not available and activated');
 define('_USERPICTURESNOTFOUNDORNOPERMISSION',	'The picture id was not found or you do not have permissions to view this picture');

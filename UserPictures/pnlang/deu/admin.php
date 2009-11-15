@@ -48,6 +48,8 @@ define('_USERPICTURESDELETETHUMBNAILSFORRECREATION',	'Löschen aller Vorschau-Bil
 define('_USERPICTURESDELETEDTHUMBNAILS',		'Anzahl gelöschter Vorschau-Bilder');
 define('_USERPICTURESTEMPLATETOAVATAR',			'Neue Uploads einer Vorlage automatisch als Avatar eines Benutzers setzen');
 define('_USERPICTURESDONOTUSE',					'deaktiviert');
+define('_USERPICTURESINSTALLEDVERSION',         'Installierte Version');
+define('_USERPICTURESSUPPORT',                  'Hier kannst Du die Entwicklung des Moduls unterstützen');
 
 // global category management
 define('_USERPICTURESGLOBALCATEGORYMANAGEMENT',	'Verwaltung der allgemeinen Bilder-Kategorien');

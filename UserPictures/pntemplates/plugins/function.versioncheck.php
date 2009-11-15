@@ -25,7 +25,7 @@ function smarty_function_versioncheck($params, &$smarty)
     $currentversion = trim($currentversion['version']);
     
     // current version           
-    $output = "<p>".$currentversion;
+    $output = $currentversion;
     
     // get newest version number
     require_once('Snoopy.class.php');
@@ -36,13 +36,13 @@ function smarty_function_versioncheck($params, &$smarty)
     $newestversion = trim($newestversion);   
     if (!$newestversion) { 
       // newest version check not possible, so return only current version number
-      echo($output." (installation is up to date)</p>");
+      echo($output." (installation is up to date)");
       return; 
     }  
     
     if ($currentversion != $newestversion) {
       // generate info link if new version is available
-      $output .= " (<strong><a href=\"http://www.zksoft.de/\">Please update! Update available! Latest release: ".$newestversion."</a></strong>)</p>";
+      $output .= " (<strong><a href=\"http://www.zksoft.de/\">Please update! Update available! Latest release: ".$newestversion."</a></strong>)";
     }   
     echo($output);
     return; 
