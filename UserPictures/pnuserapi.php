@@ -64,12 +64,14 @@ function UserPictures_userapi_showPicture($args)
  * @param	$args['startwith']			int		number of the image that should be the first on the page
  * @param	$args['managepicturelink']	int		set to 1 if manage own gallery link should be included in picture ur
  * @param	$args['managepictures']		bool	true also retrieves images marked to be viewed by nobody!
+ * @param	$args['noscript']		   bool	    true if picture should not be added to header (js, lightbox)
  * @return 	array (pictures) or integer (with countonly parameter)
  * return array: // see pntables.php for more details and the userpictures core columns!
  * 			assoc_persons:		associated persons as array
  * 			category: 			private category information as array
  * 			code:				code to display existing picture
  * 			code_thumbnail:		code to dispay image as thumbnail including links, lighbox and overin
+ * 			code_lightbox:		code to dispay image only for lightbox listing (no display of image, just link)
  * 			comment:			picture's comment
  * 			date:				picture's upload date as timestamp
  * 			filename:			picture's filename
@@ -91,6 +93,7 @@ function UserPictures_userapi_get($args)
 	$managepicturelink 	= (int)	$args['managepicturelink'];
 	$template_id 		= 		$args['template_id'];
 	$managepictures		= 		$args['managepictures'];
+	$noscript           =       $args['noscript'];
 	$key				= (int)	$args['key'];
 	$startwith			= 		$args['startwith'];
 	if (!($startwith > 0)) $startwith = 1;
@@ -271,15 +274,18 @@ function UserPictures_userapi_get($args)
         $userpictures_counter++;
         
 		// Add code part
+		$img_part = '<img   id="pt'.$obj['id'].'" 
+                            class="userpictures_photo" 
+							src="'.pnGetBaseURL().$obj['filename_absolute'].'.thumb.jpg" />';
+		$comment_part = 'title="'.up_prepDisplay($obj['comment']).'" ';
 		$obj['code_thumbnail'] 	= '<a 	id="p'.$obj['id'].'" 
 										onmouseover="return overlib(\''.up_prepDisplay($info).'\');" 
 										onmouseout="return nd();" 
 										href="'.$obj['url'].'" 
 										rel="lightbox[set]">
-									<img id="pt'.$obj['id'].'" 
-										class="userpictures_photo" 
-										src="'.pnGetBaseURL().$obj['filename_absolute'].'.thumb.jpg" /></a>';
-
+										'.$img_part.'
+									</a>';
+		$obj['code_lightbox'] 	= '<a '.$comment_part.' href="'.$obj['filename_absolute'].'" rel="lightbox[set]"></a>';
 		$script = '		<script type="text/javascript">
 							Event.observe(window, \'load\', function() {
 								if ($(\'p'.$obj['id'].'\'))  {
@@ -289,8 +295,10 @@ function UserPictures_userapi_get($args)
 								}
 							});
 						</script>';
-		PageUtil::addVar('rawtext', $script);
-		$obj['code'] 			= '<img title="'.pnVarPrepForDisplay($obj['comment']).' " class="userpictures_photo" src="'.pnGetBaseURL().$obj['filename_absolute'].'" />';
+		if (!($noscript)) {
+            PageUtil::addVar('rawtext', $script);
+        }
+		$obj['code'] 			= '<img '.$comment_part.' class="userpictures_photo" src="'.pnGetBaseURL().$obj['filename_absolute'].'" />';
         $obj['id'] = $old_id;
 		// Increase counter to have the upstartwith-variable with the right values
 	  	$counter++;
@@ -353,6 +361,7 @@ function UserPictures_userapi_latest($args)
         			'template_id' 	=> $template_id,
         			'showmax'		=> $showmax,
         			'uid'			=> $uid,
+        			'noscript'      => true,
         			'startwith'		=> $dummy
         		));
             $dummy = $dummy + $showmax;
@@ -365,12 +374,20 @@ function UserPictures_userapi_latest($args)
             $limit = null;
         }
         $addon = array();
-        $addon[] = UserPictures_userapi_get(array(
-        			'template_id' 	=> $template_id,
-        			'showmax'		=> $showmax,
-        			'uid'			=> $uid,
-        			'startwith'		=> ($startwith+$showmax)
-        		));
+        if ($uid > 1) {
+            $dummy = ($startwith+$showmax);
+            do  {
+                $result = UserPictures_userapi_get(array(
+            			'template_id' 	=> $template_id,
+            			'showmax'		=> $showmax,
+            			'uid'			=> $uid,
+            			'noscript'      => true,
+            			'startwith'		=> $dummy
+                		));
+            	$dummy = $dummy + $showmax;
+            	$addon[] = $result;
+            } while ((count($result) > 0) || ($uid < 2));
+        }
     }
 
 	// Add overlib

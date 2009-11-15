@@ -8,7 +8,7 @@
 
     <!--[foreach from=$prefix item="ArrayItem"]-->
         <!--[foreach from=$ArrayItem item="item"]-->
-            <a href="<!--[$item.filename_absolute]-->" rel="lightbox[set]"></a>
+            <!--[$item.code_lightbox]-->
         <!--[/foreach]-->
     <!--[/foreach]-->
 
@@ -55,7 +55,7 @@
 
     <!--[foreach from=$addon item="ArrayItem"]-->
         <!--[foreach from=$ArrayItem item="item"]-->
-            <a href="<!--[$item.filename_absolute]-->" rel="lightbox[set]"></a>
+            <!--[$item.code_lightbox]-->
         <!--[/foreach]-->
     <!--[/foreach]-->
 
