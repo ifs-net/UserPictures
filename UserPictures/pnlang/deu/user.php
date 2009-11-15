@@ -84,7 +84,7 @@ define('_USERPICTURESNOLINKINGFORUSER',		'Der gewählte Benutzer lässt keine Verk
 define('_USERPICTURESLINKEDBY',			'verknüpft durch');
 define('_USERPICTURESASSOCDELETED',		'Zuordnung entfernt');
 define('_USERPICTURESERRORDELETINGASSOC',	'Fehler beim Entfernen der Zuordnung');
-define('_USERPICTURESVIEWTHUMBNAILS',		'Vorschau-Übericht anzeigen');
+define('_USERPICTURESVIEWTHUMBNAILS',		'Vorschau-Übersicht anzeigen');
 define('_USERPICTURESWANTTOLINKPIC',		'Du willst dieses Bild anderen zeigen');
 define('_USERPICTURESUSEURL',			'Gib die folgende URL an deine Freunde weiter');
 define('_USERPICTURESFILTER',			'filtern');
